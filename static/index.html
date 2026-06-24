@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>セキスペ・セキュリティ・ラボ | Security & Auth Lab</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Premium Stylesheet -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="logo-icon">🛡️</span>
+                <div class="brand-text">
+                    <h1>セキスペ・ラボ</h1>
+                    <span>Security & Auth Lab</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu" id="navMenu">
+                <div class="nav-loading">モジュールを読み込み中...</div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="badge">情報処理安全確保支援士 対策</div>
+                <div class="server-status">
+                    <span class="status-dot online"></span>
+                    <span>サーバー: オンライン</span>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="title-bar">
+                    <h2 id="moduleTitle">ダッシュボード</h2>
+                    <p id="moduleDesc" class="subtitle">認証とセキュリティ技術の体系的な学習プラットフォーム</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary btn-console" id="toggleConsoleBtn">
+                        <span>🔍 ログコンソール</span>
+                        <span class="hotkey">Ctrl + `</span>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Dynamic Content Load Area -->
+            <div class="content-body" id="contentBody">
+                <!-- Dashboard Welcome Page (Default) -->
+                <div class="welcome-container active-tab" id="welcomeTab">
+                    <div class="hero-card">
+                        <div class="hero-content">
+                            <span class="hero-badge">Welcome to Security Lab</span>
+                            <h2>体系的に学ぶ、実践セキュリティ技術</h2>
+                            <p>この環境は、情報処理安全確保支援士の試験で頻出する暗号化、ハッシュ化、JWT認証、多要素認証（MFA）、およびOAuth 2.0 / OpenID Connect の仕組みを、実際にパラメータを操作しながらハンズオン形式で学習するためのものです。</p>
+                        </div>
+                        <div class="hero-visual">
+                            <div class="glowing-orb"></div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="section-title">学習モジュール一覧</h3>
+                    <div class="modules-grid" id="welcomeGrid">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+                
+                <!-- Lab Content Wrapper (Dynamically loaded modules insert HTML here) -->
+                <div class="lab-container" id="labContainer" style="display: none;">
+                    <!-- Module HTML will be inserted dynamically -->
+                </div>
+            </div>
+        </main>
+        
+        <!-- Interactive Log Console -->
+        <div class="log-console" id="logConsole">
+            <div class="console-header">
+                <h3>💾 API ログ & パケットコンソール</h3>
+                <div class="console-controls">
+                    <button class="console-btn" id="clearConsoleBtn">クリア</button>
+                    <button class="console-btn" id="closeConsoleBtn">閉じる</button>
+                </div>
+            </div>
+            <div class="console-body" id="consoleBodyText">
+                <div class="console-line system">[SYSTEM] セキュリティ・ラボが起動しました。各実験でのサーバー通信内容がここにリアルタイムで表示されます。</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Core Application Entrypoint -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
