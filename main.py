@@ -65,6 +65,30 @@ MODULES = [
         "title": "暗号化＆デジタル署名",
         "description": "AES（共通鍵）とRSA（公開鍵）の使い分け、デジタル署名による改ざん検知を学びます。",
         "jsFile": "lab_crypto.js"
+    },
+    {
+        "id": "network",
+        "title": "FW / IDS・IPS / WAF 使い分け",
+        "description": "ファイアウォール、IDS/IPS、WAFのそれぞれの処理レイヤーや防御対象の違いを体系的に学びます。",
+        "jsFile": "lab_network.js"
+    },
+    {
+        "id": "vuln",
+        "title": "Web脆弱性攻撃と防衛 (SQLi / XSS)",
+        "description": "SQLインジェクションやクロスサイトスクリプティング（XSS）の脆弱性と、セキュアコーディングでの防御を体験します。",
+        "jsFile": "lab_vuln.js"
+    },
+    {
+        "id": "kerberos",
+        "title": "認証プロトコル・ログ解析 (Kerberos)",
+        "description": "Kerberos認証チケットの発行プロセスと、チケットをデコードした認証ログの解析を学びます。",
+        "jsFile": "lab_kerberos.js"
+    },
+    {
+        "id": "ipsec",
+        "title": "IPsec構造・IKE交換",
+        "description": "IPsecカプセル化（Tunnel/Transport、AH/ESP）パケットと、IKE Phase 1・Phase 2の通信シーケンスを学びます。",
+        "jsFile": "lab_ipsec.js"
     }
 ]
 
@@ -439,6 +463,313 @@ def verify_signature(req: SignatureVerifyRequest):
         return {"valid": True, "message": "デジタル署名は有効です。メッセージの完全性が確認されました。"}
     except Exception:
         return {"valid": False, "message": "デジタル署名が無効です。メッセージが改ざんされたか、異なる鍵が使われました。"}
+
+
+    except Exception:
+        return {"valid": False, "message": "デジタル署名が無効です。メッセージが改ざんされたか、異なる鍵が使われました。"}
+
+
+# --- LAB 6: Network Boundary Defense API ---
+class NetworkPacketRequest(BaseModel):
+    src_ip: str = "192.168.1.50"
+    dest_port: int = 80
+    headers: Dict[str, str] = {}
+    payload: str = ""
+
+@app.post("/api/network/simulate")
+def simulate_network(req: NetworkPacketRequest):
+    payload_lower = req.payload.lower()
+    
+    # 1. Firewall (L3/L4 check)
+    if req.dest_port in [22, 23, 3389, 445]:
+        return {
+            "blocked": True,
+            "device": "Firewall (ファイアウォール)",
+            "layer": "L4 (トランスポート層)",
+            "reason": f"ポート {req.dest_port} への接続要求はセキュリティポリシーにより遮断されました（ポート拒否設定）。",
+            "action": "DROP / REJECT"
+        }
+    
+    if "portscan" in payload_lower:
+        return {
+            "blocked": True,
+            "device": "Firewall (ファイアウォール)",
+            "layer": "L4 (トランスポート層)",
+            "reason": "短時間での多数のポートスキャンを検知したため、送信元IPからのパケットを遮断しました。",
+            "action": "DROP"
+        }
+
+    # 2. IDS/IPS (L4-L7 signature check)
+    ids_signatures = ["/bin/sh", "nc -e", "ping -c", "cmd.exe", "powershell", "rm -rf /", "wget http", "curl http"]
+    matched_ids = [sig for sig in ids_signatures if sig in payload_lower]
+    if matched_ids:
+        return {
+            "blocked": True,
+            "device": "IDS/IPS (侵入検知/防止システム)",
+            "layer": "L7 (アプリケーション層) シグネチャ一致",
+            "reason": f"OSコマンドインジェクション / 不正コマンド実行シグネチャ '{matched_ids[0]}' を検知しました。",
+            "action": "BLOCK / IPS Triggered"
+        }
+
+    # 3. WAF (L7 HTTP context check)
+    waf_sqli_signatures = ["union select", "select * from", "insert into", "or 1=1", "' or '1'='1", "drop table"]
+    waf_xss_signatures = ["<script>", "javascript:", "onerror=", "onload=", "alert("]
+    waf_traversal_signatures = ["../", "..\\", "/etc/passwd"]
+    
+    matched_sqli = [sig for sig in waf_sqli_signatures if sig in payload_lower]
+    matched_xss = [sig for sig in waf_xss_signatures if sig in payload_lower]
+    matched_traversal = [sig for sig in waf_traversal_signatures if sig in payload_lower]
+    
+    user_agent = req.headers.get("User-Agent", "").lower()
+    if "sqlmap" in user_agent or "nikto" in user_agent:
+        return {
+            "blocked": True,
+            "device": "WAF (Webアプリケーションファイアウォール)",
+            "layer": "L7 (アプリケーション層) HTTPコンテキスト",
+            "reason": f"脆弱性スキャンツールと思われるUser-Agent '{user_agent}' からのアクセスを拒否しました。",
+            "action": "BLOCK (403 Forbidden)"
+        }
+        
+    if matched_sqli:
+        return {
+            "blocked": True,
+            "device": "WAF (Webアプリケーションファイアウォール)",
+            "layer": "L7 (アプリケーション層) HTTPリクエストボディ",
+            "reason": f"SQLインジェクション攻撃パターン '{matched_sqli[0]}' を検知しました。",
+            "action": "BLOCK (403 Forbidden)"
+        }
+    if matched_xss:
+        return {
+            "blocked": True,
+            "device": "WAF (Webアプリケーションファイアウォール)",
+            "layer": "L7 (アプリケーション層) HTTPリクエストボディ",
+            "reason": f"クロスサイトスクリプティング (XSS) パターン '{matched_xss[0]}' を検知しました。",
+            "action": "BLOCK (403 Forbidden)"
+        }
+    if matched_traversal:
+        return {
+            "blocked": True,
+            "device": "WAF (Webアプリケーションファイアウォール)",
+            "layer": "L7 (アプリケーション層) URLパス・クエリ",
+            "reason": f"ディレクトリトラバーサル攻撃パターン '{matched_traversal[0]}' を検知しました。",
+            "action": "BLOCK (403 Forbidden)"
+        }
+
+    # 4. Success (Reached Web Server)
+    return {
+        "blocked": False,
+        "device": "Web Server (ウェブサーバー)",
+        "layer": "L7 (アプリケーション層)",
+        "reason": "すべてのセキュリティフィルターを通過し、Webサーバーに到達しました。正常応答を返却します。",
+        "action": "ALLOW (200 OK)"
+    }
+
+
+# --- LAB 7: SQLi & XSS Vulnerability API ---
+class SQLiRequest(BaseModel):
+    input_text: str
+    secure_mode: bool = False
+
+@app.post("/api/vuln/sqli")
+def simulate_sqli(req: SQLiRequest):
+    users = [
+        {"id": 1, "username": "admin", "role": "Administrator", "email": "admin@securitylab.local"},
+        {"id": 2, "username": "yudai", "role": "Specialist", "email": "yudai@example.com"},
+        {"id": 3, "username": "guest", "role": "Guest User", "email": "guest@example.com"}
+    ]
+    
+    query = ""
+    result = []
+    success = False
+    error = ""
+    
+    if req.secure_mode:
+        query = f"SELECT * FROM users WHERE username = ?;  [Bound Parameter: '{req.input_text}']"
+        matched = [u for u in users if u["username"] == req.input_text]
+        if matched:
+            result = matched
+            success = True
+    else:
+        query = f"SELECT * FROM users WHERE username = '{req.input_text}';"
+        normalized = req.input_text.replace(" ", "").lower()
+        if "'or'1'='1" in normalized or "'or1=1" in normalized or "'or''='" in normalized:
+            result = users
+            success = True
+        elif "'unionselect" in normalized:
+            result = users + [{"id": 99, "username": "attacker", "role": "Hacker", "email": "leak@hack.net"}]
+            success = True
+        else:
+            matched = [u for u in users if u["username"] == req.input_text]
+            if matched:
+                result = matched
+                success = True
+            else:
+                error = "ユーザーが見つかりません。"
+                
+    return {
+        "sql_query": query,
+        "results": result,
+        "success": success,
+        "error": error
+    }
+
+class XSSRequest(BaseModel):
+    input_text: str
+    secure_mode: bool = False
+
+@app.post("/api/vuln/xss")
+def simulate_xss(req: XSSRequest):
+    raw_input = req.input_text
+    
+    if req.secure_mode:
+        escaped = (raw_input.replace("&", "&amp;")
+                            .replace("<", "&lt;")
+                            .replace(">", "&gt;")
+                            .replace('"', "&quot;")
+                            .replace("'", "&#x27;"))
+        return {
+            "output_html": escaped,
+            "escaped": True,
+            "message": "HTMLエスケープが適用され、安全なプレーンテキストとして出力されます。"
+        }
+    else:
+        return {
+            "output_html": raw_input,
+            "escaped": False,
+            "message": "⚠️ 警告: エスケープが施されていません！ブラウザに直接出力されたスクリプトが即座に実行される危険があります。"
+        }
+
+
+# --- LAB 8: Kerberos Protocol Simulation API ---
+class KerberosRequest(BaseModel):
+    step: str
+    username: str = "yudai"
+    service_name: str = "CIFS/file_server"
+
+@app.post("/api/auth/kerberos")
+def simulate_kerberos(req: KerberosRequest):
+    session_key_client_tgs = "K_c_tgs_session_key_abc123"
+    session_key_client_server = "K_c_s_session_key_xyz987"
+    timestamp = int(time.time())
+    
+    if req.step == "AS-REQ":
+        tgt = {
+            "cname": req.username,
+            "sname": "krbtgt/realm",
+            "authtime": timestamp,
+            "endtime": timestamp + 36000,
+            "key": session_key_client_tgs
+        }
+        encrypted_tgt = "TGT_Encrypted(With_K_tgs)_" + base64.b64encode(f"TGT:{tgt}".encode()).decode()[:40] + "..."
+        encrypted_session_key = "SessionKey_Encrypted(With_K_user)_" + base64.b64encode(session_key_client_tgs.encode()).decode()[:20] + "..."
+        
+        return {
+            "step": "AS-REP (認証サービス応答)",
+            "sent_request": f"AS-REQ: [cname={req.username}, sname=krbtgt/realm]",
+            "response": {
+                "tgt_hex": encrypted_tgt,
+                "session_key_enc": encrypted_session_key,
+                "raw_tgt_content_visible": tgt,
+                "session_key": session_key_client_tgs
+            },
+            "explanation": "【解説】ユーザーはIDをASに送信（パスワードは送信しない）。ASはユーザーのパスワードから導出した鍵(K_user)でセッション鍵を暗号化し、かつTGSの鍵(K_tgs)で暗号化した「TGT (チケット送信チケット)」を返します。これによりパスワードの通信経路上への漏洩を防ぎます。"
+        }
+        
+    elif req.step == "TGS-REQ":
+        service_ticket = {
+            "cname": req.username,
+            "sname": req.service_name,
+            "endtime": timestamp + 18000,
+            "key": session_key_client_server
+        }
+        encrypted_service_ticket = "ServiceTicket_Encrypted(With_K_service)_" + base64.b64encode(f"Ticket:{service_ticket}".encode()).decode()[:40] + "..."
+        encrypted_client_server_key = "ClientServerKey_Encrypted(With_K_c_tgs)_" + base64.b64encode(session_key_client_server.encode()).decode()[:20] + "..."
+        
+        return {
+            "step": "TGS-REP (チケット交付サービス応答)",
+            "sent_request": f"TGS-REQ: [Presenting TGT + Authenticator for {req.service_name}]",
+            "response": {
+                "service_ticket_hex": encrypted_service_ticket,
+                "session_key_enc": encrypted_client_server_key,
+                "raw_ticket_content_visible": service_ticket,
+                "session_key": session_key_client_server
+            },
+            "explanation": "【解説】クライアントはTGSに対し、「暗号化されたTGT」と「セッション鍵で暗号化した認証子」を送り、対象サービスの利用許可を求めます。TGSはTGTを復号してセッション鍵を入手し、認証子を検証。問題なければ、目的のサービスサーバーの鍵(K_service)で暗号化した「サービス利用チケット」を返します。"
+        }
+        
+    elif req.step == "AP-REQ":
+        return {
+            "step": "AP-REP (アプリケーションサーバー応答)",
+            "sent_request": f"AP-REQ: [Presenting Service Ticket + Authenticator]",
+            "response": {
+                "access_granted": True,
+                "message": "🟢 認証成功: サービスサーバーへのログインが承認されました！",
+                "explanation_ap": "APサーバーは、自身が保持する秘密鍵(K_service)で「サービス利用チケット」を復号し、クライアントと自身の間で共有される新しいセッション鍵を入手。これで認証子が正しく暗号化されているか検証し、一致すればアクセスを許可します。ユーザーのパスワードはAPサーバーに一切伝わりません。"
+            },
+            "explanation": "【解説】クライアントは、サービスを提供するAPサーバーへ「サービス利用チケット」と「認証子」を送信します。サーバーは自身の秘密鍵でチケットを復号して認証子を検証し、一致すればセッションを確立してログインを許可します（SSOの実現）。"
+        }
+    else:
+        raise HTTPException(status_code=400, detail="無効なステップ名です。")
+
+
+# --- LAB 9: IPsec Packet Structure API ---
+class IPsecPacketRequest(BaseModel):
+    mode: str = "tunnel"
+    protocol: str = "esp"
+    payload: str = "GET /secret_data HTTP/1.1"
+
+@app.post("/api/ipsec/build")
+def build_ipsec_packet(req: IPsecPacketRequest):
+    original_ip_header = "Original IP Header (Src: 192.168.1.50, Dst: 10.0.0.100)"
+    new_ip_header = "New IP Header (Src: 192.168.1.1 [GW1], Dst: 10.0.0.1 [GW2])"
+    payload_data = f"Payload Data: [{req.payload}]"
+    packet_layout = []
+    
+    if req.mode == "transport":
+        if req.protocol == "esp":
+            packet_layout = [
+                {"name": "Original IP Header", "size": "20 bytes", "state": "Cleartext (明文)", "desc": "元のIPアドレス(192.168.1.50 -> 10.0.0.100)を含むIPヘッダー。暗号化されません。"},
+                {"name": "ESP Header", "size": "8 bytes", "state": "Cleartext (明文)", "desc": "SPIやシーケンス番号を含み、パケットの識別やリプレイ攻撃対策に使用されます。"},
+                {"name": "Payload Data", "size": "Variable", "state": "🔒 ENCRYPTED (暗号化)", "desc": f"暗号化された実際のペイロードデータ: '{req.payload}'"},
+                {"name": "ESP Trailer", "size": "2-26 bytes", "state": "🔒 ENCRYPTED (暗号化)", "desc": "パディングサイズや次ヘッダー（プロトコル番号）を含みます。暗号化されます。"},
+                {"name": "ESP Auth (ICV)", "size": "12 bytes", "state": "MAC (完全性保証)", "desc": "パケットが改ざんされていないか検証するためのMAC（メッセージ認証コード）データです。"}
+            ]
+        else:
+            packet_layout = [
+                {"name": "Original IP Header", "size": "20 bytes", "state": "🔒 AUTHENTICATED (認証保護/不変)", "desc": "元のIPヘッダー。暗号化されませんが、AHによって改ざん検知の対象になります。"},
+                {"name": "AH Header", "size": "24 bytes", "state": "🔒 AUTHENTICATED (認証保護/不変)", "desc": "SPI、シーケンス番号、ICV（改ざん検知用ハッシュ）を含みます。自身も認証対象になります。"},
+                {"name": "Payload Data", "size": "Variable", "state": "🔒 AUTHENTICATED (認証保護/不変)", "desc": "暗号化されず平文のままですが、完全性チェック（改ざん検知）で保護されます。"}
+            ]
+    else:
+        if req.protocol == "esp":
+            packet_layout = [
+                {"name": "New IP Header", "size": "20 bytes", "state": "Cleartext (明文)", "desc": "VPNゲートウェイ間の新しいIPヘッダー(GW1 -> GW2)。ルーティングに使用されます。"},
+                {"name": "ESP Header", "size": "8 bytes", "state": "Cleartext (明文)", "desc": "暗号化セキュリティアソシエーションを識別する情報。"},
+                {"name": "Original IP Header", "size": "20 bytes", "state": "🔒 ENCRYPTED (暗号化)", "desc": "元の端末間のIPヘッダー(192.168.1.50 -> 10.0.0.100)。カプセル化（暗号化）されて隠蔽されます。"},
+                {"name": "Payload Data", "size": "Variable", "state": "🔒 ENCRYPTED (暗号化)", "desc": f"暗号化されたデータ本体: '{req.payload}'"},
+                {"name": "ESP Trailer", "size": "2-26 bytes", "state": "🔒 ENCRYPTED (暗号化)", "desc": "暗号化ブロックサイズ調整用のパディング等。"},
+                {"name": "ESP Auth (ICV)", "size": "12 bytes", "state": "MAC (完全性保証)", "desc": "改ざん検知用の認証値。"}
+            ]
+        else:
+            packet_layout = [
+                {"name": "New IP Header", "size": "20 bytes", "state": "🔒 AUTHENTICATED (認証保護/不変)", "desc": "新しいゲートウェイ間のIPヘッダー。改ざん検知で保護されます。"},
+                {"name": "AH Header", "size": "24 bytes", "state": "🔒 AUTHENTICATED (認証保護/不変)", "desc": "改ざん検知情報。"},
+                {"name": "Original IP Header", "size": "20 bytes", "state": "🔒 AUTHENTICATED (認証保護/不変)", "desc": "元のIPヘッダー。暗号化されませんが、改ざん検知で保護されます。"},
+                {"name": "Payload Data", "size": "Variable", "state": "🔒 AUTHENTICATED (認証保護/不変)", "desc": "平文データ。改ざん検知で保護されます。"}
+            ]
+            
+    return {
+        "mode": req.mode,
+        "protocol": req.protocol,
+        "original_packet": {
+            "ip_header": original_ip_header,
+            "payload": payload_data
+        },
+        "new_packet": {
+            "ip_header": new_ip_header if req.mode == "tunnel" else original_ip_header,
+            "layout": packet_layout
+        }
+    }
 
 
 # --- Server Route: Serve index.html or fallback ---
