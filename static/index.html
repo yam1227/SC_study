@@ -71,6 +71,12 @@
                     <div class="modules-grid" id="welcomeGrid">
                         <!-- Dynamically filled -->
                     </div>
+                    
+                    <h3 class="section-title" style="margin-top: 44px;">💥 セキスペ頻出攻撃手法 クイック・リファレンス</h3>
+                    <p class="subtitle" style="margin-bottom: 20px;">各攻撃手法の用語をクリックすると、詳細な攻撃概要と防衛策が展開されます。</p>
+                    <div class="reference-container" id="quickReferenceContainer">
+                        <!-- JavaScript will dynamically populate the details/summary accordions -->
+                    </div>
                 </div>
                 
                 <!-- Lab Content Wrapper (Dynamically loaded modules insert HTML here) -->
@@ -82,6 +88,8 @@
         
         <!-- Interactive Log Console -->
         <div class="log-console" id="logConsole">
+            <!-- Resize Drag Handle -->
+            <div class="console-resize-handle" id="consoleResizeHandle"></div>
             <div class="console-header">
                 <h3>💾 API ログ & パケットコンソール</h3>
                 <div class="console-controls">
@@ -96,6 +104,7 @@
     </div>
     
     <!-- Core Application Entrypoint -->
+    <script src="/static/js/glossary.js"></script>
     <script src="/static/js/main.js"></script>
 </body>
 </html>
