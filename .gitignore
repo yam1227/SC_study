@@ -32,3 +32,8 @@ Thumbs.db
 
 # training files
 train/
+
+# Automated UI Testing (Playwright / Pytest)
+test_app.py
+.pytest_cache/
+test-results/

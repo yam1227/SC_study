@@ -59,6 +59,20 @@ class SecurityLab {
         this.log('system', `サーバーから ${this.modules.length} 個のモジュール定義をロードしました。`);
     }
 
+    // Helper to get unified icon for each subcategory
+    getIconForSubcategory(subId) {
+        const icons = {
+            "1_db": "🛢️",
+            "2_network": "📡",
+            "3_security": "🛡️",
+            "4_dev": "💻",
+            "5_mgmt": "⚙️",
+            "6_service": "🛎️",
+            "7_audit": "🔍"
+        };
+        return icons[subId] || "⚙️";
+    }
+
     // Render left navigation menu
     renderNavigation() {
         this.navMenu.innerHTML = "";
@@ -71,53 +85,220 @@ class SecurityLab {
         dashItem.addEventListener("click", () => this.switchTab("dashboard"));
         this.navMenu.appendChild(dashItem);
         
-        // Add each module
+        // Define Categories structure
+        const catMap = {
+            technology: { name: "テクノロジ系", subcategories: {} },
+            management: { name: "マネジメント系", subcategories: {} }
+        };
+        
+        // Populate modules into categories/subcategories map
         this.modules.forEach(mod => {
-            const item = document.createElement("a");
-            item.className = "nav-item";
-            item.dataset.id = mod.id;
+            const cat = mod.category || "technology";
+            const sub = mod.subcategory || "3_security";
+            const subName = mod.subcategory_name || "3. セキュリティ";
             
-            // Assign icons based on module ID
-            let icon = "⚙️";
-            if (mod.id === "hashing") icon = "🔑";
-            else if (mod.id === "jwt") icon = "🎟️";
-            else if (mod.id === "mfa") icon = "📱";
-            else if (mod.id === "oauth") icon = "🤝";
-            else if (mod.id === "crypto") icon = "🔐";
+            if (!catMap[cat]) {
+                catMap[cat] = { name: cat, subcategories: {} };
+            }
+            if (!catMap[cat].subcategories[sub]) {
+                catMap[cat].subcategories[sub] = { name: subName, modules: [] };
+            }
+            catMap[cat].subcategories[sub].modules.push(mod);
+        });
+        
+        // Draw Navigation in order
+        const catOrder = ["technology", "management"];
+        catOrder.forEach(catKey => {
+            const cat = catMap[catKey];
+            if (!cat) return;
             
-            item.innerHTML = `<span class="icon">${icon}</span> ${mod.title}`;
-            item.addEventListener("click", () => this.switchTab(mod.id));
-            this.navMenu.appendChild(item);
+            const subkeys = Object.keys(cat.subcategories).sort();
+            if (subkeys.length === 0) return; // Skip if no modules in this category
+            
+            // Add Category Header
+            const catHeader = document.createElement("div");
+            catHeader.className = "nav-category-header";
+            catHeader.innerText = cat.name;
+            this.navMenu.appendChild(catHeader);
+            
+            subkeys.forEach(subKey => {
+                const sub = cat.subcategories[subKey];
+                
+                // Add Subcategory Header
+                const subHeader = document.createElement("div");
+                subHeader.className = "nav-subcategory-header";
+                subHeader.innerText = sub.name;
+                this.navMenu.appendChild(subHeader);
+                
+                // Add Modules
+                sub.modules.forEach(mod => {
+                    const item = document.createElement("a");
+                    item.className = "nav-item nav-item-indented";
+                    item.dataset.id = mod.id;
+                    
+                    const icon = this.getIconForSubcategory(mod.subcategory || "3_security");
+                    
+                    item.innerHTML = `<span class="icon">${icon}</span> ${mod.title}`;
+                    item.addEventListener("click", () => this.switchTab(mod.id));
+                    this.navMenu.appendChild(item);
+                });
+            });
         });
     }
 
-    // Render grid list on the dashboard
+    // Render grid list on the dashboard grouped by Subject A-2 classification (1-7)
     renderWelcomeGrid() {
         this.welcomeGrid.innerHTML = "";
-        this.modules.forEach(mod => {
-            const card = document.createElement("div");
-            card.className = "module-card";
+        
+        // Define all categories/subcategories from syllabus, including placeholders
+        const syllabusStructure = [
+            {
+                category: "technology",
+                categoryName: "テクノロジ系",
+                badge: "Technology",
+                subcategories: [
+                    {
+                        id: "1_db",
+                        name: "1. データベース",
+                        isPlaceholder: true,
+                        placeholderTitle: "データベース方式・トランザクション制御",
+                        placeholderDesc: "データベースの物理設計、正規化、トランザクションのACID特性、排他制御などについて学ぶシミュレータを準備中です。"
+                    },
+                    {
+                        id: "2_network",
+                        name: "2. ネットワーク",
+                        isPlaceholder: false
+                    },
+                    {
+                        id: "3_security",
+                        name: "3. セキュリティ",
+                        isPlaceholder: false
+                    },
+                    {
+                        id: "4_dev",
+                        name: "4. システム開発技術",
+                        isPlaceholder: true,
+                        placeholderTitle: "セキュア開発ライフサイクル・テスト手法",
+                        placeholderDesc: "安全なソフトウェア開発、単体テスト・結合テストの技法、要件定義から導入・受入れまでのプロセスを予定しています。"
+                    },
+                    {
+                        id: "5_mgmt",
+                        name: "5. ソフトウェア開発管理技術",
+                        isPlaceholder: true,
+                        placeholderTitle: "プロジェクトの構成管理・変更管理",
+                        placeholderDesc: "Gitを用いたバージョン管理や、知的財産権の管理、ビルド・デプロイ環境の自動化などのシミュレーションです。"
+                    }
+                ]
+            },
+            {
+                category: "management",
+                categoryName: "マネジメント系",
+                badge: "Management",
+                subcategories: [
+                    {
+                        id: "6_service",
+                        name: "6. サービスマネジメント",
+                        isPlaceholder: true,
+                        placeholderTitle: "ITサービス運用・SLA・ファシリティ",
+                        placeholderDesc: "ITILガイドラインに基づくサービスデスクのインシデント管理、SLA合意、システムの可用性管理手法を準備中です。"
+                    },
+                    {
+                        id: "7_audit",
+                        name: "7. システム監査",
+                        isPlaceholder: true,
+                        placeholderTitle: "システム監査実施基準・内部統制",
+                        placeholderDesc: "ITガバナンス評価、内部統制の有効性検証、監査証跡（ログ）分析プロセスのシミュレータを予定しています。"
+                    }
+                ]
+            }
+        ];
+        
+        // Draw the syllabus layout on dashboard
+        syllabusStructure.forEach(cat => {
+            // Create Category Section
+            const catSection = document.createElement("div");
+            catSection.className = "category-section";
             
-            let icon = "⚙️";
-            if (mod.id === "hashing") icon = "🔑";
-            else if (mod.id === "jwt") icon = "🎟️";
-            else if (mod.id === "mfa") icon = "📱";
-            else if (mod.id === "oauth") icon = "🤝";
-            else if (mod.id === "crypto") icon = "🔐";
-            
-            card.innerHTML = `
-                <div class="module-card-header">
-                    <span class="module-card-icon">${icon}</span>
-                </div>
-                <h4>${mod.title}</h4>
-                <p>${mod.description}</p>
-                <div class="module-card-footer">
-                    <span>ラボを開始する</span>
-                    <span>→</span>
+            catSection.innerHTML = `
+                <div class="category-section-title">
+                    <span>${cat.categoryName}</span>
+                    <span class="badge-cat">${cat.badge}</span>
                 </div>
             `;
-            card.addEventListener("click", () => this.switchTab(mod.id));
-            this.welcomeGrid.appendChild(card);
+            
+            cat.subcategories.forEach(sub => {
+                const subGroup = document.createElement("div");
+                subGroup.className = "subcategory-group";
+                
+                subGroup.innerHTML = `
+                    <div class="subcategory-title">${sub.name}</div>
+                `;
+                
+                const grid = document.createElement("div");
+                grid.className = "modules-grid";
+                
+                if (sub.isPlaceholder) {
+                    // Render placeholder card
+                    const card = document.createElement("div");
+                    card.className = "module-card disabled";
+                    card.innerHTML = `
+                        <span class="badge-coming-soon">準備中</span>
+                        <div class="module-card-header">
+                            <span class="module-card-icon">${this.getIconForSubcategory(sub.id)}</span>
+                        </div>
+                        <h4>${sub.placeholderTitle}</h4>
+                        <p>${sub.placeholderDesc}</p>
+                        <div class="module-card-footer">
+                            <span>準備中</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                } else {
+                    // Render actual modules for this subcategory
+                    const subModules = this.modules.filter(m => m.subcategory === sub.id);
+                    
+                    if (subModules.length === 0) {
+                        // Empty actual subcategory (fallback, shouldn't happen for network/security)
+                        const card = document.createElement("div");
+                        card.className = "module-card disabled";
+                        card.innerHTML = `
+                            <span class="badge-coming-soon">準備中</span>
+                            <div class="module-card-header">
+                                <span class="module-card-icon">${this.getIconForSubcategory(sub.id)}</span>
+                            </div>
+                            <h4>コンテンツ準備中</h4>
+                            <p>この区分の学習モジュールは現在準備中です。</p>
+                        `;
+                        grid.appendChild(card);
+                    } else {
+                        subModules.forEach(mod => {
+                            const card = document.createElement("div");
+                            card.className = "module-card";
+                            
+                            const icon = this.getIconForSubcategory(mod.subcategory || "3_security");
+                            
+                            card.innerHTML = `
+                                <div class="module-card-header">
+                                    <span class="module-card-icon">${icon}</span>
+                                </div>
+                                <h4>${mod.title}</h4>
+                                <p>${mod.description}</p>
+                                <div class="module-card-footer">
+                                    <span>ラボを開始する</span>
+                                    <span>→</span>
+                                </div>
+                            `;
+                            card.addEventListener("click", () => this.switchTab(mod.id));
+                            grid.appendChild(card);
+                        });
+                    }
+                }
+                
+                subGroup.appendChild(grid);
+                catSection.appendChild(subGroup);
+            });
+            
+            this.welcomeGrid.appendChild(catSection);
         });
     }
 
@@ -212,6 +393,20 @@ class SecurityLab {
                 attack: "公衆回線（インターネット）などの中間回線において、通過するIPパケットを生データのまま盗聴する、あるいは内容を改ざんしてパケットを受信者に送信する手法。",
                 defense: "IPsecを構築し、<b>ESP (Encapsulating Security Payload)</b> プロトコルによってペイロード部を強力な共通鍵で暗号化し、かつパケット全体の整合性チェックを適用します。",
                 exam: "IPsecでは、暗号化と完全性を提供する <b>ESP</b> と、暗号化は行わず完全性・認証のみを提供する <b>AH (Authentication Header)</b> の仕様の違いが出題されます。AHはパケットのグローバルIP等が書き換わるNAT変換環境下では、ヘッダーの整合性エラーが発生するため使用できない性質が重要です。"
+            },
+            {
+                title: "🔑 IPsec SAと鍵ライフタイム (SAの識別と再キーイング)",
+                moduleId: "vpn_types",
+                attack: "VPN接続において、同一ゲートウェイ間で複数の異なる拠点や通信種別が混在する際、受信側ルーターがどの暗号ポリシーや鍵を適用してパケットを復号すればよいか識別できなくなる設計上の課題。",
+                defense: "ESP/AHヘッダーに含まれる <b>SPI (Security Parameter Index)</b> という32ビットの識別子を使用し、対応する <b>SA (Security Association)</b> を一意に特定して適切な復号処理を行います。また、ライフタイム超過時には自動で再キーイングを行います。",
+                exam: "セキスペでは、SAは<b>「送信方向と受信方向で別々に確立されるため、双方向通信には最低2本必要」</b>である点や、それらを識別する <b>SPI (Security Parameter Index)</b> の役割が頻出です。"
+            },
+            {
+                title: "🌐 IP-VPN ＆ 広域イーサネット (キャリア閉域網の設計)",
+                moduleId: "vpn_types",
+                attack: "公衆回線を利用するインターネットVPNにおいて、通信遅延（オーバーヘッド）や帯域保証（ベストエフォート）の欠如により、高品質な拠点間接続や独自ルーティングプロトコル（OSPF等）の伝送が阻害される設計上の課題。",
+                defense: "通信事業者の閉域網を利用する <b>「IP-VPN (MPLS網・L3接続)」</b> や、データリンク層で直結する <b>「広域イーサネット (L2接続・独自ルーティングやトランクVLAN転送可能)」</b> を導入します。閉域網のため<b>暗号化処理は通常不要</b>です。",
+                exam: "IP-VPNはL3接続のためIP以外のプロトコルは転送できませんが、広域イーサネットは<b>L2接続であるためIP以外のプロトコル（Non-IP）やトランクVLANを自由に通せる</b>特徴が出題されます。"
             }
         ];
         
@@ -219,8 +414,22 @@ class SecurityLab {
             const card = document.createElement("details");
             card.className = "ref-card";
             
+            // Determine subcategory dynamically
+            let subcategory = "3_security";
+            if (att.moduleId === "ipsec" || att.moduleId === "vpn_types" || (att.moduleId === "network" && att.title.includes("ポートスキャン"))) {
+                subcategory = "2_network";
+            }
+            
+            const icon = this.getIconForSubcategory(subcategory);
+            const subName = subcategory === "2_network" ? "2. ネットワーク" : "3. セキュリティ";
+            
+            // Strip the leading emoji and space from the original title
+            const firstSpaceIndex = att.title.indexOf(" ");
+            const cleanTitle = firstSpaceIndex !== -1 ? att.title.substring(firstSpaceIndex + 1) : att.title;
+            const fullTitle = `${icon} 【${subName}】 ${cleanTitle}`;
+            
             card.innerHTML = `
-                <summary class="ref-summary">${att.title}</summary>
+                <summary class="ref-summary">${fullTitle}</summary>
                 <div class="ref-content">
                     <div class="ref-attack">
                         <b>📌 攻撃の概要:</b><br>
@@ -336,6 +545,27 @@ class SecurityLab {
         const modObj = window.SecurityLabModules[mod.id];
         if (!modObj) return;
         
+        // Define learning overview banner HTML
+        let overviewHtml = "";
+        if (mod.overview) {
+            const keywordsHtml = mod.keywords && mod.keywords.length > 0
+                ? `<div class="overview-keywords-list">` + 
+                  mod.keywords.map(kw => `<span class="keyword-badge"># ${kw}</span>`).join('') + 
+                  `</div>`
+                : "";
+            
+            overviewHtml = `
+                <div class="module-overview-card">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 16px;">💡</span>
+                        <h4>このモジュールで学習できる概要</h4>
+                    </div>
+                    <p>${mod.overview}</p>
+                    ${keywordsHtml}
+                </div>
+            `;
+        }
+        
         // Define Glossary Search Box HTML
         const glossaryHtml = `
             <div class="card glossary-search-card" style="margin-bottom: 24px;">
@@ -353,8 +583,8 @@ class SecurityLab {
             </div>
         `;
         
-        // Insert module html template with Glossary prepended
-        this.labContainer.innerHTML = glossaryHtml + modObj.html;
+        // Insert module html template with Overview and Glossary prepended
+        this.labContainer.innerHTML = overviewHtml + glossaryHtml + modObj.html;
         
         // Initialize glossary search handlers
         this.initGlossarySearch();

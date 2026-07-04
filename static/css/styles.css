@@ -1112,4 +1112,461 @@ details.ref-card[open] summary::after {
     box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
 }
 
+/* --- Subject A-2 Exam Classification styles --- */
+.category-section {
+    margin-top: 40px;
+    margin-bottom: 24px;
+}
+
+.category-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-section-title span.badge-cat {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-primary-hover);
+    background-color: var(--color-primary-glow);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.subcategory-group {
+    margin-bottom: 32px;
+}
+
+.subcategory-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.subcategory-title::before {
+    content: "📁";
+    font-size: 14px;
+}
+
+.nav-category-header {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-primary-hover);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 14px 16px 4px 16px;
+    margin-top: 12px;
+    opacity: 0.8;
+    border-top: 1px dashed rgba(255,255,255,0.05);
+}
+
+.nav-category-header:first-of-type {
+    border-top: none;
+    margin-top: 0;
+}
+
+.nav-subcategory-header {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 6px 16px 2px 24px;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-item-indented {
+    margin-left: 12px;
+}
+
+.module-card.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(24, 24, 28, 0.4);
+    position: relative;
+    pointer-events: none;
+}
+
+.module-card.disabled:hover {
+    transform: none;
+    border-color: rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+}
+
+.badge-coming-soon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* --- Module Learning Overview Banner styles --- */
+.module-overview-card {
+    background: rgba(99, 102, 241, 0.05);
+    border-left: 4px solid var(--color-primary) !important;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.module-overview-card h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.module-overview-card p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 8px 0 0 0;
+}
+
+.overview-keywords-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.keyword-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--color-primary-hover);
+    background-color: var(--color-primary-glow);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    transition: var(--transition-fast);
+}
+
+.keyword-badge:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 6px var(--color-primary-glow);
+}
+
+/* --- IPsec SA Simulator UI styles --- */
+.sa-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.sa-table th, .sa-table td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.sa-table th {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.sa-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.01);
+}
+
+.sa-status-active {
+    color: #10b981;
+    font-weight: bold;
+}
+
+.sa-status-inactive {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.sa-diagram-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 14px;
+}
+
+.sa-box {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+}
+
+.sa-box.ike {
+    background-color: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+}
+
+.sa-box.ipsec-out {
+    background-color: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+}
+
+.sa-box.ipsec-in {
+    background-color: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #fde047;
+}
+
+/* --- OSI Model Simulator styles --- */
+.osi-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.osi-layer-card {
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.osi-layer-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary-glow);
+}
+
+.osi-layer-card.active {
+    border-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.08);
+}
+
+.osi-layer-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-primary-hover);
+    background-color: var(--color-primary-glow);
+    padding: 2px 6px;
+    border-radius: 4px;
+    min-width: 48px;
+    text-align: center;
+}
+
+.osi-layer-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+    margin-left: 14px;
+}
+
+.osi-pdu-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.osi-layer-card.active .osi-pdu-badge {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.osi-header-tag {
+    font-size: 9px;
+    font-weight: 700;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    background-color: #ef4444;
+    animation: fadeIn var(--transition-fast) ease-in-out;
+}
+
+.osi-packet-preview-container {
+    background-color: #0c0a09;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #fbbf24;
+    min-height: 120px;
+    position: relative;
+}
+
+.osi-packet-block {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.osi-packet-segment {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.osi-segment-eth { background-color: #3b82f6; }
+.osi-segment-ip { background-color: #10b981; }
+.osi-segment-tcp { background-color: #f59e0b; }
+.osi-segment-tls { background-color: #a78bfa; }
+.osi-segment-data { background-color: #ec4899; }
+.osi-segment-fcs { background-color: #6b7280; }
+
+.osi-flow-animation-container {
+    height: 60px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    position: relative;
+    overflow: hidden;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+}
+
+.osi-flow-node {
+    font-size: 24px;
+    z-index: 2;
+    background-color: var(--bg-app);
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.osi-flow-line {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background-color: var(--border-color);
+    z-index: 1;
+}
+
+.osi-flow-packet {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    top: calc(50% - 7px);
+    left: 40px;
+    z-index: 3;
+    display: none;
+    box-shadow: 0 0 8px var(--color-primary);
+}
+
+/* --- OSI Packet Decoder Table styles --- */
+.osi-decoder-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 20px;
+}
+
+.osi-decoder-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.osi-decoder-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+.osi-decoder-table th, .osi-decoder-table td {
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.osi-decoder-table th {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    font-weight: 600;
+    width: 25%;
+}
+
+.osi-decoder-table td.field-name {
+    font-family: var(--font-mono);
+    color: var(--color-primary-hover);
+    font-weight: 600;
+    width: 30%;
+}
+
+.osi-decoder-table td.field-value {
+    font-family: var(--font-mono);
+    color: #fbbf24;
+}
+
+.osi-decoder-table tr.highlight {
+    background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+.osi-decoder-table tr.highlight td {
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+.osi-decoder-table tr.decapsulated {
+    opacity: 0.35;
+    text-decoration: line-through;
+    background-color: rgba(239, 68, 68, 0.04) !important;
+}
+
+.osi-decoder-table tr.decapsulated td.field-value {
+    color: var(--text-secondary) !important;
+}
+
 

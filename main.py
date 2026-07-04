@@ -40,55 +40,122 @@ MODULES = [
         "id": "hashing",
         "title": "パスワードハッシュ化＆ソルト",
         "description": "SHA-256 vs bcrypt の比較、辞書攻撃シミュレーションを通じて、ソルトとストレッチングの重要性を学びます。",
-        "jsFile": "lab_hashing.js"
+        "jsFile": "lab_hashing.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "パスワードを安全に保存するためのハッシュ化アルゴリズム（SHA-256、bcrypt）の違いや、レインボーテーブル・辞書攻撃を防ぐ「ソルト（Salt）」および「ストレッチング」の重要性を学びます。",
+        "keywords": ["ハッシュ関数", "SHA-256", "bcrypt", "ソルト (Salt)", "ストレッチング", "辞書攻撃", "ストレージコスト"]
     },
     {
         "id": "jwt",
         "title": "JWTセキュリティ",
         "description": "JWTの構造、改ざん検知、および「alg: none」の脆弱性を体験的に学びます。",
-        "jsFile": "lab_jwt.js"
+        "jsFile": "lab_jwt.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "Web API等で広く使われるJWT (JSON Web Token) のデータ構造を学びます。トークン改ざん検知の仕組みや、署名アルゴリズムを `none` に書き換える脆弱性（alg: none 脆弱性）を実際に再現し、正しい署名検証による防御方法を学習します。",
+        "keywords": ["JWT (JSON Web Token)", "署名 (Signature)", "改ざん検知", "alg: none 脆弱性", "Base64url"]
     },
     {
         "id": "mfa",
         "title": "多要素認証 (MFA) & TOTP",
         "description": "TOTPの仕組み、共有鍵、30秒有効期間の計算、QRコード連携を学びます。",
-        "jsFile": "lab_mfa.js"
+        "jsFile": "lab_mfa.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "ワンタイムパスワード（OTP）を用いた多要素認証について学びます。認証アプリで使われる時間ベースのワンタイムパスワード（TOTP）の生成ロジック（共有鍵と時間から算出する仕組み）を可視化し、実際の Authenticator アプリとの同期を検証します。",
+        "keywords": ["MFA (多要素認証)", "TOTP", "HOTP", "共有鍵 (Base32)", "Unix Time (30秒制限)"]
     },
     {
         "id": "oauth",
         "title": "OAuth 2.0 / OIDC フロー",
         "description": "認可コードフローや state パラメータによるCSRF対策をインタラクティブに学びます。",
-        "jsFile": "lab_oauth.js"
+        "jsFile": "lab_oauth.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "外部サービス間で権限を安全に委譲する OAuth 2.0 / OpenID Connect (OIDC) の動作フローを学びます。代表的な『認可コードフロー』を順を追って実行し、セキュリティ対策パラメータ `state`（CSRF対策）や `nonce`（リプレイ攻撃対策）の重要性を学習します。",
+        "keywords": ["OAuth 2.0", "OIDC (OpenID Connect)", "認可コードフロー", "state パラメータ (CSRF対策)", "nonce パラメータ"]
     },
     {
         "id": "crypto",
         "title": "暗号化＆デジタル署名",
         "description": "AES（共通鍵）とRSA（公開鍵）の使い分け、デジタル署名による改ざん検知を学びます。",
-        "jsFile": "lab_crypto.js"
+        "jsFile": "lab_crypto.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "現代のセキュリティの基盤となる暗号技術を学びます。共通鍵暗号（AES-GCM）での暗号化・復号、公開鍵暗号（RSA）を用いた鍵ペア生成と暗号化、さらに送信元の証明と改ざん防止を行う『デジタル署名』の仕組みを検証します。",
+        "keywords": ["共通鍵暗号 (AES)", "公開鍵暗号 (RSA)", "ハイブリッド暗号", "デジタル署名", "改ざん検知"]
     },
     {
         "id": "network",
         "title": "FW / IDS・IPS / WAF 使い分け",
         "description": "ファイアウォール、IDS/IPS、WAFのそれぞれの処理レイヤーや防御対象の違いを体系的に学びます。",
-        "jsFile": "lab_network.js"
+        "jsFile": "lab_network.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "ネットワークやアプリケーションを防御するための3つの主要防御機器（ファイアウォール、IDS/IPS、WAF）の動作レイヤーと防衛対象の違いを学びます。境界防衛シミュレータを使用し、パケットの種類に応じてどの機器がどのように機能するかを可視化します。",
+        "keywords": ["ファイアウォール (L4)", "IDS/IPS (L7 シグネチャ)", "WAF (L7 HTTP)", "ポートスキャン", "SQLi/XSS"]
     },
     {
         "id": "vuln",
         "title": "Web脆弱性攻撃と防衛 (SQLi / XSS)",
         "description": "SQLインジェクションやクロスサイトスクリプティング（XSS）の脆弱性と、セキュアコーディングでの防御を体験します。",
-        "jsFile": "lab_vuln.js"
+        "jsFile": "lab_vuln.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "Webアプリケーションに潜む代表的な脆弱性である SQL インジェクション (SQLi) とクロスサイトスクリプティング (XSS) の動作原理と、その防衛方法を学びます。攻撃リクエストを体験し、ソースコードレベルでのバインド変数使用やサニタイズ（エスケープ）の効果を確認します。",
+        "keywords": ["SQLインジェクション (SQLi)", "プレースホルダ (バインド変数)", "クロスサイトスクリプティング (XSS)", "サニタイズ (エスケープ)", "セキュアコーディング"]
     },
     {
         "id": "kerberos",
         "title": "認証プロトコル・ログ解析 (Kerberos)",
         "description": "Kerberos認証チケットの発行プロセスと、チケットをデコードした認証ログの解析を学びます。",
-        "jsFile": "lab_kerberos.js"
+        "jsFile": "lab_kerberos.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "組織内ネットワークでシングルサインオン（SSO）を実現する Kerberos 認証の3つの通信フェーズ（AS、TGS、AP）について学びます。認証チケット（TGT等）の暗号化デコードログを解析し、時間スタンプ（リプレイ攻撃対策）による検証処理を理解します。",
+        "keywords": ["Kerberos (ケルベロス)", "TGT (チケット交付チケット)", "Authenticator (認証子)", "チケット転送", "リプレイ攻撃対策 (タイムスタンプ)"]
     },
     {
         "id": "ipsec",
         "title": "IPsec構造・IKE交換",
         "description": "IPsecカプセル化（Tunnel/Transport、AH/ESP）パケットと、IKE Phase 1・Phase 2の通信シーケンスを学びます。",
-        "jsFile": "lab_ipsec.js"
+        "jsFile": "lab_ipsec.js",
+        "category": "technology",
+        "subcategory": "2_network",
+        "subcategory_name": "2. ネットワーク",
+        "overview": "IPsecによる安全なVPN通信のパケット構造と、接続前に鍵交換を行うIKEプロトコルの動作を学びます。AHとESP、トンネルモードとトランスポートモードの違いによるパケット配置をビジュアルで確認し、IKEのメインモードとアグレッシブモードのシーケンスを比較します。",
+        "keywords": ["IPsec", "AH (認証のみ)", "ESP (暗号化+認証)", "トンネル / トランスポートモード", "IKE Phase 1 / Phase 2", "メイン / アグレッシブモード"]
+    },
+    {
+        "id": "vpn_types",
+        "title": "IPsec SA・広域ネットワークVPN",
+        "description": "IPsecの鍵交換・接続管理を司る『SA (Security Association)』の動作概念と、キャリア閉域網などを利用した広域ネットワークVPNの違いを体系的に学びます。",
+        "jsFile": "lab_vpn_types.js",
+        "category": "technology",
+        "subcategory": "2_network",
+        "subcategory_name": "2. ネットワーク",
+        "overview": "IPsecの鍵交換・接続管理を司る『SA (Security Association)』の動作概念と、キャリア閉域網などを利用した広域ネットワークVPN（IP-VPN、広域イーサネット、インターネットVPN）の違いを学びます。SAの方向性やSPI、広域VPNの特徴を整理します。",
+        "keywords": ["IKE SA (双方向1本)", "IPsec SA (片方向2本)", "SPI (Security Parameter Index)", "IP-VPN (MPLS閉域網)", "広域イーサネット (L2閉域網)"]
+    },
+    {
+        "id": "osi_model",
+        "title": "OSI参照モデル・カプセル化",
+        "description": "データのカプセル化（ヘッダー付与）と非カプセル化を、物理層からアプリケーション層までの各プロトコル動作と共に視覚的に学びます。",
+        "jsFile": "lab_osi_model.js",
+        "category": "technology",
+        "subcategory": "2_network",
+        "subcategory_name": "2. ネットワーク",
+        "overview": "ネットワーク通信の共通規格であるOSI参照モデル7階層について、PCからWebサーバーへHTTPSでリクエストが送られる際の『カプセル化』および『非カプセル化』プロセスをアニメーションで視覚的に学習します。",
+        "keywords": ["OSI参照モデル", "カプセル化 (Encapsulation)", "非カプセル化 (Decapsulation)", "PDU (プロトコルデータ単位)", "L2/L3スイッチ", "MAC/IPアドレス"]
     }
 ]
 
@@ -770,6 +837,7 @@ def build_ipsec_packet(req: IPsecPacketRequest):
             "layout": packet_layout
         }
     }
+
 
 
 # --- Server Route: Serve index.html or fallback ---
