@@ -1569,4 +1569,73 @@ details.ref-card[open] summary::after {
     color: var(--text-secondary) !important;
 }
 
+/* --- Email Security Simulator styles --- */
+.email-flow-visual {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
 
+.flow-dot {
+    z-index: 10;
+    box-shadow: 0 0 8px var(--color-primary);
+}
+
+.badge-success {
+    background-color: rgba(16, 185, 129, 0.1) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    color: #34d399 !important;
+}
+
+.badge-danger {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    color: #f87171 !important;
+}
+
+.btn-tab {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-tab:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+}
+
+.btn-tab.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #ffffff;
+}
+
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+.btn-tab-mini {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-sm);
+}
+
+.btn-tab-mini:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+}
+
+.btn-tab-mini.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #ffffff;
+}
