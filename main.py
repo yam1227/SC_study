@@ -4,7 +4,7 @@ import io
 import os
 from typing import Dict, Any, List
 from fastapi import FastAPI, HTTPException, Request, status
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -111,7 +111,29 @@ MODULES = [
         "subcategory": "3_security",
         "subcategory_name": "3. セキュリティ",
         "overview": "Webアプリケーションに潜む代表的な脆弱性である SQL インジェクション (SQLi) とクロスサイトスクリプティング (XSS) の動作原理と、その防衛方法を学びます。攻撃リクエストを体験し、ソースコードレベルでのバインド変数使用やサニタイズ（エスケープ）の効果を確認します。",
-        "keywords": ["SQLインジェクション (SQLi)", "プレースホルダ (バインド変数)", "クロスサイトスクリプティング (XSS)", "サニタイズ (エスケープ)", "セキュアコーディング"]
+        "keywords": ["SQLインジェクション (SQLi)", "プレースホルダ (バインド変数)", "クロスサイトスクリプティング (XSS)", "サニタイズ (エスケープ)", "セキュアプログラミング"]
+    },
+    {
+        "id": "email_security",
+        "title": "メールセキュリティ・ドメイン認証",
+        "description": "SMTP/POP3/IMAPの送受信フロー、メールヘッダの構造、およびSPF・DKIM・DMARCドメイン認証の検証プロセスを詳細に学習します。",
+        "jsFile": "lab_email_security.js",
+        "category": "technology",
+        "subcategory": "2_network",
+        "subcategory_name": "2. ネットワーク",
+        "overview": "メールの送受信で使用される各種プロトコルの違いや、メールヘッダの構造（Envelope-FromとHeader Fromの違い）を学びます。さらなりすましメール対策として必須の送信元ドメイン認証技術である『SPF』『DKIM』『DMARC』の仕組みと検証フロー、アライメントチェックの動作をビジュアルシミュレーターで体験します。",
+        "keywords": ["SMTP / POP3 / IMAP", "Envelope-From / Header From", "Receivedヘッダ", "SPF (送信IP制限)", "DKIM (電子署名)", "DMARC (アライメントとポリシー)", "SPF/DKIMアライメント"]
+    },
+    {
+        "id": "cookie_security",
+        "title": "CookieとWebセキュリティ",
+        "description": "Cookieの送受信フロー、主要属性（Secure、HttpOnly、SameSite）の挙動、およびXSSやCSRFなどの攻撃に対する具体的な防御策を詳細に学習します。",
+        "jsFile": "lab_cookie_security.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "Webアプリケーションでセッション管理等に使われるCookieについて、HTTPリクエスト・レスポンスにおける送受信プロセスをシミュレートします。XSS脆弱性からセッションIDを守る「HttpOnly属性」，盗聴を防ぐ「Secure属性」，別ドメイン発のリクエストによるCSRF攻撃を防ぐ「SameSite属性（Strict/Lax/None）」の違いをビジュアルで学習します。",
+        "keywords": ["Cookie", "Set-Cookieヘッダ", "HttpOnly属性 (XSS対策)", "Secure属性", "SameSite属性 (CSRF対策)", "Domain/Path/Max-Age", "セッションハイジャック"]
     },
     {
         "id": "kerberos",
@@ -121,7 +143,7 @@ MODULES = [
         "category": "technology",
         "subcategory": "3_security",
         "subcategory_name": "3. セキュリティ",
-        "overview": "組織内ネットワークでシングルサインオン（SSO）を実現する Kerberos 認証の3つの通信フェーズ（AS、TGS、AP）について学びます。認証チケット（TGT等）の暗号化デコードログを解析し、時間スタンプ（リプレイ攻撃対策）による検証処理を理解します。",
+        "overview": "Kerberos（ケルベロス）認証の3つのチケット発行フェーズ（AS、TGS、AP）のステップ実行。暗号化された TGT（チケット交付チケット） やサービスチケットの内容、および リプレイ攻撃対策としてのタイムスタンプ を含む生ログのデコード解析。",
         "keywords": ["Kerberos (ケルベロス)", "TGT (チケット交付チケット)", "Authenticator (認証子)", "チケット転送", "リプレイ攻撃対策 (タイムスタンプ)"]
     },
     {
@@ -156,17 +178,6 @@ MODULES = [
         "subcategory_name": "2. ネットワーク",
         "overview": "ネットワーク通信の共通規格であるOSI参照モデル7階層について、PCからWebサーバーへHTTPSでリクエストが送られる際の『カプセル化』および『非カプセル化』プロセスをアニメーションで視覚的に学習します。",
         "keywords": ["OSI参照モデル", "カプセル化 (Encapsulation)", "非カプセル化 (Decapsulation)", "PDU (プロトコルデータ単位)", "L2/L3スイッチ", "MAC/IPアドレス"]
-    },
-    {
-        "id": "email_security",
-        "title": "メールセキュリティ・ドメイン認証",
-        "description": "SMTP/POP3/IMAPの送受信フロー、メールヘッダの構造、およびSPF・DKIM・DMARCドメイン認証の検証プロセスを詳細に学習します。",
-        "jsFile": "lab_email_security.js",
-        "category": "technology",
-        "subcategory": "2_network",
-        "subcategory_name": "2. ネットワーク",
-        "overview": "メールの送受信で使用される各種プロトコルの違いや、メールヘッダの構造（Envelope-FromとHeader Fromの違い）を学びます。さらになりすましメール対策として必須の送信元ドメイン認証技術である『SPF』『DKIM』『DMARC』の仕組みと検証フロー、アライメントチェックの動作をビジュアルシミュレーターで体験します。",
-        "keywords": ["SMTP / POP3 / IMAP", "Envelope-From / Header From", "Receivedヘッダ", "SPF (送信IP制限)", "DKIM (電子署名)", "DMARC (アライメントとポリシー)", "SPF/DKIMアライメント"]
     }
 ]
 
@@ -850,13 +861,59 @@ def build_ipsec_packet(req: IPsecPacketRequest):
     }
 
 
+# --- LAB 13: Cookie and Web Security API ---
+class CookieSimulateRequest(BaseModel):
+    http_only: bool
+    secure: bool
+    same_site: str  # "strict", "lax", "none"
+    request_type: str  # "normal", "csrf_link", "csrf_post"
+    use_https: bool
+
+@app.post("/api/cookie/simulate")
+def simulate_cookie(req: CookieSimulateRequest):
+    cookie_sent = True
+    reason = "通常リクエストのため、Cookieは送信されました。"
+
+    # 1. Secure attribute check
+    if req.secure and not req.use_https:
+        cookie_sent = False
+        reason = "Secure属性が有効ですが、非暗号化通信 (HTTP) のためブラウザによってCookieの送信がブロックされました。"
+
+    # 2. SameSite attribute check
+    elif req.request_type == "csrf_link":
+        if req.same_site == "strict":
+            cookie_sent = False
+            reason = "SameSite=Strict が設定されているため、クロスサイト（別サイトからのリンク遷移）でのGETリクエストではCookieは送信されません。"
+        else:
+            reason = f"SameSite={req.same_site.capitalize()} のため、クロスサイト遷移（GET）でもCookieは送信されます。"
+            
+    elif req.request_type == "csrf_post":
+        if req.same_site in ["strict", "lax"]:
+            cookie_sent = False
+            reason = f"SameSite={req.same_site.capitalize()} が設定されているため、クロスサイトでのPOSTリクエスト（CSRF攻撃）ではCookieは送信されません。"
+        else:
+            reason = "SameSite=None（かつSecure有効）のため、クロスサイトのPOSTリクエストでもCookieが送信され、CSRF攻撃が成立する可能性があります。"
+
+    # HttpOnly information
+    js_readable = not req.http_only
+    js_reason = "HttpOnly属性が無効なため、JavaScriptの document.cookie からCookie値を読み取り可能です（XSSによるセッション盗聴の危険性）。" if js_readable else "HttpOnly属性が有効なため、JavaScriptからCookie値へのアクセスは遮断されています。"
+
+    return {
+        "cookie_sent": cookie_sent,
+        "reason": reason,
+        "js_readable": js_readable,
+        "js_reason": js_reason,
+        "set_cookie_header": f"Set-Cookie: session_id=sess_abc123; Path=/; {'HttpOnly; ' if req.http_only else ''}{'Secure; ' if req.secure else ''}SameSite={req.same_site.capitalize()}"
+    }
+
 
 # --- Server Route: Serve index.html or fallback ---
 @app.get("/")
 def get_index():
-    index_path = os.path.join(os.path.dirname(__file__), "static", "index.html")
+    index_path = os.path.join("static", "index.html")
     if os.path.exists(index_path):
-        return FileResponse(index_path)
+        with open(index_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(f.read())
     return HTMLResponse("<h1>Security & Auth Lab Backend is Running!</h1><p>Please place index.html in the static directory.</p>")
 
 # Mount static files (HTML, CSS, JS)
