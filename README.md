@@ -3,7 +3,7 @@
 情報処理安全確保支援士（セキスペ）の試験範囲で頻出する暗号・認証技術、および各種ネットワーク防衛技術を、実際のデータ・通信ログを見ながら体系的かつ体験的に学習するためのインタラクティブなローカルラボ環境です。
 
 ## 特徴
-- **対話型シミュレーション**: パスワードのハッシュ化速度、JWT改ざん検証、TOTP（MFA）時間同期、OAuth 2.0認可シーケンス、RSA暗号・デジタル署名の改ざん検知、境界防衛、Web脆弱性、Kerberosチケット交換、IPsecパケットカプセル化、IPsec SA確立プロセス、SPIによる暗号データ転送、OSI参照モデル各層でのカプセル化・非カプセル化、メール送受信・ドメイン認証（SPF/DKIM/DMARC）、Cookie属性（HttpOnly/Secure/SameSite）制御などをブラウザ上で直感的に試せます。
+- **対話型シミュレーション**: パスワードのハッシュ化速度、JWT改ざん検証、TOTP（MFA）時間同期、OAuth 2.0認可シーケンス、SAML 2.0/学認SSOの認証シーケンスとアサーション改ざん検証、RSA暗号・デジタル署名の改ざん検知、境界防衛、Web脆弱性、Kerberosチケット交換、IPsecパケットカプセル化、IPsec SA確立プロセス、SPIによる暗号データ転送、OSI参照モデル各層でのカプセル化・非カプセル化、メール送受信・ドメイン認証（SPF/DKIM/DMARC）、Cookie属性（HttpOnly/Secure/SameSite）制御などをブラウザ上で直感的に試せます。
 - **学習概要バナー自動表示（NEW）**: 各モジュールに遷移すると、そのモジュールの目的と重要キーワードがひと目でわかる学習概要バナーが冒頭に表示され、学習ポイントの見落としを防ぎます。
 - **攻撃手法クイック・リファレンス（NEW）**: ダッシュボード下部に、セキスペ頻出の各種攻撃手法（辞書攻撃、JWT改ざん、CSRF、SQLi、XSS、リプレイ攻撃、ポートスキャン等）の概要・防衛策・試験ポイントをまとめたインタラクティブなアコーディオン（アコーディオンドロップダウン）を実装。そこから直接関連する学習ラボへジャンプできます。
 - **セキスペ用語検索（簡易事典機能）**: 各モジュールの上部から、シラバス準拠のセキュリティ/認証重要用語（全52語）をリアルタイムに検索可能。試験での重要出題ポイントをその場で確認できます。
@@ -32,13 +32,18 @@ uv pip install -r requirements.txt
 .venv/bin/uvicorn main:app --host 127.0.0.1 --port 18000 --reload
 ```
 
+> [!TIP]
+> **VS Code / Cursor を使用する場合**
+> ワークスペースの `.vscode/settings.json` を設定し、自動的に `.venv` 内の Python インタプリタを使用するよう構成しています。
+> エディタ上で `Cannot find module` エラーが発生している場合は、コマンドパレット (`Cmd + Shift + P`) から `Python: Select Interpreter` を実行し、`.venv/bin/python` を明示的に選択してください。
+
 ### 2. ブラウザでアクセス
 以下のURLにアクセスすると、セキュリティ・ラボのダッシュボードが表示されます。
 👉 **[http://127.0.0.1:18000](http://127.0.0.1:18000)**
 
 ---
 
-## 搭載されている学習モジュール (全13モジュール)
+## 搭載されている学習モジュール (全14モジュール)
 
 1. **パスワードハッシュ化＆ソルト (Password Hashing)**
    - SHA-256（ソルトなし・高速）と bcrypt（ソルト自動付与・意図的な遅延処理）の違いを比較。
@@ -78,6 +83,10 @@ uv pip install -r requirements.txt
 13. **CookieとWebセキュリティ (Cookie & Web Security)**
     - Cookieの送受信フローにおいて、XSS対策の「HttpOnly属性」、盗聴対策の「Secure属性」、およびCSRF対策の「SameSite属性（Strict/Lax/None）」の設定によるブラウザの送信制限挙動をシミュレート。
     - XSSによるセッション強奪や、CSRFによる不正送金といった実際的な攻撃シナリオを実演し、各属性の防御効果を体験学習。
+14. **SAML 認証 & 学認 SSO (SAML & GakuNin SSO)**
+    - 学術認証フェデレーション「学認 (GakuNin)」をモデルにした、SP-initiated SSOフローの体験シミュレーション。
+    - XML構造で記述されたSAMLアサーションの内部データ構造（Issuer, Subject, Conditions, AttributeStatement, SignatureValue等）の解読。
+    - **「アサーションの5大検証基準（デジタル署名、有効期限、宛先Audience、リプレイ対策InResponseTo、送信先Recipient）」** の厳密な判定と、アサーションのデータを意図的に改ざんした際にSPがどのように検知してブロックするかを学習する改ざんシミュレータ。
 
 ---
 
@@ -134,8 +143,8 @@ uv pip install -r requirements.txt
    .venv/bin/playwright install chromium
    ```
 
-### テストの実行
-以下のコマンドを実行すると、バックグラウンドでテスト用サーバーが自動起動し、UIシナリオテストを実行した後に自動で終了します。
-```bash
+### E2E UIテストの実行
 .venv/bin/pytest test_app.py
-```
+
+# SAML APIユニットテストの実行
+.venv/bin/pytest test_saml.py

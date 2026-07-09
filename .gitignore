@@ -35,5 +35,6 @@ train/
 
 # Automated UI Testing (Playwright / Pytest)
 test_app.py
+test_saml.py
 .pytest_cache/
 test-results/

@@ -178,6 +178,17 @@ MODULES = [
         "subcategory_name": "2. ネットワーク",
         "overview": "ネットワーク通信の共通規格であるOSI参照モデル7階層について、PCからWebサーバーへHTTPSでリクエストが送られる際の『カプセル化』および『非カプセル化』プロセスをアニメーションで視覚的に学習します。",
         "keywords": ["OSI参照モデル", "カプセル化 (Encapsulation)", "非カプセル化 (Decapsulation)", "PDU (プロトコルデータ単位)", "L2/L3スイッチ", "MAC/IPアドレス"]
+    },
+    {
+        "id": "saml",
+        "title": "SAML 認証 & 学認 SSO",
+        "description": "SAML 2.0 に基づくシングルサインオン、アサーションの内部構造、および SP におけるデジタル署名や有効期限の厳密な検証基準を、学認 (GakuNin) のシナリオを通じて体験的に学びます。",
+        "jsFile": "lab_saml.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "教育・研究機関で広く使われている学術認証フェデレーション「学認（GakuNin）」をモデルに、SAML 2.0 に基づくシングルサインオン（SSO）の仕組みを学習します。ユーザーがサービスプロバイダ（SP）にアクセスし、アイデンティティプロバイダ（IdP）で認証され、SAMLアサーションを含むSAMLResponseを受け取るフローを追体験し、SPがアサーションの信頼性をどのように厳密に検証しているか（署名・有効期限・宛先・リプレイ攻撃防止など）を学習します。",
+        "keywords": ["SAML 2.0", "SP (Service Provider)", "IdP (Identity Provider)", "SAMLアサーション", "メタデータ", "学認 (GakuNin)", "ACS (Assertion Consumer Service)", "デジタル署名", "リプレイ攻撃対策"]
     }
 ]
 
@@ -904,6 +915,351 @@ def simulate_cookie(req: CookieSimulateRequest):
         "js_readable": js_readable,
         "js_reason": js_reason,
         "set_cookie_header": f"Set-Cookie: session_id=sess_abc123; Path=/; {'HttpOnly; ' if req.http_only else ''}{'Secure; ' if req.secure else ''}SameSite={req.same_site.capitalize()}"
+    }
+
+
+# --- SAML IdP Simulated RSA Keypair ---
+saml_idp_private_key = rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=2048
+)
+saml_idp_public_key = saml_idp_private_key.public_key()
+saml_idp_public_pem = saml_idp_public_key.public_bytes(
+    encoding=serialization.Encoding.PEM,
+    format=serialization.PublicFormat.SubjectPublicKeyInfo
+).decode('utf-8')
+
+
+class SAMLAuthenticateRequest(BaseModel):
+    username: str
+    authn_request_id: str
+
+
+class SAMLVerifyRequest(BaseModel):
+    saml_response_xml: str
+    expected_in_response_to: str
+    time_offset_seconds: int = 0
+
+
+@app.post("/api/saml/initiate")
+def saml_initiate():
+    import uuid
+    import zlib
+    import urllib.parse
+    from datetime import datetime, timezone
+
+    request_id = "_" + str(uuid.uuid4())
+    issue_instant = datetime.now(timezone.utc).isoformat()
+    
+    entity_id = "https://sp.sciencesearch.jp/saml2"
+    acs_url = "https://sp.sciencesearch.jp/saml2/acs"
+    destination = "https://idp.university.ac.jp/idp/profile/SAML2/Redirect/SSO"
+    
+    authn_request_xml = (
+        f'<samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" '
+        f'xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '
+        f'ID="{request_id}" Version="2.0" IssueInstant="{issue_instant}" '
+        f'Destination="{destination}" AssertionConsumerServiceURL="{acs_url}" '
+        f'ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST">\n'
+        f'  <saml:Issuer>{entity_id}</saml:Issuer>\n'
+        f'  <samlp:NameIDPolicy Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" AllowCreate="true"/>\n'
+        f'</samlp:AuthnRequest>'
+    )
+    
+    # Raw DEFLATE compression without zlib headers
+    compressor = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, -zlib.MAX_WBITS)
+    compressed = compressor.compress(authn_request_xml.encode('utf-8')) + compressor.flush()
+    saml_request_b64 = base64.b64encode(compressed).decode('utf-8')
+    redirect_url = f"{destination}?SAMLRequest={urllib.parse.quote(saml_request_b64)}"
+    
+    return {
+        "request_id": request_id,
+        "entity_id": entity_id,
+        "acs_url": acs_url,
+        "destination": destination,
+        "xml": authn_request_xml,
+        "saml_request_b64": saml_request_b64,
+        "redirect_url": redirect_url
+    }
+
+
+@app.post("/api/saml/authenticate")
+def saml_authenticate(req: SAMLAuthenticateRequest):
+    import uuid
+    from datetime import datetime, timezone, timedelta
+
+    response_id = "_" + str(uuid.uuid4())
+    assertion_id = "_" + str(uuid.uuid4())
+    now = datetime.now(timezone.utc)
+    issue_instant = now.isoformat()
+    
+    not_before = (now - timedelta(minutes=2)).isoformat()
+    not_on_or_after = (now + timedelta(minutes=5)).isoformat()
+    
+    sp_entity_id = "https://sp.sciencesearch.jp/saml2"
+    idp_entity_id = "https://idp.university.ac.jp/idp/shibboleth"
+    recipient_acs = "https://sp.sciencesearch.jp/saml2/acs"
+    
+    role = "faculty" if "sensei" in req.username.lower() or "prof" in req.username.lower() else "student"
+    email = f"{req.username}@university.ac.jp"
+    
+    assertion_xml_template = (
+        f'<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '
+        f'ID="{assertion_id}" IssueInstant="{issue_instant}" Version="2.0">\n'
+        f'  <saml:Issuer>{idp_entity_id}</saml:Issuer>\n'
+        f'  <saml:Subject>\n'
+        f'    <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">{req.username}</saml:NameID>\n'
+        f'    <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">\n'
+        f'      <saml:SubjectConfirmationData InResponseTo="{req.authn_request_id}" '
+        f'NotOnOrAfter="{not_on_or_after}" Recipient="{recipient_acs}"/>\n'
+        f'    </saml:SubjectConfirmation>\n'
+        f'  </saml:Subject>\n'
+        f'  <saml:Conditions NotBefore="{not_before}" NotOnOrAfter="{not_on_or_after}">\n'
+        f'    <saml:AudienceRestriction>\n'
+        f'      <saml:Audience>{sp_entity_id}</saml:Audience>\n'
+        f'    </saml:AudienceRestriction>\n'
+        f'  </saml:Conditions>\n'
+        f'  <saml:AuthnStatement AuthnInstant="{issue_instant}">\n'
+        f'    <saml:AuthnContext>\n'
+        f'      <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>\n'
+        f'    </saml:AuthnContext>\n'
+        f'  </saml:AuthnStatement>\n'
+        f'  <saml:AttributeStatement>\n'
+        f'    <saml:Attribute Name="urn:oid:0.9.2342.19200300.100.1.3" FriendlyName="mail">\n'
+        f'      <saml:AttributeValue>{email}</saml:AttributeValue>\n'
+        f'    </saml:Attribute>\n'
+        f'    <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" FriendlyName="eduPersonAffiliation">\n'
+        f'      <saml:AttributeValue>{role}</saml:AttributeValue>\n'
+        f'      <saml:AttributeValue>member</saml:AttributeValue>\n'
+        f'    </saml:Attribute>\n'
+        f'  </saml:AttributeStatement>\n'
+        f'</saml:Assertion>'
+    )
+    
+    assertion_bytes = assertion_xml_template.encode('utf-8')
+    signature = saml_idp_private_key.sign(
+        assertion_bytes,
+        padding.PKCS1v15(),
+        hashes.SHA256()
+    )
+    signature_b64 = base64.b64encode(signature).decode('utf-8')
+    
+    saml_response_xml = (
+        f'<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" '
+        f'xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '
+        f'ID="{response_id}" Version="2.0" IssueInstant="{issue_instant}" '
+        f'Destination="{recipient_acs}" InResponseTo="{req.authn_request_id}">\n'
+        f'  <saml:Issuer>{idp_entity_id}</saml:Issuer>\n'
+        f'  <samlp:Status>\n'
+        f'    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>\n'
+        f'  </samlp:Status>\n'
+        f'  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">\n'
+        f'    <ds:SignedInfo>\n'
+        f'      <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>\n'
+        f'      <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>\n'
+        f'      <ds:Reference>\n'
+        f'        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>\n'
+        f'      </ds:Reference>\n'
+        f'    </ds:SignedInfo>\n'
+        f'    <ds:SignatureValue>{signature_b64}</ds:SignatureValue>\n'
+        f'  </ds:Signature>\n'
+        f'{assertion_xml_template}\n'
+        f'</samlp:Response>'
+    )
+    
+    saml_response_b64 = base64.b64encode(saml_response_xml.encode('utf-8')).decode('utf-8')
+    
+    return {
+        "response_id": response_id,
+        "assertion_id": assertion_id,
+        "username": req.username,
+        "role": role,
+        "email": email,
+        "xml": saml_response_xml,
+        "assertion_xml": assertion_xml_template,
+        "saml_response_b64": saml_response_b64,
+        "public_key_pem": saml_idp_public_pem
+    }
+
+
+@app.post("/api/saml/verify")
+def saml_verify(req: SAMLVerifyRequest):
+    import re
+    import xml.etree.ElementTree as ET
+    from datetime import datetime, timezone, timedelta
+
+    xml = req.saml_response_xml
+    
+    try:
+        root = ET.fromstring(xml)
+    except Exception as e:
+        return {
+            "success": False,
+            "overall_status": "XML_PARSE_ERROR",
+            "error_message": f"XMLの解析に失敗しました。構文が正しいか確認してください。(Error: {str(e)})",
+            "checks": {
+                "signature": {"status": "FAILED", "msg": "XML解析エラーのため検証不可"},
+                "conditions": {"status": "FAILED", "msg": "XML解析エラーのため検証不可"},
+                "audience": {"status": "FAILED", "msg": "XML解析エラーのため検証不可"},
+                "in_response_to": {"status": "FAILED", "msg": "XML解析エラーのため検証不可"},
+                "recipient": {"status": "FAILED", "msg": "XML解析エラーのため検証不可"}
+            }
+        }
+
+    ns = {
+        'saml': 'urn:oasis:names:tc:SAML:2.0:assertion',
+        'samlp': 'urn:oasis:names:tc:SAML:2.0:protocol',
+        'ds': 'http://www.w3.org/2000/09/xmldsig#'
+    }
+
+    def find_element(path, root_el):
+        el = root_el.find(path, ns)
+        if el is not None:
+            return el
+        tag_name = path.split('/')[-1].split(':')[-1]
+        for elem in root_el.iter():
+            if elem.tag.endswith(tag_name):
+                return elem
+        return None
+
+    sig_val_el = find_element('.//ds:SignatureValue', root)
+    assertion_el = find_element('.//saml:Assertion', root)
+    
+    assertion_match = re.search(r'(<saml:Assertion.*?</saml:Assertion>)', xml, re.DOTALL)
+    if not assertion_match:
+        assertion_match = re.search(r'(<Assertion.*?</Assertion>)', xml, re.DOTALL)
+
+    assertion_xml_str = assertion_match.group(1) if assertion_match else ""
+
+    sig_verified = False
+    sig_error = ""
+    if sig_val_el is not None and sig_val_el.text and assertion_xml_str:
+        sig_b64 = sig_val_el.text.strip().replace("\n", "").replace(" ", "").replace("\r", "")
+        try:
+            sig_bytes = base64.b64decode(sig_b64)
+            saml_idp_public_key.verify(
+                sig_bytes,
+                assertion_xml_str.encode('utf-8'),
+                padding.PKCS1v15(),
+                hashes.SHA256()
+            )
+            sig_verified = True
+        except Exception as e:
+            sig_error = str(e)
+    else:
+        sig_error = "署名値またはAssertion要素が見つかりません"
+
+    cond_el = find_element('.//saml:Conditions', root)
+    not_before_str = cond_el.attrib.get('NotBefore') if cond_el is not None else None
+    not_on_or_after_str = cond_el.attrib.get('NotOnOrAfter') if cond_el is not None else None
+
+    aud_el = find_element('.//saml:Audience', root)
+    audience_val = aud_el.text.strip() if aud_el is not None and aud_el.text else None
+
+    sub_conf_data_el = find_element('.//saml:SubjectConfirmationData', root)
+    in_response_to_val = sub_conf_data_el.attrib.get('InResponseTo') if sub_conf_data_el is not None else None
+    recipient_val = sub_conf_data_el.attrib.get('Recipient') if sub_conf_data_el is not None else None
+
+    checks = {}
+
+    if sig_verified:
+        checks["signature"] = {
+            "status": "SUCCESS",
+            "msg": "デジタル署名は有効です。アサーションは信頼されたIdPの秘密鍵で署名されており、改ざんされていません。"
+        }
+    else:
+        checks["signature"] = {
+            "status": "FAILED",
+            "msg": f"デジタル署名の検証に失敗しました。アサーションの内容（ユーザー情報や有効期限など）が改ざんされているか、署名が正しくありません。(エラー: {sig_error})"
+        }
+
+    simulated_now = datetime.now(timezone.utc) + timedelta(seconds=req.time_offset_seconds)
+    
+    cond_ok = False
+    cond_msg = ""
+    if not_before_str and not_on_or_after_str:
+        try:
+            nb_dt = datetime.fromisoformat(not_before_str.replace('Z', '+00:00'))
+            noa_dt = datetime.fromisoformat(not_on_or_after_str.replace('Z', '+00:00'))
+            
+            if nb_dt <= simulated_now <= noa_dt:
+                cond_ok = True
+                cond_msg = f"有効期間内です。(有効期間: {not_before_str} 〜 {not_on_or_after_str}, 検証基準時刻: {simulated_now.isoformat()})"
+            elif simulated_now < nb_dt:
+                cond_msg = f"有効期間前です。まだ有効になっていません。(有効開始予定: {not_before_str}, 検証基準時刻: {simulated_now.isoformat()})"
+            else:
+                cond_msg = f"有効期限切れです。(有効期限: {not_on_or_after_str}, 検証基準時刻: {simulated_now.isoformat()})"
+        except Exception as e:
+            cond_msg = f"有効期限のパースに失敗しました: {str(e)}"
+    else:
+        cond_msg = "有効期限情報 (NotBefore / NotOnOrAfter) が存在しません。"
+
+    checks["conditions"] = {
+        "status": "SUCCESS" if cond_ok else "FAILED",
+        "msg": cond_msg
+    }
+
+    sp_entity_id = "https://sp.sciencesearch.jp/saml2"
+    aud_ok = (audience_val == sp_entity_id)
+    checks["audience"] = {
+        "status": "SUCCESS" if aud_ok else "FAILED",
+        "msg": f"期待値: {sp_entity_id}, 受信値: {audience_val or '[未設定]'}. " + (
+            "一致しました。自サービス宛てのアサーションです。" if aud_ok else "不一致です！このアサーションは別のサービスプロバイダ(SP)宛てに発行されたものです。"
+        )
+    }
+
+    in_resp_ok = (in_response_to_val == req.expected_in_response_to)
+    checks["in_response_to"] = {
+        "status": "SUCCESS" if in_resp_ok else "FAILED",
+        "msg": f"期待されるID: {req.expected_in_response_to}, 受信値: {in_response_to_val or '[未設定]'}. " + (
+            "一致しました。SPが要求したリクエストに対する正しい応答です。" if in_resp_ok else "不一致です！セッションハイジャックやリプレイ攻撃の可能性があります。"
+        )
+    }
+
+    recipient_acs = "https://sp.sciencesearch.jp/saml2/acs"
+    recipient_ok = (recipient_val == recipient_acs)
+    checks["recipient"] = {
+        "status": "SUCCESS" if recipient_ok else "FAILED",
+        "msg": f"期待値: {recipient_acs}, 受信値: {recipient_val or '[未設定]'}. " + (
+            "一致しました。正しい受信エンドポイント(ACS)に送信されています。" if recipient_ok else "不一致です！SAMLResponseの送信先ACSエンドポイントが不正です。"
+        )
+    }
+
+    username_val = "unknown"
+    role_val = "unknown"
+    email_val = "unknown"
+    
+    nameid_el = find_element('.//saml:NameID', root)
+    if nameid_el is not None and nameid_el.text:
+        username_val = nameid_el.text.strip()
+    
+    attr_els = root.findall('.//saml:Attribute', ns)
+    if not attr_els:
+        for elem in root.iter():
+            if elem.tag.endswith('Attribute'):
+                attr_els.append(elem)
+
+    for attr in attr_els:
+        name = attr.attrib.get('Name') or attr.attrib.get('FriendlyName')
+        val_el = find_element('saml:AttributeValue', attr)
+        if val_el is not None and val_el.text:
+            val_text = val_el.text.strip()
+            if name and ('eduPersonAffiliation' in name or 'affiliation' in name):
+                role_val = val_text
+            elif name and ('mail' in name):
+                email_val = val_text
+
+    overall_success = all(c["status"] == "SUCCESS" for c in checks.values())
+
+    return {
+        "success": overall_success,
+        "overall_status": "AUTHENTICATED" if overall_success else "VERIFICATION_FAILED",
+        "checks": checks,
+        "user_info": {
+            "username": username_val,
+            "role": role_val,
+            "email": email_val
+        }
     }
 
 
