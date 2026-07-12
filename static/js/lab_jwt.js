@@ -4,6 +4,69 @@
 window.SecurityLabModules["jwt"] = {
     html: `
         <div class="lab-container">
+            <!-- Part 0: JWT Intro Guide -->
+            <div class="card jwt-intro-card" style="border-left: 4px solid var(--color-primary); margin-bottom: 8px;">
+                <h3>📖 JWTの基本と認証方式の理解</h3>
+                <p class="card-subtitle" style="margin-bottom: 20px;">手を動かして実験を行う前に、JWTの目的や脅威について理解しましょう。</p>
+                
+                <div class="jwt-intro-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px;">
+                    <!-- Left: Base Tech & Auth comparison -->
+                    <div>
+                        <h4 style="color: var(--color-primary-hover); margin-bottom: 10px; font-size: 14px; font-weight: 600;">🔑 JWT (JSON Web Token) とは？</h4>
+                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 16px;">
+                            JWTは、クライアントとサーバー間でユーザー情報や権限（クレーム）を<b>JSON形式のトークン</b>として安全に送受信するためのオープン標準（RFC 7519）です。トークン自身に必要なデータが含まれているため、データベースへのセッション問い合わせをせずに信頼性を担保できるのが特徴です。主にWeb APIの認可やシングルサインオン（SSO）で実装されます。
+                        </p>
+                        
+                        <h4 style="color: var(--color-primary-hover); margin-bottom: 10px; font-size: 14px; font-weight: 600;">⚔️ セッションベース認証 vs トークンベース認証（JWT）</h4>
+                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px;">
+                            JWTは<b>トークンベース認証</b>に分類されます。それぞれの認証方式には、以下のような目的と役割の違いがあります。
+                        </p>
+                        
+                        <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 8px; margin-bottom: 16px;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); text-align: left;">
+                                    <th style="padding: 8px 4px; font-weight: 600; width: 25%;">特徴</th>
+                                    <th style="padding: 8px 4px; font-weight: 600; width: 38%;">セッションベース（Cookie等）</th>
+                                    <th style="padding: 8px 4px; font-weight: 600; width: 37%;">トークンベース（JWT）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary);">
+                                    <td style="padding: 8px 4px; font-weight: 500; color: var(--text-primary);">状態の保持</td>
+                                    <td style="padding: 8px 4px;"><b>ステートフル</b><br>(サーバーのメモリ/DBに保存)</td>
+                                    <td style="padding: 8px 4px;"><b>ステートレス</b><br>(サーバーは状態を保持しない)</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary);">
+                                    <td style="padding: 8px 4px; font-weight: 500; color: var(--text-primary);">情報の実体</td>
+                                    <td style="padding: 8px 4px;">セッションIDのみを渡し、中身はサーバーが管理</td>
+                                    <td style="padding: 8px 4px;">ユーザー情報や権限をトークン内に丸ごと内包</td>
+                                </tr>
+                                <tr style="color: var(--text-secondary);">
+                                    <td style="padding: 8px 4px; font-weight: 500; color: var(--text-primary);">スケーラビリティ</td>
+                                    <td style="padding: 8px 4px;">サーバー間でのセッション同期が必要で負荷が高い</td>
+                                    <td style="padding: 8px 4px;">サーバーは署名の鍵を検証するだけなので容易にスケール</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Right: alg none vulnerability -->
+                    <div style="border-left: 1px solid var(--border-color); padding-left: 32px;">
+                        <h4 style="color: var(--color-danger); margin-bottom: 10px; font-size: 14px; font-weight: 600;">⚠️ alg: none 脆弱性とは？</h4>
+                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px;">
+                            JWTのヘッダー部分には、署名検証に使用したアルゴリズムを示す <code>"alg"</code> フィールドが存在します（例: <code>"HS256"</code>, <code>"RS256"</code>）。
+                        </p>
+                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px;">
+                            <code>"none"</code> アルゴリズムは、「署名検証をスキップする」ための開発・テスト用の指定です。しかし、本番サーバーの検証ロジックが <code>alg: "none"</code> トークンを正当なものとして受け入れてしまう場合、<b>改ざん検知の仕組みが完全にバイパス</b>されます。
+                        </p>
+                        <div style="background-color: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); padding: 12px; border-radius: var(--radius-sm); font-size: 12.5px; color: #fecdd3; line-height: 1.5;">
+                            <b>攻撃のシナリオ:</b><br>
+                            攻撃者はトークンのヘッダーを <code>"alg": "none"</code> に書き換えた上で、ペイロードを <code>"role": "admin"</code> に改ざんし、末尾の署名部分を削除してサーバーに送信します。脆弱なサーバーは署名検証を行わないため、改ざんされた管理者権限をそのまま信用し、アクセスを許可してしまいます。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="lab-grid-2">
                 <!-- Part 1: Token Generator -->
                 <div class="card">
@@ -54,6 +117,9 @@ window.SecurityLabModules["jwt"] = {
                             <div class="jwt-part">
                                 <label for="sandboxJwtToken">検証するJWTトークン（直接編集可能）:</label>
                                 <textarea id="sandboxJwtToken" class="jwt-editor" style="height: 120px;" placeholder="ここにJWTを貼り付けます"></textarea>
+                                <button class="btn btn-secondary" id="btnTamperNone" style="border-color: var(--color-danger); color: var(--color-danger); margin-top: 8px; padding: 8px 12px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
+                                    ⚠️ トークンを「alg: none」に改ざんする
+                                </button>
                             </div>
                             
                             <div class="form-group">
@@ -113,16 +179,17 @@ window.SecurityLabModules["jwt"] = {
             </div>
         </div>
     `,
-    
-    init: function(app) {
+
+    init: function (app) {
         const btnGenerateJWT = document.getElementById("btnGenerateJWT");
         const jwtUserId = document.getElementById("jwtUserId");
         const jwtUsername = document.getElementById("jwtUsername");
         const jwtRole = document.getElementById("jwtRole");
         const jwtSecret = document.getElementById("jwtSecret");
         const outJwtToken = document.getElementById("outJwtToken");
-        
+
         const sandboxJwtToken = document.getElementById("sandboxJwtToken");
+        const btnTamperNone = document.getElementById("btnTamperNone");
         const verifySecret = document.getElementById("verifySecret");
         const allowNoneAlg = document.getElementById("allowNoneAlg");
         const btnVerifyJWT = document.getElementById("btnVerifyJWT");
@@ -131,19 +198,19 @@ window.SecurityLabModules["jwt"] = {
         const jwtDecodedSignature = document.getElementById("jwtDecodedSignature");
         const jwtVerificationReport = document.getElementById("jwtVerificationReport");
         const jwtVerificationReportBox = document.getElementById("jwtVerificationReportBox");
-        
+
         // 1. Generate JWT Handler
         btnGenerateJWT.addEventListener("click", async () => {
             const userId = jwtUserId.value.trim();
             const username = jwtUsername.value.trim();
             const role = jwtRole.value;
             const secret = jwtSecret.value.trim();
-            
+
             if (!userId || !username || !secret) {
                 alert("すべてのフィールドを入力してください。");
                 return;
             }
-            
+
             try {
                 const res = await app.apiCall("/api/jwt/generate", "POST", {
                     user_id: userId,
@@ -151,19 +218,70 @@ window.SecurityLabModules["jwt"] = {
                     role: role,
                     secret: secret
                 });
-                
+
                 outJwtToken.innerText = res.token;
                 sandboxJwtToken.value = res.token;
                 verifySecret.value = secret;
-                
+
                 // Parse and decode locally for display
                 updateDecoderDisplay(res.token);
-                
+
             } catch (err) {
                 outJwtToken.innerText = "エラーが発生しました";
             }
         });
-        
+
+        // 1.5. Tamper JWT with alg: none
+        btnTamperNone.addEventListener("click", () => {
+            const token = sandboxJwtToken.value.trim();
+            if (!token || token === "トークン未発行") {
+                alert("改ざんするトークンがありません。先にトークンを発行するか、トークンを入力してください。");
+                return;
+            }
+
+            const parts = token.split(".");
+            if (parts.length < 2) {
+                alert("無効なトークン形式です。");
+                return;
+            }
+
+            try {
+                // Base64URL decode helper
+                const base64UrlDecode = (str) => {
+                    let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+                    while (base64.length % 4) {
+                        base64 += '=';
+                    }
+                    return decodeURIComponent(atob(base64).split('').map(function (c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                };
+
+                // Base64URL encode helper
+                const base64UrlEncode = (str) => {
+                    const base64 = btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+                        return String.fromCharCode(parseInt(p1, 16));
+                    }));
+                    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+                };
+
+                const headerJson = JSON.parse(base64UrlDecode(parts[0]));
+                headerJson.alg = "none"; // alg を none に書き換え
+
+                const newHeaderB64 = base64UrlEncode(JSON.stringify(headerJson));
+
+                // 新しいトークン（署名を空にした header.payload. 形式）を生成
+                const tamperedToken = `${newHeaderB64}.${parts[1]}.`;
+
+                sandboxJwtToken.value = tamperedToken;
+                updateDecoderDisplay(tamperedToken);
+                app.log('system', 'トークンを「alg: none」に改ざんしました（署名データを消去）。');
+            } catch (e) {
+                alert("トークンのデコード・改ざんに失敗しました。");
+                app.log('error', '改ざん処理中のエラー', e);
+            }
+        });
+
         // Local parsing helper
         function updateDecoderDisplay(token) {
             try {
@@ -174,25 +292,25 @@ window.SecurityLabModules["jwt"] = {
                     jwtDecodedSignature.innerText = "署名なし";
                     return;
                 }
-                
+
                 // Base64URL decode
                 const base64UrlDecode = (str) => {
                     let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
                     while (base64.length % 4) {
                         base64 += '=';
                     }
-                    return decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return decodeURIComponent(atob(base64).split('').map(function (c) {
                         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                     }).join(''));
                 };
-                
+
                 const headerJson = JSON.parse(base64UrlDecode(parts[0]));
                 const payloadJson = JSON.parse(base64UrlDecode(parts[1]));
-                
+
                 jwtDecodedHeader.innerText = JSON.stringify(headerJson, null, 2);
                 jwtDecodedPayload.innerText = JSON.stringify(payloadJson, null, 2);
                 jwtDecodedSignature.innerText = parts[2] || "なし (alg: none)";
-                
+
                 // Coloring depending on verification state
                 if (headerJson.alg && headerJson.alg.toUpperCase() === "NONE") {
                     jwtDecodedHeader.style.color = "var(--color-danger)";
@@ -205,29 +323,29 @@ window.SecurityLabModules["jwt"] = {
                 jwtDecodedSignature.innerText = "";
             }
         }
-        
+
         // Listen to edits in the token text area
         sandboxJwtToken.addEventListener("input", () => {
             updateDecoderDisplay(sandboxJwtToken.value.trim());
         });
-        
+
         // 2. Verify JWT Handler
         btnVerifyJWT.addEventListener("click", async () => {
             const token = sandboxJwtToken.value.trim();
             const secret = verifySecret.value.trim();
-            
+
             if (!token) {
                 alert("検証するトークンを入力または生成してください。");
                 return;
             }
-            
+
             try {
                 const res = await app.apiCall("/api/jwt/verify", "POST", {
                     token: token,
                     expected_secret: secret,
                     allow_none_alg: allowNoneAlg.checked
                 });
-                
+
                 if (res.valid) {
                     jwtVerificationReportBox.style.borderColor = res.message.includes("警告") ? "var(--color-warning)" : "var(--color-success)";
                     jwtVerificationReport.innerHTML = `
