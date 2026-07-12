@@ -71,6 +71,12 @@ body {
     flex-direction: column;
     height: 100%;
     z-index: 10;
+    transition: margin-left var(--transition-normal);
+}
+
+/* Collapsed Sidebar State */
+.app-container.sidebar-collapsed .sidebar {
+    margin-left: calc(-1 * var(--sidebar-width));
 }
 
 .brand {
@@ -206,6 +212,34 @@ body {
     background-color: rgba(9, 9, 11, 0.8);
     backdrop-filter: blur(12px);
     z-index: 5;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-toggle-sidebar {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-toggle-sidebar:hover {
+    color: var(--text-primary);
+    border-color: var(--color-primary);
+    background-color: var(--bg-card-hover);
+    box-shadow: 0 0 12px var(--color-primary-glow);
 }
 
 .title-bar h2 {

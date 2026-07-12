@@ -28,6 +28,8 @@ class SecurityLab {
         this.moduleTitle = document.getElementById("moduleTitle");
         this.moduleDesc = document.getElementById("moduleDesc");
         this.contentBody = document.getElementById("contentBody");
+        this.toggleSidebarBtn = document.getElementById("toggleSidebarBtn");
+        this.appContainer = document.querySelector(".app-container");
         
         this.logConsole = document.getElementById("logConsole");
         this.consoleBody = document.getElementById("consoleBodyText");
@@ -39,6 +41,7 @@ class SecurityLab {
 
     async init() {
         this.setupConsole();
+        this.setupSidebar();
         this.setupKeyboardShortcuts();
         
         try {
@@ -644,6 +647,19 @@ class SecurityLab {
                 `;
                 resultsContainer.appendChild(div);
             });
+        });
+    }
+
+    setupSidebar() {
+        if (!this.toggleSidebarBtn || !this.appContainer) return;
+
+        // ノートPCなどの小さい画面（1100px未満）では初期状態で折りたたむ
+        if (window.innerWidth < 1100) {
+            this.appContainer.classList.add("sidebar-collapsed");
+        }
+
+        this.toggleSidebarBtn.addEventListener("click", () => {
+            this.appContainer.classList.toggle("sidebar-collapsed");
         });
     }
 
