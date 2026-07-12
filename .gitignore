@@ -38,3 +38,6 @@ test_app.py
 test_saml.py
 .pytest_cache/
 test-results/
+
+# Important Walkthrough
+Walkthroughs/
