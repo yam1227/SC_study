@@ -34,11 +34,24 @@ window.SecurityLabModules["crypto"] = {
                             <label for="symNonce">一時値 Nonce / IV (Hex):</label>
                             <input type="text" id="symNonce" placeholder="自動挿入されます">
                         </div>
+                        <div class="form-group">
+                            <label for="symTag">GCMタグのHEX値 ※意図的に改ざん可能:</label>
+                            <input type="text" id="symTag" placeholder="自動挿入されます。改ざんすると整合性検証で弾かれます">
+                        </div>
                         <button class="btn btn-secondary" id="btnSymDecrypt" style="border-color: var(--color-success);">復号を実行</button>
                     </div>
                 </div>
                 
-                <div class="form-group">
+                <div class="info-note" style="margin-top: 14px; border-left: 3px solid var(--color-primary-hover); background: rgba(255,255,255,0.02); padding: 12px; border-radius: 4px; font-size: 12px; line-height: 1.5;">
+                    <span style="color: var(--color-primary-hover); font-weight: 600;">💡 認証タグ（Tag / MAC）とは？</span><br>
+                    <span style="color: var(--text-secondary);">
+                        GCM（Galois/Counter Mode）などの<b>認証付き暗号 (AEAD)</b>において、暗号化と同時に生成されるチェックサム（通常16バイト）です。
+                        このタグは、平文・暗号文・鍵・Nonceから数学的に算出され、復号時にサーバーで再計算して一致するか確認されます。
+                        <b>暗号文やNonce、あるいはタグ自身が1文字でも改ざんされると、タグの検証で失敗し、復号エラー（改ざん検知）となります。</b>
+                    </span>
+                </div>
+                
+                <div class="form-group" style="margin-top: 14px;">
                     <label>共通鍵 復号レポート:</label>
                     <div class="response-box" id="symReportBox">
                         <code id="symReport">復号を実行してください。</code>
@@ -136,6 +149,7 @@ window.SecurityLabModules["crypto"] = {
         const outSymKey = document.getElementById("outSymKey");
         const symCiphertext = document.getElementById("symCiphertext");
         const symNonce = document.getElementById("symNonce");
+        const symTag = document.getElementById("symTag");
         const btnSymDecrypt = document.getElementById("btnSymDecrypt");
         const symReport = document.getElementById("symReport");
         const symReportBox = document.getElementById("symReportBox");
@@ -179,8 +193,9 @@ window.SecurityLabModules["crypto"] = {
                 outSymKey.innerText = res.key_hex;
                 symCiphertext.value = res.ciphertext_hex;
                 symNonce.value = res.nonce_hex;
+                symTag.value = res.tag_hex;
                 
-                symReport.innerText = "暗号化が正常に完了しました。暗号文の値を書き換えて「復号を実行」すると、改ざん検知のテストができます。";
+                symReport.innerText = "暗号化が正常に完了しました。暗号文や認証タグの値を書き換えて「復号を実行」すると、改ざん検知のテストができます。";
                 symReportBox.style.borderColor = "var(--border-color)";
             } catch (err) {
                 alert("共通鍵暗号化エラー: " + err.message);
@@ -190,10 +205,11 @@ window.SecurityLabModules["crypto"] = {
         btnSymDecrypt.addEventListener("click", async () => {
             const ciphertext = symCiphertext.value.trim();
             const nonce = symNonce.value.trim();
+            const tag = symTag.value.trim();
             const key = outSymKey.innerText.trim();
             
-            if (!ciphertext || !nonce || key === "鍵未生成") {
-                alert("暗号文、Nonce、共通鍵が必要です。先に暗号化を実行してください。");
+            if (!ciphertext || !nonce || !tag || key === "鍵未生成") {
+                alert("暗号文、Nonce、認証タグ、共通鍵が必要です。先に暗号化を実行してください。");
                 return;
             }
             
@@ -201,6 +217,7 @@ window.SecurityLabModules["crypto"] = {
                 const res = await app.apiCall("/api/crypto/symmetric/decrypt", "POST", {
                     ciphertext_hex: ciphertext,
                     nonce_hex: nonce,
+                    tag_hex: tag,
                     key_hex: key
                 });
                 

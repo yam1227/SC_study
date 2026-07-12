@@ -522,7 +522,7 @@ class SecurityLab {
             
             // Append script element to body
             const script = document.createElement("script");
-            script.src = `/static/js/${mod.jsFile}`;
+            script.src = `/static/js/${mod.jsFile}?t=${Date.now()}`;
             script.type = "text/javascript";
             script.async = true;
             

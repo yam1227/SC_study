@@ -497,10 +497,15 @@ def symmetric_encrypt(req: SymmetricRequest):
             
         aesgcm = AESGCM(key)
         nonce = os.urandom(12)
-        ciphertext = aesgcm.encrypt(nonce, req.plaintext.encode(), None)
+        full_ciphertext = aesgcm.encrypt(nonce, req.plaintext.encode(), None)
+        
+        # AES-GCMの暗号文末尾16バイトは認証タグ(Tag)
+        actual_ciphertext = full_ciphertext[:-16]
+        tag = full_ciphertext[-16:]
         
         return {
-            "ciphertext_hex": ciphertext.hex(),
+            "ciphertext_hex": actual_ciphertext.hex(),
+            "tag_hex": tag.hex(),
             "nonce_hex": nonce.hex(),
             "key_hex": key.hex()
         }
@@ -510,6 +515,7 @@ def symmetric_encrypt(req: SymmetricRequest):
 class SymmetricDecryptRequest(BaseModel):
     ciphertext_hex: str
     nonce_hex: str
+    tag_hex: str
     key_hex: str
 
 @app.post("/api/crypto/symmetric/decrypt")
@@ -518,9 +524,13 @@ def symmetric_decrypt(req: SymmetricDecryptRequest):
         key = bytes.fromhex(req.key_hex)
         nonce = bytes.fromhex(req.nonce_hex)
         ciphertext = bytes.fromhex(req.ciphertext_hex)
+        tag = bytes.fromhex(req.tag_hex)
+        
+        # 復号のために暗号文とタグを結合
+        full_ciphertext = ciphertext + tag
         
         aesgcm = AESGCM(key)
-        plaintext = aesgcm.decrypt(nonce, ciphertext, None)
+        plaintext = aesgcm.decrypt(nonce, full_ciphertext, None)
         return {"plaintext": plaintext.decode()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"復号失敗 (改ざんまたはキー間違い): {str(e)}")
