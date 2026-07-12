@@ -375,24 +375,79 @@ class MFAVerifyRequest(BaseModel):
 
 @app.post("/api/mfa/verify")
 def verify_mfa(req: MFAVerifyRequest):
+    import base64
+    import hmac
+    import hashlib
+    import struct
+    import time
+    from datetime import datetime, timezone
+
     secret = mfa_secrets.get(req.user)
     if not secret:
         raise HTTPException(status_code=400, detail="MFAがセットアップされていません。")
         
     totp = pyotp.TOTP(secret)
-    # verify returns boolean
     is_valid = totp.verify(req.token)
     
-    # Detail calculations for learning
     current_time = int(time.time())
-    time_step = current_time // 30
+    current_step = current_time // 30
     
+    logs = []
+    
+    try:
+        b32_padding = len(secret) % 8
+        padded_secret = secret
+        if b32_padding != 0:
+            padded_secret += "=" * (8 - b32_padding)
+        secret_bytes = base64.b32decode(padded_secret.encode('ascii'), casefold=True)
+        logs.append(f"1. Base32シークレットをデコードしました: {secret} -> {secret_bytes.hex()}")
+    except Exception as e:
+        secret_bytes = b""
+        logs.append(f"1. シークレットのデコードに失敗しました: {str(e)}")
+
+    step_range = [current_step - 1, current_step, current_step + 1]
+    
+    logs.append(f"2. サーバーの現在時刻: {current_time} (Unix Epoch)")
+    logs.append(f"3. 現在のタイムステップ番号 (t = epoch // 30): {current_step}")
+    logs.append("4. 時刻のズレを考慮し、前後1ステップ（t-1, t, t+1）のOTPを算出・検証します:")
+    
+    for step in step_range:
+        counter_bytes = struct.pack(">Q", step)
+        if secret_bytes:
+            hasher = hmac.new(secret_bytes, counter_bytes, hashlib.sha1)
+            hmac_hash = hasher.digest()
+            offset = hmac_hash[-1] & 0x0f
+            truncated = struct.unpack(">I", hmac_hash[offset:offset+4])[0] & 0x7fffffff
+            otp = truncated % 1000000
+            otp_str = f"{otp:06d}"
+        else:
+            hmac_hash = b""
+            truncated = 0
+            offset = 0
+            otp_str = "000000"
+            
+        step_time_str = datetime.fromtimestamp(step * 30, tz=timezone.utc).strftime('%H:%M:%S')
+        is_match = (otp_str == req.token)
+        match_marker = " [★一致]" if is_match else ""
+        logs.append(f"   - タイムステップ {step} (基準時間 {step_time_str} UTC):")
+        logs.append(f"     * カウンタ (HEX): {counter_bytes.hex()}")
+        if hmac_hash:
+            logs.append(f"     * HMAC-SHA1: {hmac_hash.hex()}")
+            logs.append(f"     * 抽出値 (オフセット {offset}): {truncated} (HEX: {truncated:08x})")
+        logs.append(f"     * 生成OTP: {otp_str}{match_marker}")
+        
+    if is_valid:
+        logs.append(f"5. 判定結果: 入力されたコード '{req.token}' は、サーバーが計算したOTPと一致しました。認証成功。")
+    else:
+        logs.append(f"5. 判定結果: 入力されたコード '{req.token}' は、検証対象のどのタイムステップのOTPとも一致しませんでした。認証失敗。")
+
     return {
         "valid": is_valid,
         "server_info": {
             "current_unix_time": current_time,
-            "time_step_counter": time_step,
-            "calculated_otp": totp.now()
+            "time_step_counter": current_step,
+            "calculated_otp": totp.now(),
+            "verification_logs": logs
         }
     }
 
@@ -1240,13 +1295,14 @@ def saml_verify(req: SAMLVerifyRequest):
                 attr_els.append(elem)
 
     for attr in attr_els:
-        name = attr.attrib.get('Name') or attr.attrib.get('FriendlyName')
+        name = attr.attrib.get('Name') or ""
+        friendly_name = attr.attrib.get('FriendlyName') or ""
         val_el = find_element('saml:AttributeValue', attr)
         if val_el is not None and val_el.text:
             val_text = val_el.text.strip()
-            if name and ('eduPersonAffiliation' in name or 'affiliation' in name):
+            if 'eduPersonAffiliation' in name or 'affiliation' in name or 'eduPersonAffiliation' in friendly_name or 'affiliation' in friendly_name:
                 role_val = val_text
-            elif name and ('mail' in name):
+            elif 'mail' in name or 'mail' in friendly_name:
                 email_val = val_text
 
     overall_success = all(c["status"] == "SUCCESS" for c in checks.values())

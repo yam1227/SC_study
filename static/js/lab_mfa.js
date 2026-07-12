@@ -207,22 +207,41 @@ window.SecurityLabModules["mfa"] = {
                     token: token
                 });
                 
-                if (res.valid) {
-                    mfaVerifyReportBox.style.borderColor = "var(--color-success)";
+                const isSuccess = res.valid;
+                mfaVerifyReportBox.style.borderColor = isSuccess ? "var(--color-success)" : "var(--color-danger)";
+                
+                let logsHtml = "";
+                if (res.server_info && res.server_info.verification_logs) {
+                    logsHtml = `<div style="margin-top: 12px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); line-height: 1.4; overflow-x: auto; max-height: 250px; text-align: left;">
+                        <span style="color: var(--color-primary-hover); font-weight: 600;">💻 サーバー側の詳細検証ログ:</span><br>
+                        ${res.server_info.verification_logs.map(log => {
+                            let escaped = app.escapeHtml(log);
+                            escaped = escaped.replace(/ /g, "&nbsp;");
+                            if (log.includes("[★一致]")) {
+                                return `<span style="color: var(--color-success);">${escaped}</span>`;
+                            }
+                            if (log.includes("認証成功")) {
+                                return `<span style="color: var(--color-success); font-weight: 600;">${escaped}</span>`;
+                            }
+                            if (log.includes("認証失敗")) {
+                                return `<span style="color: var(--color-danger); font-weight: 600;">${escaped}</span>`;
+                            }
+                            return escaped;
+                        }).join("<br>")}
+                    </div>`;
+                }
+
+                if (isSuccess) {
                     mfaVerifyReport.innerHTML = `
                         <span style="color: var(--color-success); font-weight: bold;">🟢 認証成功 (MFA Verified)</span>
                         <br>入力コード [${token}] は有効です！
-                        <br><br><b>検証データ:</b>
-                        <br>・サーバーUnix時刻: ${res.server_info.current_unix_time}
-                        <br>・タイムステップ数 (t/30): ${res.server_info.time_step_counter}
-                        <br>・計算されたOTP: <b>${res.server_info.calculated_otp}</b>
+                        ${logsHtml}
                     `;
                 } else {
-                    mfaVerifyReportBox.style.borderColor = "var(--color-danger)";
                     mfaVerifyReport.innerHTML = `
                         <span style="color: var(--color-danger); font-weight: bold;">🔴 認証失敗 (Verification Failed)</span>
                         <br>入力コード [${token}] は正しくないか、有効期限（30秒）が切れています。
-                        <br>再度コードを確認して入力し直してください。
+                        ${logsHtml}
                     `;
                 }
             } catch (err) {
