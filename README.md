@@ -128,26 +128,3 @@ uv pip install -r requirements.txt
      ```
 
 これで、サーバー起動時に自動的にダッシュボードとサイドメニューに新しいモジュールが読み込まれ、タブを切り替えて実験を行うことができます。
-
----
-
-## E2E 自動UIテスト
-
-本プロジェクトには、Playwrightを用いた自動UIテスト環境が用意されています。ローカルで起動中のChromeデバッグポート（9222）等に干渉せず、独立してE2Eテストを実行できます。
-
-### テスト環境の準備
-1. テスト用パッケージをインストールします。
-   ```bash
-   uv pip install -r requirements.txt
-   ```
-2. Playwrightに必要なブラウザバイナリをインストールします。
-   ```bash
-   # 仮想環境のアクティベート状態、あるいは直接実行
-   .venv/bin/playwright install chromium
-   ```
-
-### E2E UIテストの実行
-.venv/bin/pytest test_app.py
-
-# SAML APIユニットテストの実行
-.venv/bin/pytest test_saml.py
