@@ -2,6 +2,7 @@ import time
 import base64
 import io
 import os
+import datetime
 from typing import Dict, Any, List
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.responses import JSONResponse, FileResponse, HTMLResponse
@@ -14,6 +15,8 @@ import bcrypt
 import jwt
 import pyotp
 import qrcode
+from cryptography import x509
+from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -189,6 +192,17 @@ MODULES = [
         "subcategory_name": "3. セキュリティ",
         "overview": "教育・研究機関で広く使われている学術認証フェデレーション「学認（GakuNin）」をモデルに、SAML 2.0 に基づくシングルサインオン（SSO）の仕組みを学習します。ユーザーがサービスプロバイダ（SP）にアクセスし、アイデンティティプロバイダ（IdP）で認証され、SAMLアサーションを含むSAMLResponseを受け取るフローを追体験し、SPがアサーションの信頼性をどのように厳密に検証しているか（署名・有効期限・宛先・リプレイ攻撃防止など）を学習します。",
         "keywords": ["SAML 2.0", "SP (Service Provider)", "IdP (Identity Provider)", "SAMLアサーション", "メタデータ", "学認 (GakuNin)", "ACS (Assertion Consumer Service)", "デジタル署名", "リプレイ攻撃対策"]
+    },
+    {
+        "id": "pki",
+        "title": "認証局 (CA) と PKI ライフサイクル",
+        "description": "CA, RA, VA, AA, OCSP などの役割とデータの流れ、証明書の発行から失効検証（CRL/OCSP）までをインタラクティブに学びます。",
+        "jsFile": "lab_pki.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "公開鍵基盤 (PKI) における認証局 (CA)、登録局 (RA)、検証局 (VA)、アトリビュート認証局 (AA) の役割を学びます。証明書発行申請 (CSR) から発行、そして証明書の有効性検証 (CRL / OCSP) までのデータと検証の流れを視覚的にシミュレートします。",
+        "keywords": ["公開鍵基盤 (PKI)", "認証局 (CA)", "登録局 (RA)", "検証局 (VA)", "アトリビュート認証局 (AA)", "OCSP", "CRL (証明書失効リスト)", "CSR (証明書署名要求)"]
     }
 ]
 
@@ -1326,6 +1340,337 @@ def saml_verify(req: SAMLVerifyRequest):
             "role": role_val,
             "email": email_val
         }
+    }
+
+
+# --- LAB 15: Public Key Infrastructure & Certificate Authority API ---
+pki_ca_store: Dict[str, Any] = {}
+pki_aa_store: Dict[str, Any] = {}
+pki_issued_certs: Dict[int, Dict[str, Any]] = {}
+pki_ac_store: Dict[int, Dict[str, Any]] = {}
+
+def ensure_pki_setup():
+    if "private_key" in pki_ca_store:
+        return
+    # Generate CA Key
+    ca_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    ca_subject = x509.Name([
+        x509.NameAttribute(NameOID.COUNTRY_NAME, "JP"),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Security Lab CA"),
+        x509.NameAttribute(NameOID.COMMON_NAME, "Root CA"),
+    ])
+    # Self-signed Root CA Cert
+    now = datetime.datetime.now(datetime.timezone.utc)
+    ca_cert = x509.CertificateBuilder().subject_name(
+        ca_subject
+    ).issuer_name(
+        ca_subject
+    ).public_key(
+        ca_key.public_key()
+    ).serial_number(
+        x509.random_serial_number()
+    ).not_valid_before(
+        now
+    ).not_valid_after(
+        now + datetime.timedelta(days=3650)
+    ).add_extension(
+        x509.BasicConstraints(ca=True, path_length=None), critical=True
+    ).sign(ca_key, hashes.SHA256())
+    
+    pki_ca_store["private_key"] = ca_key
+    pki_ca_store["cert"] = ca_cert
+    pki_ca_store["cert_pem"] = ca_cert.public_bytes(serialization.Encoding.PEM).decode()
+    pki_ca_store["subject"] = "C=JP, O=Security Lab CA, CN=Root CA"
+
+    # Generate AA Key
+    aa_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    pki_aa_store["private_key"] = aa_key
+    pki_aa_store["public_key_pem"] = aa_key.public_key().public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    ).decode()
+
+class PKISetupResponse(BaseModel):
+    ca_subject: str
+    ca_cert_pem: str
+    aa_public_key_pem: str
+
+@app.post("/api/pki/setup", response_model=PKISetupResponse)
+def pki_setup():
+    ensure_pki_setup()
+    return {
+        "ca_subject": pki_ca_store["subject"],
+        "ca_cert_pem": pki_ca_store["cert_pem"],
+        "aa_public_key_pem": pki_aa_store["public_key_pem"]
+    }
+
+class CSRRequest(BaseModel):
+    common_name: str
+    organization: str
+    country: str
+
+@app.post("/api/pki/csr")
+def pki_generate_csr(req: CSRRequest):
+    # Generate User Key Pair
+    user_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    
+    # CSR Builder
+    csr = x509.CertificateSigningRequestBuilder().subject_name(x509.Name([
+        x509.NameAttribute(NameOID.COUNTRY_NAME, req.country),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, req.organization),
+        x509.NameAttribute(NameOID.COMMON_NAME, req.common_name),
+    ])).sign(user_key, hashes.SHA256())
+    
+    csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode()
+    private_key_pem = user_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    ).decode()
+    public_key_pem = user_key.public_key().public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    ).decode()
+    
+    return {
+        "csr_pem": csr_pem,
+        "private_key_pem": private_key_pem,
+        "public_key_pem": public_key_pem
+    }
+
+class IssueCertRequest(BaseModel):
+    csr_pem: str
+    valid_days: int = 365
+
+@app.post("/api/pki/issue")
+def pki_issue_cert(req: IssueCertRequest):
+    ensure_pki_setup()
+    try:
+        csr = x509.load_pem_x509_csr(req.csr_pem.encode())
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"CSRのパースに失敗しました: {str(e)}")
+        
+    ca_key = pki_ca_store["private_key"]
+    ca_cert = pki_ca_store["cert"]
+    
+    serial = x509.random_serial_number()
+    now = datetime.datetime.now(datetime.timezone.utc)
+    
+    # Issue Cert
+    cert = x509.CertificateBuilder().subject_name(
+        csr.subject
+    ).issuer_name(
+        ca_cert.subject
+    ).public_key(
+        csr.public_key()
+    ).serial_number(
+        serial
+    ).not_valid_before(
+        now
+    ).not_valid_after(
+        now + datetime.timedelta(days=req.valid_days)
+    ).sign(ca_key, hashes.SHA256())
+    
+    cert_pem = cert.public_bytes(serialization.Encoding.PEM).decode()
+    
+    subject_str = ", ".join([f"{attr.oid._name}={attr.value}" for attr in cert.subject])
+    
+    # Save to db
+    pki_issued_certs[serial] = {
+        "subject": subject_str,
+        "pem": cert_pem,
+        "status": "Good",
+        "revoked_at": None
+    }
+    
+    return {
+        "serial_number": str(serial),
+        "cert_pem": cert_pem,
+        "subject": subject_str,
+        "not_valid_before": cert.not_valid_before_utc.isoformat(),
+        "not_valid_after": cert.not_valid_after_utc.isoformat()
+    }
+
+class RevokeCertRequest(BaseModel):
+    serial_number: str
+
+@app.post("/api/pki/revoke")
+def pki_revoke_cert(req: RevokeCertRequest):
+    ensure_pki_setup()
+    try:
+        serial = int(req.serial_number)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="無効なシリアル番号形式です。")
+        
+    if serial not in pki_issued_certs:
+        raise HTTPException(status_code=404, detail="指定されたシリアル番号の証明書が見つかりません。")
+        
+    pki_issued_certs[serial]["status"] = "Revoked"
+    pki_issued_certs[serial]["revoked_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    
+    return {
+        "serial_number": str(serial),
+        "status": "Revoked",
+        "revoked_at": pki_issued_certs[serial]["revoked_at"]
+    }
+
+class OCSPRequest(BaseModel):
+    serial_number: str
+
+@app.post("/api/pki/ocsp")
+def pki_check_ocsp(req: OCSPRequest):
+    ensure_pki_setup()
+    try:
+        serial = int(req.serial_number)
+    except ValueError:
+        return {
+            "status": "Unknown",
+            "message": "シリアル番号の形式が無効です。",
+            "signature_verified": False
+        }
+        
+    cert_info = pki_issued_certs.get(serial)
+    if not cert_info:
+        return {
+            "status": "Unknown",
+            "message": "該当する証明書がCAデータベースに存在しません。",
+            "signature_verified": False
+        }
+        
+    # Generate a simulated signed OCSP Response
+    now_str = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    next_update_str = (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=1)).isoformat()
+    
+    response_data = {
+        "serial_number": str(serial),
+        "cert_status": cert_info["status"],
+        "this_update": now_str,
+        "next_update": next_update_str,
+        "revoked_at": cert_info["revoked_at"]
+    }
+    
+    # Sign response
+    ca_key = pki_ca_store["private_key"]
+    response_bytes = str(response_data).encode()
+    signature = ca_key.sign(
+        response_bytes,
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    
+    return {
+        "status": cert_info["status"],
+        "response_data": response_data,
+        "signature_hex": signature.hex(),
+        "signature_verified": True,
+        "message": f"OCSP検証成功。証明書ステータス: {cert_info['status']}"
+    }
+
+@app.get("/api/pki/crl")
+def pki_download_crl():
+    ensure_pki_setup()
+    
+    revoked_list = []
+    now = datetime.datetime.now(datetime.timezone.utc)
+    
+    for serial, info in pki_issued_certs.items():
+        if info["status"] == "Revoked":
+            revoked_list.append({
+                "serial_number": str(serial),
+                "revocation_date": info["revoked_at"]
+            })
+            
+    crl_data = {
+        "issuer": pki_ca_store["subject"],
+        "this_update": now.isoformat(),
+        "next_update": (now + datetime.timedelta(days=7)).isoformat(),
+        "revoked_certificates": revoked_list
+    }
+    
+    # Sign CRL
+    ca_key = pki_ca_store["private_key"]
+    crl_bytes = str(crl_data).encode()
+    signature = ca_key.sign(
+        crl_bytes,
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    
+    # Format to look like a CRL text structure
+    crl_text = (
+        f"-----BEGIN CERTIFICATE REVOCATION LIST-----\n"
+        f"Issuer: {crl_data['issuer']}\n"
+        f"This Update: {crl_data['this_update']}\n"
+        f"Next Update: {crl_data['next_update']}\n"
+        f"Revoked List Count: {len(revoked_list)}\n"
+    )
+    for rc in revoked_list:
+        crl_text += f"  Serial: {rc['serial_number']} (Date: {rc['revocation_date']})\n"
+    crl_text += f"Signature (SHA256withRSA): {signature.hex()[:64]}...\n"
+    crl_text += f"-----END CERTIFICATE REVOCATION LIST-----"
+    
+    return {
+        "crl_text": crl_text,
+        "raw_data": crl_data,
+        "signature_hex": signature.hex()
+    }
+
+class ACRequest(BaseModel):
+    holder_serial: str
+    username: str
+    role: str
+    valid_days: int = 30
+
+@app.post("/api/pki/issue-ac")
+def pki_issue_ac(req: ACRequest):
+    ensure_pki_setup()
+    
+    aa_key = pki_aa_store["private_key"]
+    serial = x509.random_serial_number()
+    now = datetime.datetime.now(datetime.timezone.utc)
+    not_valid_before = now.isoformat()
+    not_valid_after = (now + datetime.timedelta(days=req.valid_days)).isoformat()
+    
+    ac_content = {
+        "ac_serial_number": str(serial),
+        "holder_pkc_serial": req.holder_serial,
+        "holder_name": req.username,
+        "issuer_aa": "C=JP, O=Security Lab AA, CN=Attribute Authority",
+        "attributes": {
+            "role": req.role,
+            "privileges": ["read", "write", "admin"] if req.role.lower() == "admin" else ["read"]
+        },
+        "not_valid_before": not_valid_before,
+        "not_valid_after": not_valid_after
+    }
+    
+    # Sign AC content with AA's private key
+    ac_bytes = str(ac_content).encode()
+    signature = aa_key.sign(
+        ac_bytes,
+        padding.PSS(
+            mgf=padding.MGF1(hashes.SHA256()),
+            salt_length=padding.PSS.MAX_LENGTH
+        ),
+        hashes.SHA256()
+    )
+    
+    pki_ac_store[serial] = {
+        "content": ac_content,
+        "signature_hex": signature.hex()
+    }
+    
+    return {
+        "ac_serial_number": str(serial),
+        "ac_json": ac_content,
+        "signature_hex": signature.hex(),
+        "aa_public_key_pem": pki_aa_store["public_key_pem"]
     }
 
 
