@@ -139,10 +139,10 @@ window.SecurityLabModules["crypto"] = {
             </div>
         </div>
     `,
-    
-    init: function(app) {
+
+    init: function (app) {
         const sessionId = "session_" + Math.random().toString(36).substring(2, 12);
-        
+
         // 1. Symmetric Elements
         const symPlaintext = document.getElementById("symPlaintext");
         const btnSymEncrypt = document.getElementById("btnSymEncrypt");
@@ -153,7 +153,7 @@ window.SecurityLabModules["crypto"] = {
         const btnSymDecrypt = document.getElementById("btnSymDecrypt");
         const symReport = document.getElementById("symReport");
         const symReportBox = document.getElementById("symReportBox");
-        
+
         // 2. Asymmetric Elements
         const btnGenRsaKeys = document.getElementById("btnGenRsaKeys");
         const rsaKeysArea = document.getElementById("rsaKeysArea");
@@ -165,7 +165,7 @@ window.SecurityLabModules["crypto"] = {
         const btnAsymDecrypt = document.getElementById("btnAsymDecrypt");
         const asymReport = document.getElementById("asymReport");
         const asymReportBox = document.getElementById("asymReportBox");
-        
+
         // 3. Signature Elements
         const signMessage = document.getElementById("signMessage");
         const btnSignMessage = document.getElementById("btnSignMessage");
@@ -174,9 +174,9 @@ window.SecurityLabModules["crypto"] = {
         const btnVerifySignature = document.getElementById("btnVerifySignature");
         const signatureReport = document.getElementById("signatureReport");
         const signatureReportBox = document.getElementById("signatureReportBox");
-        
+
         let hasKeys = false;
-        
+
         // --- 1. AES Symmetric Handlers ---
         btnSymEncrypt.addEventListener("click", async () => {
             const text = symPlaintext.value.trim();
@@ -184,35 +184,35 @@ window.SecurityLabModules["crypto"] = {
                 alert("暗号化するテキストを入力してください。");
                 return;
             }
-            
+
             try {
                 const res = await app.apiCall("/api/crypto/symmetric/encrypt", "POST", {
                     plaintext: text
                 });
-                
+
                 outSymKey.innerText = res.key_hex;
                 symCiphertext.value = res.ciphertext_hex;
                 symNonce.value = res.nonce_hex;
                 symTag.value = res.tag_hex;
-                
+
                 symReport.innerText = "暗号化が正常に完了しました。暗号文や認証タグの値を書き換えて「復号を実行」すると、改ざん検知のテストができます。";
                 symReportBox.style.borderColor = "var(--border-color)";
             } catch (err) {
                 alert("共通鍵暗号化エラー: " + err.message);
             }
         });
-        
+
         btnSymDecrypt.addEventListener("click", async () => {
             const ciphertext = symCiphertext.value.trim();
             const nonce = symNonce.value.trim();
             const tag = symTag.value.trim();
             const key = outSymKey.innerText.trim();
-            
+
             if (!ciphertext || !nonce || !tag || key === "鍵未生成") {
                 alert("暗号文、Nonce、認証タグ、共通鍵が必要です。先に暗号化を実行してください。");
                 return;
             }
-            
+
             try {
                 const res = await app.apiCall("/api/crypto/symmetric/decrypt", "POST", {
                     ciphertext_hex: ciphertext,
@@ -220,7 +220,7 @@ window.SecurityLabModules["crypto"] = {
                     tag_hex: tag,
                     key_hex: key
                 });
-                
+
                 symReportBox.style.borderColor = "var(--color-success)";
                 symReport.innerHTML = `
                     <span style="color: var(--color-success); font-weight: bold;">🟢 復号成功 (Authentication Successful)</span>
@@ -236,24 +236,24 @@ window.SecurityLabModules["crypto"] = {
                 `;
             }
         });
-        
+
         // --- 2. Asymmetric RSA Handlers ---
         btnGenRsaKeys.addEventListener("click", async () => {
             btnGenRsaKeys.disabled = true;
             btnGenRsaKeys.innerText = "生成中...";
-            
+
             try {
                 const res = await app.apiCall(`/api/crypto/generate-keys?session_id=${sessionId}`, "POST");
-                
+
                 outRsaPublicKey.value = res.public_key_pem;
                 outRsaPrivateKey.value = res.private_key_pem;
                 rsaKeysArea.style.display = "flex";
-                
+
                 hasKeys = true;
                 btnAsymEncrypt.disabled = false;
                 btnSignMessage.disabled = false;
                 btnGenRsaKeys.innerText = "RSA 鍵ペア再生成";
-                
+
                 app.log('system', 'RSA 2048-bit 鍵ペアを生成し、メモリに保存しました。');
             } catch (err) {
                 alert("鍵生成エラー: " + err.message);
@@ -261,17 +261,17 @@ window.SecurityLabModules["crypto"] = {
                 btnGenRsaKeys.disabled = false;
             }
         });
-        
+
         btnAsymEncrypt.addEventListener("click", async () => {
             const text = asymPlaintext.value.trim();
             if (!text) return;
-            
+
             try {
                 const res = await app.apiCall("/api/crypto/asymmetric/encrypt", "POST", {
                     session_id: sessionId,
                     plaintext: text
                 });
-                
+
                 outAsymCiphertext.innerText = res.ciphertext_hex;
                 btnAsymDecrypt.disabled = false;
                 asymReport.innerText = "公開鍵（Public Key）による暗号化が完了しました。対応する秘密鍵でのみ復号できます。";
@@ -280,17 +280,17 @@ window.SecurityLabModules["crypto"] = {
                 alert("公開鍵暗号化エラー: " + err.message);
             }
         });
-        
+
         btnAsymDecrypt.addEventListener("click", async () => {
             const ciphertext = outAsymCiphertext.innerText.trim();
             if (ciphertext === "暗号文未生成") return;
-            
+
             try {
                 const res = await app.apiCall("/api/crypto/asymmetric/decrypt", "POST", {
                     session_id: sessionId,
                     ciphertext_hex: ciphertext
                 });
-                
+
                 asymReportBox.style.borderColor = "var(--color-success)";
                 asymReport.innerHTML = `
                     <span style="color: var(--color-success); font-weight: bold;">🟢 復号成功</span>
@@ -304,42 +304,42 @@ window.SecurityLabModules["crypto"] = {
                 `;
             }
         });
-        
+
         // --- 3. Digital Signature Handlers ---
         btnSignMessage.addEventListener("click", async () => {
             const msg = signMessage.value.trim();
             if (!msg) return;
-            
+
             try {
                 const res = await app.apiCall("/api/crypto/signature/sign", "POST", {
                     session_id: sessionId,
                     message: msg
                 });
-                
+
                 outSignature.innerText = res.signature_hex;
                 verifyMessage.value = msg;
                 btnVerifySignature.disabled = false;
-                
+
                 signatureReport.innerText = "秘密鍵（Private Key）による電子署名の生成が完了しました。受信者側で「メッセージ」と「公開鍵」を用いて署名を検証できます。";
                 signatureReportBox.style.borderColor = "var(--border-color)";
             } catch (err) {
                 alert("署名生成エラー: " + err.message);
             }
         });
-        
+
         btnVerifySignature.addEventListener("click", async () => {
             const msg = verifyMessage.value.trim();
             const signature = outSignature.innerText.trim();
-            
+
             if (signature === "署名未生成") return;
-            
+
             try {
                 const res = await app.apiCall("/api/crypto/signature/verify", "POST", {
                     session_id: sessionId,
                     message: msg,
                     signature_hex: signature
                 });
-                
+
                 if (res.valid) {
                     signatureReportBox.style.borderColor = "var(--color-success)";
                     signatureReport.innerHTML = `
