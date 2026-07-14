@@ -18,7 +18,9 @@ window.SecurityLabModules["pki"] = {
                 overflow: hidden;
                 display: flex;
                 flex-direction: column;
-                min-height: 400px;
+                min-height: 300px;
+                height: 480px;
+                flex-shrink: 0;
             }
             .topology-header {
                 padding: 12px 16px;
@@ -37,7 +39,31 @@ window.SecurityLabModules["pki"] = {
                 flex-grow: 1;
                 width: 100%;
                 height: 100%;
-                min-height: 350px;
+            }
+            .topology-resize-handle {
+                height: 12px;
+                background: rgba(255, 255, 255, 0.03);
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                cursor: ns-resize;
+                width: 100%;
+                transition: background 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                user-select: none;
+                position: relative;
+                z-index: 10;
+            }
+            .topology-resize-handle::after {
+                content: "";
+                width: 24px;
+                height: 2px;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 1px;
+            }
+            .topology-resize-handle:hover {
+                background: rgba(56, 189, 248, 0.15);
             }
             .node-label {
                 font-family: 'Inter', sans-serif;
@@ -177,98 +203,108 @@ window.SecurityLabModules["pki"] = {
                     <span id="pkiFlowStatus" style="font-size: 11px; color: var(--text-secondary);">ノードをクリックすると役割が表示されます</span>
                 </div>
                 
-                <svg class="topology-map" id="pkiSvg" viewBox="0 0 750 380">
-                    <!-- Definitions for markers and filters -->
-                    <defs>
-                        <marker id="arrow" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569" />
-                        </marker>
-                        <marker id="arrow-active" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
-                        </marker>
-                        <marker id="arrow-active-red" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                            <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
-                        </marker>
-                    </defs>
+                <div class="topology-body" style="display: flex; flex: 1; min-height: 240px; overflow: hidden; position: relative;">
+                    <!-- 左側: マップSVG -->
+                    <div style="flex: 2; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border-color); position: relative;">
+                        <svg class="topology-map" id="pkiSvg" viewBox="0 0 750 380" style="flex: 1; width: 100%; height: 100%;">
+                            <!-- Definitions for markers and filters -->
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#475569" />
+                                </marker>
+                                <marker id="arrow-active" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                                </marker>
+                                <marker id="arrow-active-red" viewBox="0 0 10 10" refX="28" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e" />
+                                </marker>
+                            </defs>
 
-                    <!-- Connection Lines -->
-                    <!-- User <-> RA -->
-                    <path d="M 120 280 L 120 120" class="connection-line" id="line-user-ra" marker-end="url(#arrow)" />
-                    <!-- RA <-> CA -->
-                    <path d="M 150 90 L 340 50" class="connection-line" id="line-ra-ca" marker-end="url(#arrow)" />
-                    <!-- CA -> Repository -->
-                    <path d="M 375 80 L 375 160" class="connection-line" id="line-ca-repo" marker-end="url(#arrow)" />
-                    <!-- User -> Server (Auth/Handshake) -->
-                    <path d="M 160 300 L 590 300" class="connection-line" id="line-user-server" marker-end="url(#arrow)" />
-                    <!-- Server -> VA (OCSP Request) -->
-                    <path d="M 610 270 L 610 120" class="connection-line" id="line-server-va" marker-end="url(#arrow)" />
-                    <!-- Server -> Repository (CRL Download) -->
-                    <path d="M 590 285 L 410 200" class="connection-line" id="line-server-repo" marker-end="url(#arrow)" />
-                    <!-- User <-> AA (Attribute Request) - Connect User(120,300) to AA(260,185) -->
-                    <path d="M 140 280 L 240 200" class="connection-line" id="line-user-aa" marker-end="url(#arrow)" />
-                    
-                    <!-- Nodes (Circles with icons) -->
-                    <!-- CA (Certificate Authority) -->
-                    <g transform="translate(375, 50)" class="pki-node" data-node="ca">
-                        <circle r="30" class="node-circle ca-node" id="node-ca" />
-                        <text y="5" font-size="20" text-anchor="middle">🏛️</text>
-                        <text y="42" class="node-title">CA (認証局)</text>
-                        <text y="54" class="node-label">Certificate Authority</text>
-                    </g>
-                    
-                    <!-- RA (Registration Authority) -->
-                    <g transform="translate(120, 90)" class="pki-node" data-node="ra">
-                        <circle r="25" class="node-circle" id="node-ra" />
-                        <text y="5" font-size="16" text-anchor="middle">🔎</text>
-                        <text y="38" class="node-title">RA (登録局)</text>
-                        <text y="50" class="node-label">Registration Authority</text>
-                    </g>
-                    
-                    <!-- VA (Validation Authority) -->
-                    <g transform="translate(610, 90)" class="pki-node" data-node="va">
-                        <circle r="25" class="node-circle" id="node-va" />
-                        <text y="5" font-size="16" text-anchor="middle">🤖</text>
-                        <text y="38" class="node-title">VA (検証局 / OCSP)</text>
-                        <text y="50" class="node-label">Validation Authority</text>
-                    </g>
-                    
-                    <!-- AA (Attribute Authority) - Moved to x=260 (left of Repository) -->
-                    <g transform="translate(260, 185)" class="pki-node" data-node="aa">
-                        <circle r="25" class="node-circle aa-node" id="node-aa" />
-                        <text y="5" font-size="16" text-anchor="middle">🛡️</text>
-                        <text y="38" class="node-title">AA (属性認証局)</text>
-                        <text y="50" class="node-label">Attribute Authority</text>
-                    </g>
-                    
-                    <!-- Repository -->
-                    <g transform="translate(375, 185)" class="pki-node" data-node="repo">
-                        <circle r="25" class="node-circle" id="node-repo" />
-                        <text y="5" font-size="16" text-anchor="middle">🛢️</text>
-                        <text y="38" class="node-title">リポジトリ</text>
-                        <text y="50" class="node-label">Repository (LDAP/Web)</text>
-                    </g>
-                    
-                    <!-- User / EE (End Entity) -->
-                    <g transform="translate(120, 300)" class="pki-node" data-node="user">
-                        <circle r="25" class="node-circle" id="node-user" />
-                        <text y="5" font-size="16" text-anchor="middle">👤</text>
-                        <text y="38" class="node-title">利用者 (EE)</text>
-                        <text y="50" class="node-label">End Entity</text>
-                    </g>
-                    
-                    <!-- Web Server (Relying Party) -->
-                    <g transform="translate(610, 300)" class="pki-node" data-node="server">
-                        <circle r="25" class="node-circle" id="node-server" />
-                        <text y="5" font-size="16" text-anchor="middle">💻</text>
-                        <text y="38" class="node-title">Webサーバー</text>
-                        <text y="50" class="node-label">Relying Party (検証者)</text>
-                    </g>
-                </svg>
+                            <!-- Connection Lines -->
+                            <!-- User <-> RA -->
+                            <path d="M 120 280 L 120 120" class="connection-line" id="line-user-ra" marker-end="url(#arrow)" />
+                            <!-- RA <-> CA -->
+                            <path d="M 150 90 L 340 50" class="connection-line" id="line-ra-ca" marker-end="url(#arrow)" />
+                            <!-- CA -> Repository -->
+                            <path d="M 375 80 L 375 160" class="connection-line" id="line-ca-repo" marker-end="url(#arrow)" />
+                            <!-- User -> Server (Auth/Handshake) -->
+                            <path d="M 160 300 L 590 300" class="connection-line" id="line-user-server" marker-end="url(#arrow)" />
+                            <!-- Server -> VA (OCSP Request) -->
+                            <path d="M 610 270 L 610 120" class="connection-line" id="line-server-va" marker-end="url(#arrow)" />
+                            <!-- Server -> Repository (CRL Download) -->
+                            <path d="M 590 285 L 410 200" class="connection-line" id="line-server-repo" marker-end="url(#arrow)" />
+                            <!-- User <-> AA (Attribute Request) - Connect User(120,300) to AA(260,185) -->
+                            <path d="M 140 280 L 240 200" class="connection-line" id="line-user-aa" marker-end="url(#arrow)" />
+                            
+                            <!-- Nodes (Circles with icons) -->
+                            <!-- CA (Certificate Authority) -->
+                            <g transform="translate(375, 50)" class="pki-node" data-node="ca">
+                                <circle r="30" class="node-circle ca-node" id="node-ca" />
+                                <text y="5" font-size="20" text-anchor="middle">🏛️</text>
+                                <text y="42" class="node-title">CA (認証局)</text>
+                                <text y="54" class="node-label">Certificate Authority</text>
+                            </g>
+                            
+                            <!-- RA (Registration Authority) -->
+                            <g transform="translate(120, 90)" class="pki-node" data-node="ra">
+                                <circle r="25" class="node-circle" id="node-ra" />
+                                <text y="5" font-size="16" text-anchor="middle">🔎</text>
+                                <text y="38" class="node-title">RA (登録局)</text>
+                                <text y="50" class="node-label">Registration Authority</text>
+                            </g>
+                            
+                            <!-- VA (Validation Authority) -->
+                            <g transform="translate(610, 90)" class="pki-node" data-node="va">
+                                <circle r="25" class="node-circle" id="node-va" />
+                                <text y="5" font-size="16" text-anchor="middle">🤖</text>
+                                <text y="38" class="node-title">VA (検証局 / OCSP)</text>
+                                <text y="50" class="node-label">Validation Authority</text>
+                            </g>
+                            
+                            <!-- AA (Attribute Authority) - Moved to x=260 (left of Repository) -->
+                            <g transform="translate(260, 185)" class="pki-node" data-node="aa">
+                                <circle r="25" class="node-circle aa-node" id="node-aa" />
+                                <text y="5" font-size="16" text-anchor="middle">🛡️</text>
+                                <text y="38" class="node-title">AA (属性認証局)</text>
+                                <text y="50" class="node-label">Attribute Authority</text>
+                            </g>
+                            
+                            <!-- Repository -->
+                            <g transform="translate(375, 185)" class="pki-node" data-node="repo">
+                                <circle r="25" class="node-circle" id="node-repo" />
+                                <text y="5" font-size="16" text-anchor="middle">🛢️</text>
+                                <text y="38" class="node-title">リポジトリ</text>
+                                <text y="50" class="node-label">Repository (LDAP/Web)</text>
+                            </g>
+                            
+                            <!-- User / EE (End Entity) -->
+                            <g transform="translate(120, 300)" class="pki-node" data-node="user">
+                                <circle r="25" class="node-circle" id="node-user" />
+                                <text y="5" font-size="16" text-anchor="middle">👤</text>
+                                <text y="38" class="node-title">利用者 (EE)</text>
+                                <text y="50" class="node-label">End Entity</text>
+                            </g>
+                            
+                            <!-- Web Server (Relying Party) -->
+                            <g transform="translate(610, 300)" class="pki-node" data-node="server">
+                                <circle r="25" class="node-circle" id="node-server" />
+                                <text y="5" font-size="16" text-anchor="middle">🗄️</text>
+                                <text y="38" class="node-title">Webサーバー</text>
+                                <text y="50" class="node-label">Relying Party (検証者)</text>
+                            </g>
+                        </svg>
+                    </div>
 
-                <!-- Dynamic explanation box inside map card -->
-                <div style="padding: 12px 16px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border-color); font-size: 12px; line-height: 1.5;" id="pkiNodeExplainer">
-                    <b>💡 インタラクティブマップ:</b> 上記の丸いノードをクリックすると、その機関の役割とセキスペ試験でのポイントが表示されます。
+                    <!-- 右側: 選択した属性の説明文 -->
+                    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; background: rgba(0,0,0,0.1); overflow-y: auto;">
+                        <div style="padding: 16px; font-size: 0.9rem; line-height: 1.6; box-sizing: border-box;" id="pkiNodeExplainer">
+                            <b>💡 インタラクティブマップ:</b> 左側の丸いノードをクリックすると、その機関の役割とセキスペ試験でのポイントが表示されます。
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Resize Handle -->
+                <div class="topology-resize-handle" id="pkiTopologyResizeHandle"></div>
             </div>
 
             <!-- Action Control Panel (Moved beneath the map) -->
@@ -305,12 +341,37 @@ window.SecurityLabModules["pki"] = {
                         <div>
                             <div id="pkiCertInventory">
                                 <div class="form-group">
-                                    <label>発行された証明書のシリアル番号:</label>
-                                    <div class="response-box" style="padding: 6px;"><code id="outPkiSerial" style="color: #fb7185;">未発行</code></div>
+                                    <label>身元証明書 (PKC) のデータ構造解析:</label>
+                                    <div class="response-box" style="padding: 10px; font-size: 11px; line-height: 1.5;">
+                                        <table class="info-table">
+                                            <tr>
+                                                <td style="color: var(--text-secondary); width: 110px;">シリアル番号:</td>
+                                                <td id="outPkiSerial" style="color: #fb7185; font-family: monospace;">未発行</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: var(--text-secondary);">Subject (所有者):</td>
+                                                <td id="outPkiSubject" style="color: #38bdf8;">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: var(--text-secondary);">Issuer (発行者):</td>
+                                                <td id="outPkiIssuer" style="color: #a855f7;">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: var(--text-secondary);">有効期限 (期間):</td>
+                                                <td id="outPkiValidity" style="color: #34d399;">-</td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="form-group" style="margin-top: 8px;">
-                                    <label>X.509 証明書 (PEM形式) - 公開鍵と署名を含む:</label>
-                                    <div class="pem-text" id="outPkiCertPem">-----</div>
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <details style="border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.15);">
+                                        <summary style="padding: 6px 10px; font-size: 11px; color: var(--text-secondary); cursor: pointer; user-select: none;">
+                                            📄 X.509 証明書 (PEM生データ) を表示 / 非表示
+                                        </summary>
+                                        <div style="padding: 8px; border-top: 1px solid var(--border-color);">
+                                            <div class="pem-text" id="outPkiCertPem">-----</div>
+                                        </div>
+                                    </details>
                                 </div>
                             </div>
                         </div>
@@ -386,8 +447,37 @@ window.SecurityLabModules["pki"] = {
                         <div>
                             <div id="pkiAcResultArea">
                                 <div class="form-group">
-                                    <label>発行された属性証明書 (AC JSON):</label>
-                                    <div class="pem-text" id="outPkiAcJson">-----</div>
+                                    <label>属性証明書 (AC) のデータ構造解析:</label>
+                                    <div class="response-box" style="padding: 10px; font-size: 11px; line-height: 1.5;">
+                                        <table class="info-table">
+                                            <tr>
+                                                <td style="color: var(--text-secondary); width: 110px;">対象PKCシリアル:</td>
+                                                <td id="outPkiAcTargetSerial" style="color: #fb7185; font-family: monospace;">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: var(--text-secondary);">付与された特権属性:</td>
+                                                <td id="outPkiAcRoleVal" style="color: #f59e0b; font-weight: bold;">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: var(--text-secondary);">署名機関:</td>
+                                                <td id="outPkiAcIssuer" style="color: #a855f7;">CN=SecurityLab AA, O=SecurityLab, C=JP</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: var(--text-secondary);">有効期限 (期間):</td>
+                                                <td id="outPkiAcValidity" style="color: #34d399;">-</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <details style="border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.15);">
+                                        <summary style="padding: 6px 10px; font-size: 11px; color: var(--text-secondary); cursor: pointer; user-select: none;">
+                                            📄 属性証明書 (AC JSON生データ) を表示 / 非表示
+                                        </summary>
+                                        <div style="padding: 8px; border-top: 1px solid var(--border-color);">
+                                            <div class="pem-text" id="outPkiAcJson">-----</div>
+                                        </div>
+                                    </details>
                                 </div>
                             </div>
                         </div>
@@ -420,6 +510,8 @@ window.SecurityLabModules["pki"] = {
         const pkiFlowStatus = document.getElementById("pkiFlowStatus");
         const pkiNodeExplainer = document.getElementById("pkiNodeExplainer");
         const pkiSvg = document.getElementById("pkiSvg");
+        const pkiTopologyResizeHandle = document.getElementById("pkiTopologyResizeHandle");
+        const topologyContainer = document.querySelector(".topology-container");
         
         // Input & Buttons Tab 1
         const pkiCn = document.getElementById("pkiCn");
@@ -427,7 +519,12 @@ window.SecurityLabModules["pki"] = {
         const btnPkiCsr = document.getElementById("btnPkiCsr");
         const btnPkiSubmitRa = document.getElementById("btnPkiSubmitRa");
         const btnPkiIssueCa = document.getElementById("btnPkiIssueCa");
+        
+        // Tab 1 PKC Details Elements
         const outPkiSerial = document.getElementById("outPkiSerial");
+        const outPkiSubject = document.getElementById("outPkiSubject");
+        const outPkiIssuer = document.getElementById("outPkiIssuer");
+        const outPkiValidity = document.getElementById("outPkiValidity");
         const outPkiCertPem = document.getElementById("outPkiCertPem");
         const pkiCertInventory = document.getElementById("pkiCertInventory");
 
@@ -444,6 +541,12 @@ window.SecurityLabModules["pki"] = {
         const pkiAcRole = document.getElementById("pkiAcRole");
         const btnPkiIssueAc = document.getElementById("btnPkiIssueAc");
         const btnPkiAccessServer = document.getElementById("btnPkiAccessServer");
+        
+        // Tab 3 AC Details Elements
+        const outPkiAcTargetSerial = document.getElementById("outPkiAcTargetSerial");
+        const outPkiAcRoleVal = document.getElementById("outPkiAcRoleVal");
+        const outPkiAcIssuer = document.getElementById("outPkiAcIssuer");
+        const outPkiAcValidity = document.getElementById("outPkiAcValidity");
         const outPkiAcJson = document.getElementById("outPkiAcJson");
         const pkiAcResultArea = document.getElementById("pkiAcResultArea");
 
@@ -459,6 +562,95 @@ window.SecurityLabModules["pki"] = {
         let issuedCertsList = []; // Local cache of certificates {serial, cn, org, status, pem}
         let latestIssuedSerial = "";
         let activeAc = null; // Current active attribute certificate
+
+        // 1. Topology Map Drag Resize Logic
+        let isResizingMap = false;
+        let startY = 0;
+        let startHeight = 0;
+
+        pkiTopologyResizeHandle.addEventListener("mousedown", (e) => {
+            isResizingMap = true;
+            startY = e.clientY;
+            startHeight = topologyContainer.getBoundingClientRect().height;
+            document.body.style.userSelect = "none";
+            document.body.style.cursor = "ns-resize";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!isResizingMap) return;
+            const deltaY = e.clientY - startY;
+            const newHeight = Math.max(250, Math.min(700, startHeight + deltaY));
+            topologyContainer.style.height = `${newHeight}px`;
+        });
+
+        document.addEventListener("mouseup", () => {
+            if (isResizingMap) {
+                isResizingMap = false;
+                document.body.style.userSelect = "";
+                document.body.style.cursor = "";
+            }
+        });
+
+        // 2. Dynamic Font & Emoji Scale Logic depending on Map Container Size
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                const width = entry.contentRect.width;
+                const height = entry.contentRect.height;
+                
+                // Base dimensions for SVG are viewBox 750 x 380
+                // Since it's a 2-pane layout, the SVG width is 2/3 of the container width
+                const svgActualWidth = width * (2 / 3);
+                const scaleX = svgActualWidth / 750;
+                
+                // Exclude header (46px) and resize-handle (8px)
+                const svgActualHeight = height - 54;
+                const scaleY = svgActualHeight / 380;
+                
+                // Prevent division by zero or negative scale if the tab is hidden
+                const scale = Math.max(0.1, Math.min(scaleX, scaleY));
+                
+                // Adapt font sizes dynamically: boost relative sizes if scale decreases (to avoid tiny text)
+                // limit maximum size to prevent overlay issues
+                const textScale = Math.max(0.7, Math.min(1.4, scale));
+                
+                pkiSvg.querySelectorAll(".pki-node").forEach(nodeEl => {
+                    const nodeType = nodeEl.dataset.node;
+                    
+                    // Emoji Icon
+                    const emojiNode = nodeEl.querySelector("text:not([class])");
+                    if (emojiNode) {
+                        const baseEmojiSize = (nodeType === "ca") ? 20 : 16;
+                        const emojiSize = baseEmojiSize * Math.max(0.8, 1.25 / textScale);
+                        emojiNode.setAttribute("font-size", emojiSize);
+                        emojiNode.setAttribute("y", 5 + (emojiSize - baseEmojiSize) * 0.1);
+                    }
+                    
+                    // Node Title (.node-title)
+                    const titleNode = nodeEl.querySelector(".node-title");
+                    if (titleNode) {
+                        const baseTitleSize = 13;
+                        const titleSize = baseTitleSize * Math.max(0.85, 1.15 / textScale);
+                        titleNode.style.fontSize = `${titleSize}px`;
+                    }
+                    
+                    // Node Label (.node-label)
+                    const labelNode = nodeEl.querySelector(".node-label");
+                    if (labelNode) {
+                        const baseLabelSize = 11;
+                        const labelSize = baseLabelSize * Math.max(0.85, 1.15 / textScale);
+                        labelNode.style.fontSize = `${labelSize}px`;
+                    }
+                });
+
+                // Scale right-side explanation text dynamic size
+                const explainerEl = document.getElementById("pkiNodeExplainer");
+                if (explainerEl) {
+                    const explainerFontSize = 0.9 * Math.max(0.8, Math.min(1.2, textScale));
+                    explainerEl.style.fontSize = `${explainerFontSize}rem`;
+                }
+            }
+        });
+        resizeObserver.observe(topologyContainer);
 
         const nodesInfo = {
             ca: {
@@ -544,6 +736,16 @@ window.SecurityLabModules["pki"] = {
             }
         }
 
+        // Helper: Visual guidance pulse-button class control
+        function updateBtnPulse(activeBtn) {
+            [btnPkiCsr, btnPkiSubmitRa, btnPkiIssueCa].forEach(btn => {
+                btn.classList.remove("pulse-button");
+            });
+            if (activeBtn && !activeBtn.disabled) {
+                activeBtn.classList.add("pulse-button");
+            }
+        }
+
         // Interactive Map Click handlers
         document.querySelectorAll(".pki-node").forEach(nodeEl => {
             nodeEl.addEventListener("click", () => {
@@ -569,8 +771,30 @@ window.SecurityLabModules["pki"] = {
                 
                 clearActiveLines();
                 highlightNode("", false);
+
+                // Clear verify pulses when changing tabs
+                btnPkiCheckOcsp.classList.remove("pulse-button");
+                btnPkiCheckCrl.classList.remove("pulse-button");
+                btnPkiIssueAc.classList.remove("pulse-button");
+                btnPkiAccessServer.classList.remove("pulse-button");
+                
+                // Re-initialize step pulses if Tab 1
+                if (tabId === "tab-issue") {
+                    if (outPkiSerial.innerText === "未発行") {
+                        updateBtnPulse(btnPkiCsr);
+                    } else if (outPkiSerial.innerText === "CSR生成済み (署名未完了)" && !btnPkiSubmitRa.disabled) {
+                        updateBtnPulse(btnPkiSubmitRa);
+                    } else if (!btnPkiIssueCa.disabled) {
+                        updateBtnPulse(btnPkiIssueCa);
+                    } else {
+                        updateBtnPulse(null);
+                    }
+                }
             });
         });
+
+        // Set initial step pulse
+        updateBtnPulse(btnPkiCsr);
 
         // ==========================================
         // TAB 1: CERTIFICATE ISSUANCE FLOW
@@ -600,8 +824,15 @@ window.SecurityLabModules["pki"] = {
                 outPkiSerial.innerText = "CSR生成済み (署名未完了)";
                 outPkiCertPem.innerText = currentCsrPem;
                 
+                // Set parsed structured CSR info
+                outPkiSubject.innerText = `CN=${pkiCn.value.trim()}, O=${pkiOrg.value.trim()}, C=JP`;
+                outPkiIssuer.innerText = "未発行 (CSR状態)";
+                outPkiValidity.innerText = "-";
+                
                 btnPkiSubmitRa.disabled = false;
                 btnPkiIssueCa.disabled = true;
+                
+                updateBtnPulse(btnPkiSubmitRa);
             } catch (err) {
                 logConsole(`[ERROR] CSR作成失敗: ${err.message}`);
             }
@@ -618,6 +849,9 @@ window.SecurityLabModules["pki"] = {
                 logConsole("RAによって申請者の本人確認書類・組織実在確認が正常に行われました（審査合格）。");
                 logConsole("RAはCAへ証明書発行依頼を承認・転送しました。");
                 btnPkiIssueCa.disabled = false;
+                btnPkiSubmitRa.disabled = true;
+                
+                updateBtnPulse(btnPkiIssueCa);
             }, 1000);
         });
 
@@ -642,7 +876,10 @@ window.SecurityLabModules["pki"] = {
                     cn: pkiCn.value.trim(),
                     org: pkiOrg.value.trim(),
                     status: "Good",
-                    pem: res.cert_pem
+                    pem: res.cert_pem,
+                    subject: res.subject,
+                    valid_before: res.not_valid_before,
+                    valid_after: res.not_valid_after
                 };
                 issuedCertsList.push(newCert);
                 
@@ -657,11 +894,20 @@ window.SecurityLabModules["pki"] = {
                     outPkiSerial.innerText = res.serial_number;
                     outPkiCertPem.innerText = res.cert_pem;
                     
+                    // Show parsed structured certificate info
+                    outPkiSubject.innerText = res.subject;
+                    outPkiIssuer.innerText = "CN=SecurityLab CA, O=SecurityLab, C=JP";
+                    const notBefore = new Date(res.not_valid_before).toLocaleString();
+                    const notAfter = new Date(res.not_valid_after).toLocaleString();
+                    outPkiValidity.innerText = `${notBefore} 〜\n${notAfter}`;
+                    
                     // Update Dropdowns in other tabs
                     updateCertificateDropdowns();
                     
                     btnPkiSubmitRa.disabled = true;
                     btnPkiIssueCa.disabled = true;
+                    
+                    updateBtnPulse(null);
                 }, 1000);
                 
             } catch (err) {
@@ -716,11 +962,15 @@ window.SecurityLabModules["pki"] = {
             btnPkiCheckCrl.disabled = !hasVal;
             btnPkiCheckOcsp.disabled = !hasVal;
             
+            btnPkiCheckOcsp.classList.remove("pulse-button");
+            btnPkiCheckCrl.classList.remove("pulse-button");
+            
             if (hasVal) {
                 const target = issuedCertsList.find(c => c.serial === pkiSelectCert.value);
                 if (target && target.status === "Revoked") {
                     btnPkiRevoke.disabled = true; // Already revoked
                 }
+                btnPkiCheckOcsp.classList.add("pulse-button"); // Guide to verify
             }
         });
 
@@ -752,6 +1002,8 @@ window.SecurityLabModules["pki"] = {
                 updateCertificateDropdowns();
                 pkiSelectCert.value = serial;
                 btnPkiRevoke.disabled = true;
+                
+                btnPkiCheckOcsp.classList.add("pulse-button"); // Prompt verification
             } catch (err) {
                 logConsole(`[ERROR] 失効申請失敗: ${err.message}`);
             }
@@ -761,6 +1013,9 @@ window.SecurityLabModules["pki"] = {
         btnPkiCheckCrl.addEventListener("click", async () => {
             const serial = pkiSelectCert.value;
             if (!serial) return;
+            
+            btnPkiCheckCrl.classList.remove("pulse-button");
+            btnPkiCheckOcsp.classList.remove("pulse-button");
             
             clearActiveLines();
             highlightNode("node-server", true);
@@ -811,6 +1066,9 @@ window.SecurityLabModules["pki"] = {
             const serial = pkiSelectCert.value;
             if (!serial) return;
             
+            btnPkiCheckOcsp.classList.remove("pulse-button");
+            btnPkiCheckCrl.classList.remove("pulse-button");
+            
             clearActiveLines();
             highlightNode("node-server", true);
             highlightLine("line-user-server", "pulse"); // Present cert
@@ -860,7 +1118,12 @@ window.SecurityLabModules["pki"] = {
         // TAB 3: ATTRIBUTE CERTIFICATE (AA & AC)
         // ==========================================
         pkiAcSelectCert.addEventListener("change", () => {
-            btnPkiIssueAc.disabled = (pkiAcSelectCert.value === "");
+            const hasVal = (pkiAcSelectCert.value !== "");
+            btnPkiIssueAc.disabled = !hasVal;
+            btnPkiIssueAc.classList.remove("pulse-button");
+            if (hasVal) {
+                btnPkiIssueAc.classList.add("pulse-button");
+            }
         });
 
         btnPkiIssueAc.addEventListener("click", async () => {
@@ -894,7 +1157,17 @@ window.SecurityLabModules["pki"] = {
                     pkiAcResultArea.style.display = "block";
                     outPkiAcJson.innerText = JSON.stringify(res.ac_json, null, 2);
                     
+                    // Show parsed structured AC info
+                    outPkiAcTargetSerial.innerText = res.ac_json.holder_pkc_serial;
+                    outPkiAcRoleVal.innerText = res.ac_json.attributes.role === "Admin" ? "管理者 (Admin)" : "一般社員 (Staff)";
+                    const acNotBefore = new Date(res.ac_json.validity.not_before).toLocaleString();
+                    const acNotAfter = new Date(res.ac_json.validity.not_after).toLocaleString();
+                    outPkiAcValidity.innerText = `${acNotBefore} 〜\n${acNotAfter}`;
+                    
                     btnPkiAccessServer.disabled = false;
+                    
+                    btnPkiIssueAc.classList.remove("pulse-button");
+                    btnPkiAccessServer.classList.add("pulse-button"); // Guide to server access
                 }, 1000);
                 
             } catch (err) {
@@ -904,6 +1177,8 @@ window.SecurityLabModules["pki"] = {
 
         btnPkiAccessServer.addEventListener("click", () => {
             if (!activeAc) return;
+            
+            btnPkiAccessServer.classList.remove("pulse-button");
             
             clearActiveLines();
             highlightNode("node-server", true);

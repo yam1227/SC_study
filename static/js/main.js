@@ -489,6 +489,12 @@ class SecurityLab {
         const mod = this.modules.find(m => m.id === id);
         if (!mod) return;
         
+        // Clear global console logs when switching modules to prevent context pollution
+        if (this.consoleBody) {
+            this.consoleBody.innerHTML = "";
+            this.log('system', `実験モジュール「${mod.title}」をロードしました。`);
+        }
+        
         this.welcomeTab.style.display = "none";
         this.labContainer.style.display = "flex";
         this.moduleTitle.innerText = mod.title;
