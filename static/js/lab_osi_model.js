@@ -104,8 +104,8 @@ window.SecurityLabModules["osi_model"] = {
             </div>
         </div>
     `,
-    
-    init: function(app) {
+
+    init: function (app) {
         const osiStackContainer = document.getElementById("osiStackContainer");
         const osiPayloadInput = document.getElementById("osiPayloadInput");
         const btnStartOsiSend = document.getElementById("btnStartOsiSend");
@@ -279,10 +279,10 @@ window.SecurityLabModules["osi_model"] = {
             if (type === "system") color = "#a78bfa";
             else if (type === "success") color = "#34d399";
             else if (type === "info") color = "#60a5fa";
-            
+
             const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             osiSimLogText.innerHTML += `<div style="margin-bottom: 2px; color: ${color};">[${timeStr}] ${message}</div>`;
-            
+
             const box = osiSimLogText.parentElement;
             if (box) {
                 box.scrollTop = box.scrollHeight;
@@ -296,14 +296,14 @@ window.SecurityLabModules["osi_model"] = {
                 const el = document.createElement("div");
                 el.className = "osi-layer-card";
                 el.id = `osiLayerCard-${layer.num}`;
-                
+
                 el.innerHTML = `
                     <span class="osi-layer-num">L${layer.num}</span>
                     <span class="osi-layer-name">${layer.name}</span>
                     <span class="osi-pdu-badge">${layer.pdu}</span>
                     <span id="osiHeaderTag-${layer.num}" class="osi-header-tag" style="display: none;">Header</span>
                 `;
-                
+
                 el.addEventListener("click", () => {
                     showDetails(layer.num);
                     selectOrAddDecoderRow(layer.num);
@@ -316,7 +316,7 @@ window.SecurityLabModules["osi_model"] = {
             document.querySelectorAll(".osi-layer-card").forEach(c => c.classList.remove("active"));
             const el = document.getElementById(`osiLayerCard-${num}`);
             if (el) el.classList.add("active");
-            
+
             const detail = layerDetails[num];
             if (detail) {
                 osiDetailTitle.innerText = detail.title;
@@ -327,7 +327,7 @@ window.SecurityLabModules["osi_model"] = {
         // When a user clicks a layer card, select existing row, or add if empty
         function selectOrAddDecoderRow(num) {
             const isTableEmpty = osiDecoderTableBody.querySelector("td[colspan]") !== null || osiDecoderTableBody.innerHTML.trim() === "";
-            
+
             if (isTableEmpty) {
                 // If simulator hasn't run, clear default text and just display this layer's fields
                 updateDecoderTable(num, true);
@@ -355,10 +355,10 @@ window.SecurityLabModules["osi_model"] = {
             if (clearFirst) {
                 osiDecoderTableBody.innerHTML = "";
             }
-            
+
             const payload = osiPayloadInput.value.trim() || "POST /login HTTP/1.1";
             const fields = getHeaderFields(payload)[num];
-            
+
             if (!fields) return;
 
             // Remove existing highlights from other rows
@@ -381,7 +381,7 @@ window.SecurityLabModules["osi_model"] = {
                     </tr>
                 `;
             }).join("");
-            
+
             osiDecoderTableBody.innerHTML += newRows;
         }
 
@@ -410,7 +410,7 @@ window.SecurityLabModules["osi_model"] = {
             osiPacketTypeLabel.innerText = "PDU: データ (L7 - アプリケーションデータ)";
             osiPhysicalBits.style.display = "none";
             osiPhysicalBits.innerText = "";
-            
+
             // Hide all header tags in stack
             document.querySelectorAll(".osi-header-tag").forEach(tag => {
                 tag.style.display = "none";
@@ -431,24 +431,24 @@ window.SecurityLabModules["osi_model"] = {
         btnStartOsiSend.addEventListener("click", async () => {
             btnStartOsiSend.disabled = true;
             btnStartOsiRecv.disabled = true;
-            
+
             // Clear decoder table for fresh simulation start
             resetPacketPreview();
             osiSimLogText.innerText = "";
             logOsi(">>> PC送信側: カプセル化プロセス (Encapsulation) を開始します...", "info");
-            
+
             const payload = osiPayloadInput.value.trim() || "POST /login HTTP/1.1";
-            
+
             // L7 -> L1 Step Loop
             for (let num = 7; num >= 1; num--) {
                 showDetails(num);
-                
+
                 // Cumulative append to decoder table
                 const isFirst = (num === 7);
                 updateDecoderTable(num, isFirst);
-                
+
                 const tag = document.getElementById(`osiHeaderTag-${num}`);
-                
+
                 if (num === 7) {
                     logOsi(`[L7 アプリケーション層] HTTP要求メッセージを生成: "${payload.split('\\r\\n')[0]}"`, "normal");
                     osiPacketTypeLabel.innerText = "PDU: データ (L7 - HTTPメッセージ)";
@@ -462,7 +462,7 @@ window.SecurityLabModules["osi_model"] = {
                     tag.innerText = "TLS Encrypted";
                     tag.style.backgroundColor = "#a78bfa";
                     tag.style.display = "inline-block";
-                    
+
                     // Update PDU view
                     const dataBlock = document.getElementById("osiSegData");
                     dataBlock.innerText = "🔒 暗号化データ";
@@ -482,7 +482,7 @@ window.SecurityLabModules["osi_model"] = {
                     tag.innerText = "TCP Header";
                     tag.style.backgroundColor = "#f59e0b";
                     tag.style.display = "inline-block";
-                    
+
                     // Add segment to preview
                     const tcpSeg = document.createElement("div");
                     tcpSeg.className = "osi-packet-segment osi-segment-tcp";
@@ -497,7 +497,7 @@ window.SecurityLabModules["osi_model"] = {
                     tag.innerText = "IP Header";
                     tag.style.backgroundColor = "#10b981";
                     tag.style.display = "inline-block";
-                    
+
                     // Add IP packet to preview
                     const ipSeg = document.createElement("div");
                     ipSeg.className = "osi-packet-segment osi-segment-ip";
@@ -512,20 +512,20 @@ window.SecurityLabModules["osi_model"] = {
                     tag.innerText = "Ethernet Header";
                     tag.style.backgroundColor = "#3b82f6";
                     tag.style.display = "inline-block";
-                    
+
                     // Add Ethernet header and FCS to preview
                     const ethSeg = document.createElement("div");
                     ethSeg.className = "osi-packet-segment osi-segment-eth";
                     ethSeg.id = "osiSegEth";
                     ethSeg.innerText = "イーサネットヘッダー";
                     osiPacketSegmentsBlock.insertBefore(ethSeg, osiPacketSegmentsBlock.firstChild);
-                    
+
                     const fcsSeg = document.createElement("div");
                     fcsSeg.className = "osi-packet-segment osi-segment-fcs";
                     fcsSeg.id = "osiSegFcs";
                     fcsSeg.innerText = "FCS (エラー検知)";
                     osiPacketSegmentsBlock.appendChild(fcsSeg);
-                    
+
                     osiPacketTypeLabel.innerText = "PDU: フレーム (L2 - Ethernet Frame)";
                 }
                 else if (num === 1) {
@@ -534,40 +534,40 @@ window.SecurityLabModules["osi_model"] = {
                     tag.innerText = "PHY bit stream";
                     tag.style.backgroundColor = "#6b7280";
                     tag.style.display = "inline-block";
-                    
+
                     // Render physical bits in preview
                     osiPhysicalBits.style.display = "block";
                     let binaryStr = "";
-                    for(let i=0; i<8; i++) {
-                        binaryStr += Math.floor(Math.random()*2).toString() + Math.floor(Math.random()*2).toString() + Math.floor(Math.random()*2).toString() + Math.floor(Math.random()*2).toString() + " ";
+                    for (let i = 0; i < 8; i++) {
+                        binaryStr += Math.floor(Math.random() * 2).toString() + Math.floor(Math.random() * 2).toString() + Math.floor(Math.random() * 2).toString() + Math.floor(Math.random() * 2).toString() + " ";
                     }
                     osiPhysicalBits.innerText = "ビット変換出力: " + binaryStr + "...";
                     osiPacketTypeLabel.innerText = "PDU: ビット列 (L1 - Bit stream)";
                 }
-                
+
                 // Delay between layer steps
                 await new Promise(r => setTimeout(r, 600));
             }
-            
+
             logOsi("🟢 送信側のカプセル化が完了しました。物理回線を通って宛先サーバーへ送ります。", "success");
-            
+
             // Run cable flow animation
             osiFlowLabel.innerText = "物理信号がケーブルを流れています...";
             osiFlowPacket.style.display = "block";
             osiFlowPacket.style.transition = "none";
             osiFlowPacket.style.left = "40px";
-            
+
             // Force reflow and slide right
             setTimeout(() => {
                 osiFlowPacket.style.transition = "left 1.5s linear";
                 osiFlowPacket.style.left = "calc(100% - 54px)";
             }, 50);
-            
+
             await new Promise(r => setTimeout(r, 1600));
-            
+
             osiFlowLabel.innerText = "パケットが宛先Webサーバーの物理NICに到達しました！";
             logOsi(">> パケットがサーバーに到達しました。受信側で非カプセル化を実行可能です。", "info");
-            
+
             btnStartOsiRecv.disabled = false;
         });
 
@@ -576,12 +576,12 @@ window.SecurityLabModules["osi_model"] = {
             btnStartOsiRecv.disabled = true;
             resetDecapsulatedState(); // Reset strikethroughs
             logOsi(`\n<<< サーバー受信側: 非カプセル化プロセス (Decapsulation) を開始します...`, "info");
-            
+
             // L1 -> L7 Step Loop
             for (let num = 1; num <= 7; num++) {
                 showDetails(num);
                 markDecapsulated(num); // Add strike-through to the decapsulated layer rows
-                
+
                 if (num === 1) {
                     logOsi(`[L1 物理層] 物理NICにて電気パルスを受信し、デジタルデータに変換中...`, "normal");
                     logOsi(`[L1 物理層] ビットストリームをフレームとして組み立ててL2に引き渡します。`, "normal");
@@ -592,34 +592,34 @@ window.SecurityLabModules["osi_model"] = {
                     logOsi(`[L2 データリンク層] 受信したイーサネットフレームの宛先MACアドレスを検証。`, "normal");
                     logOsi(`[L2 データリンク層] FCS整合性チェックに合格（通信エラーなし）。`, "normal");
                     logOsi(`[L2 データリンク層] イーサネットヘッダーとFCSを剥離（デカプセル化）し、IP層へ転送。`, "system");
-                    
+
                     // Remove Ethernet seg and FCS
                     const eth = document.getElementById("osiSegEth");
                     if (eth) eth.remove();
                     const fcs = document.getElementById("osiSegFcs");
                     if (fcs) fcs.remove();
-                    
+
                     osiPacketTypeLabel.innerText = "PDU: IPパケット";
                 }
                 else if (num === 3) {
                     logOsi(`[L3 ネットワーク層] IPパケットの宛先IPを検証。自ホスト宛であることを確認。`, "normal");
                     logOsi(`[L3 ネットワーク層] IPヘッダーを剥離（デカプセル化）し、トランスポート層（TCP）に引き渡します。`, "system");
-                    
+
                     // Remove IP header segment
                     const ip = document.getElementById("osiSegIp");
                     if (ip) ip.remove();
-                    
+
                     osiPacketTypeLabel.innerText = "PDU: TCPセグメント";
                 }
                 else if (num === 4) {
                     logOsi(`[L4 トランスポート層] TCPヘッダーを解析。シーケンス番号を確認し順序保証。`, "normal");
                     logOsi(`[L4 トランスポート層] 宛先ポート 443（HTTPSサーバープロセス）へデータを引き渡し。`, "normal");
                     logOsi(`[L4 トランスポート層] TCPヘッダーを剥離（デカプセル化）してセッション層に転送します。`, "system");
-                    
+
                     // Remove TCP header segment
                     const tcp = document.getElementById("osiSegTcp");
                     if (tcp) tcp.remove();
-                    
+
                     osiPacketTypeLabel.innerText = "PDU: 暗号化メッセージデータ";
                 }
                 else if (num === 5) {
@@ -628,14 +628,14 @@ window.SecurityLabModules["osi_model"] = {
                 }
                 else if (num === 6) {
                     logOsi(`[L6 プレゼンテーション層] TLSエンジンをロード。共通鍵を用いて暗号パケットの復号を開始。`, "normal");
-                    logOsi(`[L6 プレゼンテーション層] データの復号に成功！明文データを読み取り。`, "success");
-                    
+                    logOsi(`[L6 プレゼンテーション層] 平文`, "success");
+
                     // Update PDU view to show text again
                     const dataBlock = document.getElementById("osiSegData");
                     dataBlock.innerText = "HTTP DATA";
                     dataBlock.style.backgroundColor = "#ec4899";
-                    
-                    osiPacketTypeLabel.innerText = "PDU: HTTPメッセージデータ (明文)";
+
+                    osiPacketTypeLabel.innerText = "PDU: HTTPメッセージデータ (平文)";
                 }
                 else if (num === 7) {
                     const payload = osiPayloadInput.value.trim() || "POST /login HTTP/1.1";
@@ -644,11 +644,11 @@ window.SecurityLabModules["osi_model"] = {
                     logOsi(`🟢 サーバー受信側での非カプセル化・パケット復元が完全に完了しました！`, "success");
                     app.log("success", `[OSI参照モデル] アプリケーション層にてデータの受信に成功しました。`);
                 }
-                
+
                 // Delay between layer steps
                 await new Promise(r => setTimeout(r, 600));
             }
-            
+
             osiFlowLabel.innerText = "通信処理成功";
             btnStartOsiSend.disabled = false;
         });
@@ -657,13 +657,13 @@ window.SecurityLabModules["osi_model"] = {
         btnResetOsi.addEventListener("click", () => {
             btnStartOsiSend.disabled = false;
             btnStartOsiRecv.disabled = true;
-            
+
             osiFlowLabel.innerText = "通信待機中";
             osiFlowPacket.style.display = "none";
-            
+
             resetPacketPreview();
             osiSimLogText.innerText = "「1. 送信 (カプセル化)」ボタンを押すと、各階層でのヘッダー付加プロセスが開始されます。";
-            
+
             showDetails(7);
             logOsi("シミュレーターの状態を初期化しました。", "info");
         });
