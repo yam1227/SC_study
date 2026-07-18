@@ -242,7 +242,7 @@ window.SecurityLabModules["pki"] = {
                                 <circle r="30" class="node-circle ca-node" id="node-ca" />
                                 <text y="5" font-size="20" text-anchor="middle">🏛️</text>
                                 <text y="42" class="node-title">CA (認証局)</text>
-                                <text y="54" class="node-label">Certificate Authority</text>
+                                <!-- <text y="54" class="node-label">Certificate Authority</text> -->
                             </g>
                             
                             <!-- RA (Registration Authority) -->
@@ -250,7 +250,7 @@ window.SecurityLabModules["pki"] = {
                                 <circle r="25" class="node-circle" id="node-ra" />
                                 <text y="5" font-size="16" text-anchor="middle">🔎</text>
                                 <text y="38" class="node-title">RA (登録局)</text>
-                                <text y="50" class="node-label">Registration Authority</text>
+                                <!-- <text y="50" class="node-label">Registration Authority</text> -->
                             </g>
                             
                             <!-- VA (Validation Authority) -->
@@ -258,7 +258,7 @@ window.SecurityLabModules["pki"] = {
                                 <circle r="25" class="node-circle" id="node-va" />
                                 <text y="5" font-size="16" text-anchor="middle">🤖</text>
                                 <text y="38" class="node-title">VA (検証局 / OCSP)</text>
-                                <text y="50" class="node-label">Validation Authority</text>
+                                <!-- <text y="50" class="node-label">Validation Authority</text> -->
                             </g>
                             
                             <!-- AA (Attribute Authority) - Moved to x=260 (left of Repository) -->
@@ -266,7 +266,7 @@ window.SecurityLabModules["pki"] = {
                                 <circle r="25" class="node-circle aa-node" id="node-aa" />
                                 <text y="5" font-size="16" text-anchor="middle">🛡️</text>
                                 <text y="38" class="node-title">AA (属性認証局)</text>
-                                <text y="50" class="node-label">Attribute Authority</text>
+                                <!-- <text y="50" class="node-label">Attribute Authority</text> -->
                             </g>
                             
                             <!-- Repository -->
@@ -274,7 +274,7 @@ window.SecurityLabModules["pki"] = {
                                 <circle r="25" class="node-circle" id="node-repo" />
                                 <text y="5" font-size="16" text-anchor="middle">🛢️</text>
                                 <text y="38" class="node-title">リポジトリ</text>
-                                <text y="50" class="node-label">Repository (LDAP/Web)</text>
+                                <!-- <text y="50" class="node-label">Repository (LDAP/Web)</text> -->
                             </g>
                             
                             <!-- User / EE (End Entity) -->
@@ -282,7 +282,7 @@ window.SecurityLabModules["pki"] = {
                                 <circle r="25" class="node-circle" id="node-user" />
                                 <text y="5" font-size="16" text-anchor="middle">👤</text>
                                 <text y="38" class="node-title">利用者 (EE)</text>
-                                <text y="50" class="node-label">End Entity</text>
+                                <!-- <text y="50" class="node-label">End Entity</text> -->
                             </g>
                             
                             <!-- Web Server (Relying Party) -->
@@ -290,7 +290,7 @@ window.SecurityLabModules["pki"] = {
                                 <circle r="25" class="node-circle" id="node-server" />
                                 <text y="5" font-size="16" text-anchor="middle">🗄️</text>
                                 <text y="38" class="node-title">Webサーバー</text>
-                                <text y="50" class="node-label">Relying Party (検証者)</text>
+                                <!-- <text y="50" class="node-label">Relying Party (検証者)</text> -->
                             </g>
                         </svg>
                     </div>
@@ -512,14 +512,14 @@ window.SecurityLabModules["pki"] = {
         const pkiSvg = document.getElementById("pkiSvg");
         const pkiTopologyResizeHandle = document.getElementById("pkiTopologyResizeHandle");
         const topologyContainer = document.querySelector(".topology-container");
-        
+
         // Input & Buttons Tab 1
         const pkiCn = document.getElementById("pkiCn");
         const pkiOrg = document.getElementById("pkiOrg");
         const btnPkiCsr = document.getElementById("btnPkiCsr");
         const btnPkiSubmitRa = document.getElementById("btnPkiSubmitRa");
         const btnPkiIssueCa = document.getElementById("btnPkiIssueCa");
-        
+
         // Tab 1 PKC Details Elements
         const outPkiSerial = document.getElementById("outPkiSerial");
         const outPkiSubject = document.getElementById("outPkiSubject");
@@ -541,7 +541,7 @@ window.SecurityLabModules["pki"] = {
         const pkiAcRole = document.getElementById("pkiAcRole");
         const btnPkiIssueAc = document.getElementById("btnPkiIssueAc");
         const btnPkiAccessServer = document.getElementById("btnPkiAccessServer");
-        
+
         // Tab 3 AC Details Elements
         const outPkiAcTargetSerial = document.getElementById("outPkiAcTargetSerial");
         const outPkiAcRoleVal = document.getElementById("outPkiAcRoleVal");
@@ -554,11 +554,11 @@ window.SecurityLabModules["pki"] = {
         let caSubject = "";
         let caCertPem = "";
         let aaPublicKeyPem = "";
-        
+
         let currentCsrPem = "";
         let currentUserPrivateKeyPem = "";
         let currentUserPublicKeyPem = "";
-        
+
         let issuedCertsList = []; // Local cache of certificates {serial, cn, org, status, pem}
         let latestIssuedSerial = "";
         let activeAc = null; // Current active attribute certificate
@@ -596,26 +596,26 @@ window.SecurityLabModules["pki"] = {
             for (let entry of entries) {
                 const width = entry.contentRect.width;
                 const height = entry.contentRect.height;
-                
+
                 // Base dimensions for SVG are viewBox 750 x 380
                 // Since it's a 2-pane layout, the SVG width is 2/3 of the container width
                 const svgActualWidth = width * (2 / 3);
                 const scaleX = svgActualWidth / 750;
-                
+
                 // Exclude header (46px) and resize-handle (8px)
                 const svgActualHeight = height - 54;
                 const scaleY = svgActualHeight / 380;
-                
+
                 // Prevent division by zero or negative scale if the tab is hidden
                 const scale = Math.max(0.1, Math.min(scaleX, scaleY));
-                
+
                 // Adapt font sizes dynamically: boost relative sizes if scale decreases (to avoid tiny text)
                 // limit maximum size to prevent overlay issues
                 const textScale = Math.max(0.7, Math.min(1.4, scale));
-                
+
                 pkiSvg.querySelectorAll(".pki-node").forEach(nodeEl => {
                     const nodeType = nodeEl.dataset.node;
-                    
+
                     // Emoji Icon
                     const emojiNode = nodeEl.querySelector("text:not([class])");
                     if (emojiNode) {
@@ -624,15 +624,15 @@ window.SecurityLabModules["pki"] = {
                         emojiNode.setAttribute("font-size", emojiSize);
                         emojiNode.setAttribute("y", 5 + (emojiSize - baseEmojiSize) * 0.1);
                     }
-                    
+
                     // Node Title (.node-title)
                     const titleNode = nodeEl.querySelector(".node-title");
                     if (titleNode) {
-                        const baseTitleSize = 13;
+                        const baseTitleSize = 10;
                         const titleSize = baseTitleSize * Math.max(0.85, 1.15 / textScale);
                         titleNode.style.fontSize = `${titleSize}px`;
                     }
-                    
+
                     // Node Label (.node-label)
                     const labelNode = nodeEl.querySelector(".node-label");
                     if (labelNode) {
@@ -764,11 +764,11 @@ window.SecurityLabModules["pki"] = {
             btn.addEventListener("click", () => {
                 document.querySelectorAll(".pki-tab-btn").forEach(b => b.classList.remove("active"));
                 document.querySelectorAll(".pki-tab-content").forEach(c => c.classList.remove("active"));
-                
+
                 btn.classList.add("active");
                 const tabId = btn.dataset.tab;
                 document.getElementById(tabId).classList.add("active");
-                
+
                 clearActiveLines();
                 highlightNode("", false);
 
@@ -777,7 +777,7 @@ window.SecurityLabModules["pki"] = {
                 btnPkiCheckCrl.classList.remove("pulse-button");
                 btnPkiIssueAc.classList.remove("pulse-button");
                 btnPkiAccessServer.classList.remove("pulse-button");
-                
+
                 // Re-initialize step pulses if Tab 1
                 if (tabId === "tab-issue") {
                     if (outPkiSerial.innerText === "未発行") {
@@ -799,39 +799,39 @@ window.SecurityLabModules["pki"] = {
         // ==========================================
         // TAB 1: CERTIFICATE ISSUANCE FLOW
         // ==========================================
-        
+
         // Step 1: Generate CSR
         btnPkiCsr.addEventListener("click", async () => {
             clearActiveLines();
             highlightNode("node-user", true);
             logConsole("【ステップ1】利用者(EE)の鍵ペア生成およびCSRの作成を開始...");
-            
+
             try {
                 const res = await app.apiCall("/api/pki/csr", "POST", {
                     common_name: pkiCn.value.trim(),
                     organization: pkiOrg.value.trim(),
                     country: "JP"
                 });
-                
+
                 currentCsrPem = res.csr_pem;
                 currentUserPrivateKeyPem = res.private_key_pem;
                 currentUserPublicKeyPem = res.public_key_pem;
-                
+
                 logConsole("利用者のRSA鍵ペアをローカルで生成しました。");
                 logConsole("身元情報を付加し、秘密鍵で自己署名した「CSR (証明書署名要求)」を作成完了。");
-                
+
                 pkiCertInventory.style.display = "block";
                 outPkiSerial.innerText = "CSR生成済み (署名未完了)";
                 outPkiCertPem.innerText = currentCsrPem;
-                
+
                 // Set parsed structured CSR info
                 outPkiSubject.innerText = `CN=${pkiCn.value.trim()}, O=${pkiOrg.value.trim()}, C=JP`;
                 outPkiIssuer.innerText = "未発行 (CSR状態)";
                 outPkiValidity.innerText = "-";
-                
+
                 btnPkiSubmitRa.disabled = false;
                 btnPkiIssueCa.disabled = true;
-                
+
                 updateBtnPulse(btnPkiSubmitRa);
             } catch (err) {
                 logConsole(`[ERROR] CSR作成失敗: ${err.message}`);
@@ -844,13 +844,13 @@ window.SecurityLabModules["pki"] = {
             highlightNode("node-ra", true);
             highlightLine("line-user-ra", "pulse");
             logConsole("【ステップ2】登録局(RA)への本人確認申請パケットを送信...");
-            
+
             setTimeout(() => {
                 logConsole("RAによって申請者の本人確認書類・組織実在確認が正常に行われました（審査合格）。");
                 logConsole("RAはCAへ証明書発行依頼を承認・転送しました。");
                 btnPkiIssueCa.disabled = false;
                 btnPkiSubmitRa.disabled = true;
-                
+
                 updateBtnPulse(btnPkiIssueCa);
             }, 1000);
         });
@@ -861,15 +861,15 @@ window.SecurityLabModules["pki"] = {
             highlightNode("node-ca", true);
             highlightLine("line-ra-ca", "pulse");
             logConsole("【ステップ3】認証局(CA)での署名・発行プロセスを実行中...");
-            
+
             try {
                 const res = await app.apiCall("/api/pki/issue", "POST", {
                     csr_pem: currentCsrPem,
                     valid_days: 365
                 });
-                
+
                 latestIssuedSerial = res.serial_number;
-                
+
                 // Add to local inventory cache
                 const newCert = {
                     serial: res.serial_number,
@@ -882,34 +882,34 @@ window.SecurityLabModules["pki"] = {
                     valid_after: res.not_valid_after
                 };
                 issuedCertsList.push(newCert);
-                
+
                 setTimeout(() => {
                     highlightLine("line-ca-repo", "pulse");
                     highlightLine("line-user-ra", "pulse-reverse"); // Send back cert
-                    
+
                     logConsole(`CAはCSRから公開鍵を抽出し、シリアル番号 [${res.serial_number}] を付与。`);
                     logConsole("CAの秘密鍵を用いてX.509デジタル証明書へデジタル署名を施しました。");
                     logConsole("証明書を「リポジトリ」へ登録完了。利用者は証明書をダウンロードしました。");
-                    
+
                     outPkiSerial.innerText = res.serial_number;
                     outPkiCertPem.innerText = res.cert_pem;
-                    
+
                     // Show parsed structured certificate info
                     outPkiSubject.innerText = res.subject;
                     outPkiIssuer.innerText = "CN=SecurityLab CA, O=SecurityLab, C=JP";
                     const notBefore = new Date(res.not_valid_before).toLocaleString();
                     const notAfter = new Date(res.not_valid_after).toLocaleString();
                     outPkiValidity.innerText = `${notBefore} 〜\n${notAfter}`;
-                    
+
                     // Update Dropdowns in other tabs
                     updateCertificateDropdowns();
-                    
+
                     btnPkiSubmitRa.disabled = true;
                     btnPkiIssueCa.disabled = true;
-                    
+
                     updateBtnPulse(null);
                 }, 1000);
-                
+
             } catch (err) {
                 logConsole(`[ERROR] 証明書発行失敗: ${err.message}`);
             }
@@ -923,15 +923,15 @@ window.SecurityLabModules["pki"] = {
             pkiSelectCert.innerHTML = '<option value="">-- 証明書を選択してください --</option>';
             // Tab 3 Dropdown
             pkiAcSelectCert.innerHTML = '<option value="">-- 証明書を選択してください --</option>';
-            
+
             issuedCertsList.forEach(c => {
                 const label = `シリアル: ${c.serial.substring(0, 8)}... (CN: ${c.cn}, 組織: ${c.org}) [${c.status === 'Good' ? '🟢有効' : '🔴失効'}]`;
-                
+
                 const opt2 = document.createElement("option");
                 opt2.value = c.serial;
                 opt2.innerText = label;
                 pkiSelectCert.appendChild(opt2);
-                
+
                 if (c.status === "Good") {
                     const opt3 = document.createElement("option");
                     opt3.value = c.serial;
@@ -946,7 +946,7 @@ window.SecurityLabModules["pki"] = {
             if (currentVal3 && Array.from(pkiAcSelectCert.options).some(o => o.value === currentVal3)) {
                 pkiAcSelectCert.value = currentVal3;
             }
-            
+
             btnPkiRevoke.disabled = (pkiSelectCert.value === "");
             btnPkiCheckCrl.disabled = (pkiSelectCert.value === "");
             btnPkiCheckOcsp.disabled = (pkiSelectCert.value === "");
@@ -961,10 +961,10 @@ window.SecurityLabModules["pki"] = {
             btnPkiRevoke.disabled = !hasVal;
             btnPkiCheckCrl.disabled = !hasVal;
             btnPkiCheckOcsp.disabled = !hasVal;
-            
+
             btnPkiCheckOcsp.classList.remove("pulse-button");
             btnPkiCheckCrl.classList.remove("pulse-button");
-            
+
             if (hasVal) {
                 const target = issuedCertsList.find(c => c.serial === pkiSelectCert.value);
                 if (target && target.status === "Revoked") {
@@ -978,31 +978,31 @@ window.SecurityLabModules["pki"] = {
         btnPkiRevoke.addEventListener("click", async () => {
             const serial = pkiSelectCert.value;
             if (!serial) return;
-            
+
             clearActiveLines();
             highlightNode("node-ca", true);
             highlightLine("line-user-ra", "pulse");
             highlightLine("line-ra-ca", "pulse");
             logConsole(`証明書シリアル [${serial}] の失効申請を送信中...`);
-            
+
             try {
                 const res = await app.apiCall("/api/pki/revoke", "POST", {
                     serial_number: serial
                 });
-                
+
                 // Update local status
                 const idx = issuedCertsList.findIndex(c => c.serial === serial);
                 if (idx !== -1) {
                     issuedCertsList[idx].status = "Revoked";
                 }
-                
+
                 logConsole(`CAデータベース上の証明書ステータスを「Revoked（失効）」に書き換えました。`);
                 logConsole(`失効日時: ${res.revoked_at}`);
-                
+
                 updateCertificateDropdowns();
                 pkiSelectCert.value = serial;
                 btnPkiRevoke.disabled = true;
-                
+
                 btnPkiCheckOcsp.classList.add("pulse-button"); // Prompt verification
             } catch (err) {
                 logConsole(`[ERROR] 失効申請失敗: ${err.message}`);
@@ -1013,33 +1013,33 @@ window.SecurityLabModules["pki"] = {
         btnPkiCheckCrl.addEventListener("click", async () => {
             const serial = pkiSelectCert.value;
             if (!serial) return;
-            
+
             btnPkiCheckCrl.classList.remove("pulse-button");
             btnPkiCheckOcsp.classList.remove("pulse-button");
-            
+
             clearActiveLines();
             highlightNode("node-server", true);
             highlightLine("line-user-server", "pulse"); // Client presents cert to server
             logConsole("【方式A: CRL検証】クライアントがWebサーバーに接続要求。証明書を提示しました。");
-            
+
             setTimeout(async () => {
                 highlightLine("line-server-repo", "pulse"); // Server downloads CRL
                 logConsole("Webサーバーは、証明書失効リスト(CRL)を取得するためリポジトリ(LDAP/Web)にアクセスします。");
-                
+
                 try {
                     const crlRes = await app.apiCall("/api/pki/crl", "GET");
-                    
+
                     setTimeout(() => {
                         highlightNode("node-repo", true);
                         logConsole("リポジトリから大容量のCRLデータをダウンロードしました。");
                         logConsole("サーバー側で、CRLのデジタル署名（CA鍵）を検証します。署名妥当。");
                         logConsole("ダウンロードしたCRLの全リストを線形探索し、提示されたシリアル番号があるか検索します。");
-                        
+
                         const target = issuedCertsList.find(c => c.serial === serial);
                         const isRevoked = target && target.status === "Revoked";
-                        
+
                         pkiVerifyReportBox.style.borderColor = isRevoked ? "var(--color-danger)" : "var(--color-success)";
-                        
+
                         if (isRevoked) {
                             pkiVerifyReport.innerHTML = `
                                 <span style="color: var(--color-danger); font-weight: bold;">🔴 接続拒否 (CRLにより失効検知)</span><br>
@@ -1065,32 +1065,32 @@ window.SecurityLabModules["pki"] = {
         btnPkiCheckOcsp.addEventListener("click", async () => {
             const serial = pkiSelectCert.value;
             if (!serial) return;
-            
+
             btnPkiCheckOcsp.classList.remove("pulse-button");
             btnPkiCheckCrl.classList.remove("pulse-button");
-            
+
             clearActiveLines();
             highlightNode("node-server", true);
             highlightLine("line-user-server", "pulse"); // Present cert
             logConsole("【方式B: OCSP検証】クライアントがWebサーバーに接続要求。証明書を提示しました。");
-            
+
             setTimeout(async () => {
                 highlightLine("line-server-va", "pulse"); // Send OCSP request to VA
-                logConsole(`Webサーバーは、検証局(VA)に対してシリアル番号 [${serial.substring(0,8)}...] の状態確認要求をリアルタイムで送信します。`);
-                
+                logConsole(`Webサーバーは、検証局(VA)に対してシリアル番号 [${serial.substring(0, 8)}...] の状態確認要求をリアルタイムで送信します。`);
+
                 try {
                     const res = await app.apiCall("/api/pki/ocsp", "POST", {
                         serial_number: serial
                     });
-                    
+
                     setTimeout(() => {
                         highlightNode("node-va", true);
                         highlightLine("line-server-va", "pulse-reverse"); // Response from VA
                         logConsole(`VAから署名付きOCSPレスポンス（ステータス: ${res.status}）を受信しました。`);
                         logConsole("サーバー側でOCSPレスポンスに施されたCAのデジタル署名を検証。検証成功。");
-                        
+
                         pkiVerifyReportBox.style.borderColor = (res.status === "Good") ? "var(--color-success)" : "var(--color-danger)";
-                        
+
                         if (res.status === "Good") {
                             pkiVerifyReport.innerHTML = `
                                 <span style="color: var(--color-success); font-weight: bold;">🟢 接続許可 (OCSP検証パス)</span><br>
@@ -1129,15 +1129,15 @@ window.SecurityLabModules["pki"] = {
         btnPkiIssueAc.addEventListener("click", async () => {
             const serial = pkiAcSelectCert.value;
             if (!serial) return;
-            
+
             const target = issuedCertsList.find(c => c.serial === serial);
             if (!target) return;
-            
+
             clearActiveLines();
             highlightNode("node-aa", true);
             highlightLine("line-user-aa", "pulse");
-            logConsole(`【AA申請】利用者 [${target.cn}] の身元証明書(PKC)シリアル [${serial.substring(0,8)}...] を添えて、属性認証局(AA)に属性証明書(AC)の発行を申請中...`);
-            
+            logConsole(`【AA申請】利用者 [${target.cn}] の身元証明書(PKC)シリアル [${serial.substring(0, 8)}...] を添えて、属性認証局(AA)に属性証明書(AC)の発行を申請中...`);
+
             try {
                 const role = pkiAcRole.value;
                 const res = await app.apiCall("/api/pki/issue-ac", "POST", {
@@ -1145,31 +1145,31 @@ window.SecurityLabModules["pki"] = {
                     username: target.cn,
                     role: role
                 });
-                
+
                 activeAc = res;
-                
+
                 setTimeout(() => {
                     highlightLine("line-user-aa", "pulse-reverse");
                     logConsole("属性認証局(AA)は、指定されたPKCシリアルに紐付く属性証明書(AC)を作成。");
                     logConsole(`アトリビュート（属性）に [役職: ${role}] を設定し、AAの秘密鍵でデジタル署名を施しました。`);
                     logConsole("利用者は属性証明書(AC)を取得しました。");
-                    
+
                     pkiAcResultArea.style.display = "block";
                     outPkiAcJson.innerText = JSON.stringify(res.ac_json, null, 2);
-                    
+
                     // Show parsed structured AC info
                     outPkiAcTargetSerial.innerText = res.ac_json.holder_pkc_serial;
                     outPkiAcRoleVal.innerText = res.ac_json.attributes.role === "Admin" ? "管理者 (Admin)" : "一般社員 (Staff)";
                     const acNotBefore = new Date(res.ac_json.validity.not_before).toLocaleString();
                     const acNotAfter = new Date(res.ac_json.validity.not_after).toLocaleString();
                     outPkiAcValidity.innerText = `${acNotBefore} 〜\n${acNotAfter}`;
-                    
+
                     btnPkiAccessServer.disabled = false;
-                    
+
                     btnPkiIssueAc.classList.remove("pulse-button");
                     btnPkiAccessServer.classList.add("pulse-button"); // Guide to server access
                 }, 1000);
-                
+
             } catch (err) {
                 logConsole(`[ERROR] AC発行失敗: ${err.message}`);
             }
@@ -1177,33 +1177,33 @@ window.SecurityLabModules["pki"] = {
 
         btnPkiAccessServer.addEventListener("click", () => {
             if (!activeAc) return;
-            
+
             btnPkiAccessServer.classList.remove("pulse-button");
-            
+
             clearActiveLines();
             highlightNode("node-server", true);
             highlightLine("line-user-server", "pulse");
             logConsole("【特権アクセス検証】利用者がWebサーバーに対して、公開鍵証明書(PKC)と属性証明書(AC)の両方を提示してアクセス要求中...");
-            
+
             setTimeout(() => {
                 logConsole("Webサーバーは提示された証明書を検証中:");
                 logConsole("1. 身元検証: 公開鍵証明書(PKC)のCA署名を検証 ➔ 本人確認成功。");
                 logConsole("2. 権限検証: 属性証明書(AC)のAA署名を検証 ➔ 署名妥当。");
                 logConsole(`3. 属性チェック: ACの特権情報「役職: ${activeAc.ac_json.attributes.role}」を確認。`);
-                
+
                 const role = activeAc.ac_json.attributes.role;
-                
+
                 pkiVerifyReportBox.scrollIntoView({ behavior: 'smooth' });
-                
+
                 const tabVerifyBtn = document.querySelector('[data-tab="tab-verify"]');
                 if (tabVerifyBtn) tabVerifyBtn.click(); // Switch tab to see report
-                
+
                 pkiVerifyReportBox.style.borderColor = "var(--color-success)";
-                
+
                 if (role === "Admin") {
                     pkiVerifyReport.innerHTML = `
                         <span style="color: var(--color-success); font-weight: bold;">🟢 特権アクセス承認 (Access Granted)</span><br>
-                        身元証明: ${activeAc.ac_json.holder_name} (シリアル: ${activeAc.ac_json.holder_pkc_serial.substring(0,8)}...)<br>
+                        身元証明: ${activeAc.ac_json.holder_name} (シリアル: ${activeAc.ac_json.holder_pkc_serial.substring(0, 8)}...)<br>
                         権限属性: 役職 = ${role} (管理者特権機能へのフルアクセスを許可しました)<br>
                         特権権限: [read, write, admin]
                     `;
