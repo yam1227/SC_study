@@ -28,7 +28,7 @@ window.SecurityLabModules["email_security"] = {
                             </div>
 
                             <div class="form-group" style="margin: 0;">
-                                <label style="font-size: 11px;">Header From (From:):</label>
+                                <label style="font-size: 11px;">HeaderFrom :</label>
                                 <input type="text" id="emailHeaderFrom" value="support@trusted-bank.com" style="width: 100%; font-size: 11px; padding: 4px 8px;" placeholder="メールヘッダに表示する送信者">
                                 <span style="font-size: 9px; color: var(--text-secondary);">※ メーラーの「差出人」欄（なりすまし可能）</span>
                             </div>
@@ -46,7 +46,7 @@ window.SecurityLabModules["email_security"] = {
 
                             <div style="margin-top: 10px; display: flex; gap: 8px;">
                                 <button class="btn btn-primary" id="btnStartEmailSend" style="flex: 1; font-size: 11px; padding: 6px;">メール送信実行</button>
-                                <button class="btn" id="btnResetEmailFlow" style="font-size: 11px; padding: 6px; border: 1px solid var(--border-color); background: transparent;">リセット</button>
+                                <button class="btn btn-lime-outline" id="btnResetEmailFlow" style="font-size: 11px; padding: 6px;">リセット</button>
                             </div>
                         </div>
 
@@ -143,7 +143,7 @@ window.SecurityLabModules["email_security"] = {
                                 </div>
 
                                 <div class="form-group" style="margin: 0;">
-                                    <label style="font-size: 11px;">Header From (From:) ドメイン:</label>
+                                    <label style="font-size: 11px;">Header From ドメイン:</label>
                                     <input type="text" id="authHeaderFromDom" value="trusted-bank.com" style="width: 100%; font-size: 11px; padding: 4px 8px;" readonly>
                                 </div>
 
@@ -313,7 +313,7 @@ window.SecurityLabModules["email_security"] = {
         </div>
     `,
 
-    init: function(app) {
+    init: function (app) {
         // Tab elements
         const btnTabEmailFlow = document.getElementById("btnTabEmailFlow");
         const btnTabEmailAuth = document.getElementById("btnTabEmailAuth");
@@ -422,13 +422,13 @@ window.SecurityLabModules["email_security"] = {
             btnStartEmailSend.disabled = true;
             btnResetEmailFlow.disabled = true;
             clearFlowAnimation();
-            
+
             const envFrom = emailEnvFrom.value.trim();
             const headerFrom = emailHeaderFrom.value.trim();
             const recipient = emailTo.value.trim();
             const subject = emailSubject.value.trim();
             const body = emailBody.value.trim();
-            
+
             const envFromDom = envFrom.split("@")[1] || "unknown.com";
 
             emailProtocolLog.innerHTML = "";
@@ -456,20 +456,20 @@ window.SecurityLabModules["email_security"] = {
             await logProto("S", "220 mail.trusted-bank.com ESMTP Postfix");
             await logProto("C", "EHLO client.trusted-bank.com");
             await logProto("S", "250-mail.trusted-bank.com Hello client.trusted-bank.com\r\n250-SIZE 31457280\r\n250-STARTTLS\r\n250 DSN");
-            
+
             await logProto("INFO", "STARTTLS コマンドによる暗号化接続を開始します");
             await logProto("C", "STARTTLS");
             await logProto("S", "220 2.0.0 Ready to start TLS");
             await logProto("INFO", "TLSハンドシェイク完了 (SMTP over TLS による暗号化セッション開始)");
-            
+
             await logProto("C", "EHLO client.trusted-bank.com");
             await logProto("S", "250-mail.trusted-bank.com Hello client.trusted-bank.com\r\n250 SIZE 31457280");
-            
+
             // SMTP-AUTH (SMTP Authentication) Simulation
             await logProto("INFO", "SMTP-AUTH 認証を開始します (送信アカウントの正当性を認証)");
             await logProto("C", "AUTH PLAIN dXNlcgBwYXNzd29yZA==");
             await logProto("S", "235 2.7.0 Authentication successful");
-            
+
             // Note MAIL FROM uses Envelope-From
             await logProto("C", `MAIL FROM: <${envFrom}>`);
             await logProto("S", "250 2.1.0 Ok");
@@ -477,7 +477,7 @@ window.SecurityLabModules["email_security"] = {
             await logProto("S", "250 2.1.5 Ok");
             await logProto("C", "DATA");
             await logProto("S", "354 End data with <CR><LF>.<CR><LF>");
-            
+
             // SMTP Data stream: displays Header From
             await logProto("C", `From: ${headerFrom}\r\nTo: ${recipient}\r\nSubject: ${subject}\r\n\r\n${body}`);
             await logProto("C", ".");
@@ -485,7 +485,7 @@ window.SecurityLabModules["email_security"] = {
             await logProto("C", "QUIT");
             await logProto("S", "221 2.0.0 Bye");
             await logProto("INFO", "送信メールサーバ (MTA) にメールがキューイングされました");
-            
+
             nodeMta1.style.transform = "none";
             await new Promise(r => setTimeout(r, 600));
 
@@ -529,13 +529,13 @@ window.SecurityLabModules["email_security"] = {
 
             // Common headers
             const commonHeaders = `From: ${headerFrom}\n` +
-                                 `To: ${recipient}\n` +
-                                 `Subject: ${subject}\n` +
-                                 `Message-ID: <${msgId}>\n` +
-                                 `Date: ${dateStr}\n` +
-                                 `MIME-Version: 1.0\n` +
-                                 `Content-Type: text/plain; charset="UTF-8"\n\n` +
-                                 `${body}`;
+                `To: ${recipient}\n` +
+                `Subject: ${subject}\n` +
+                `Message-ID: <${msgId}>\n` +
+                `Date: ${dateStr}\n` +
+                `MIME-Version: 1.0\n` +
+                `Content-Type: text/plain; charset="UTF-8"\n\n` +
+                `${body}`;
 
             headerOnText += commonHeaders;
             headerOffText += commonHeaders;
@@ -644,7 +644,7 @@ window.SecurityLabModules["email_security"] = {
         authMailPreset.addEventListener("change", () => {
             const val = authMailPreset.value;
             resetAuthUI();
-            
+
             if (val === "legit") {
                 authSenderIp.value = "192.0.2.10";
                 authEnvFromDom.value = "trusted-bank.com";
@@ -850,7 +850,7 @@ window.SecurityLabModules["email_security"] = {
                 dmarcPass = false;
                 textDmarcPolicyStatus.innerHTML += `・DMARC判定: <strong style="color: #f87171;">FAIL (不合格)</strong><br>`;
                 textDmarcPolicyStatus.innerHTML += `・理由: SPF/DKIMのどちらもアライメント整合性を持つ認証に合格しませんでした。<br>`;
-                
+
                 // Fetch DMARC policy from Header From domain DNS
                 textDmarcPolicyStatus.innerHTML += `⚙️ 詐称ドメイン ${headerDom} の DMARC ポリシーを確認中...<br>`;
                 await new Promise(r => setTimeout(r, 500));
@@ -901,7 +901,7 @@ window.SecurityLabModules["email_security"] = {
         // Generate tailored explanations for educational support
         function updateDetailContent(preset, spf, dkim, spfAlign, dkimAlign, dmarc, action) {
             let html = `<span style="font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: block; margin-bottom: 8px;">💡 検証解説: ${authMailPreset.options[authMailPreset.selectedIndex].text}</span>`;
-            
+
             if (preset === "legit") {
                 html += `
                     正当なドメイン送信者からの正規メールです。<br><br>

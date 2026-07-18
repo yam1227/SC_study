@@ -548,6 +548,19 @@ textarea:focus {
     cursor: not-allowed;
 }
 
+.btn-lime-outline {
+    background: transparent;
+    border: 1px solid rgba(132, 204, 22, 0.4);
+    color: #bef264;
+}
+
+.btn-lime-outline:hover {
+    background-color: rgba(132, 204, 22, 0.1);
+    border-color: #84cc16;
+    color: #a3e635;
+    box-shadow: 0 0 10px rgba(132, 204, 22, 0.2);
+}
+
 /* Response Displays */
 .response-box {
     background-color: var(--bg-app);

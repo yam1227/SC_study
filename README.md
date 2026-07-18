@@ -81,7 +81,7 @@ uv pip install -r requirements.txt
     - アプリケーション層から物理層までの各階層におけるカプセル化（HTTP、TLS、TCP、IP、イーサネットフレームヘッダーの付加）と、受信側でのデカプセル化（非カプセル化）プロセスを可視化。
     - 各階層をクリックして、プロトコル仕様やセキスペ重要ポイント（各層で動作するネットワーク機器、PDUの名称変化など）を体系的に学習。
 12. **メールセキュリティ・ドメイン認証 (Email Security & Domain Authentication)**
-    - SMTP/POP3によるメール配送プロセスを体験し、Envelope-From（MAIL FROM）とHeader From（From:）の違い、およびDKIM署名の有無による構造の差分を検証。
+    - SMTP/POP3によるメール配送プロセスを体験し、Envelope-From（MAIL FROM）とHeader From（From:）の違い、およびDKIM署名の有無による構造の差分を検証。メール送受信フロー＆ヘッダ構造シミュレータのリセットボタンを視認性の高い黄緑色（`.btn-lime-outline`）に変更。
     - 接続元送信IPアドレスやDNSレコードをもとに、受信サーバーが「SPF」「DKIM」「DMARC」を検証し、ドメインアライメントを評価して配送処理（none/quarantine/reject）を決定するフローをビジュアル学習。
 13. **CookieとWebセキュリティ (Cookie & Web Security)**
     - Cookieの送受信フローにおいて、XSS対策の「HttpOnly属性」、盗聴対策の「Secure属性」、およびCSRF対策の「SameSite属性（Strict/Lax/None）」の設定によるブラウザの送信制限挙動をシミュレート。
