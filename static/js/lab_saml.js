@@ -70,8 +70,8 @@ window.SecurityLabModules["saml"] = {
 
                             <!-- Definitions for marker arrowheads -->
                             <defs>
-                                <marker id="saml-arrowhead" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 7 3.5, 0 7" fill="currentColor" />
+                                <marker id="saml-arrowhead" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                                    <polygon points="0 0, 5 2.5, 0 5" fill="currentColor" />
                                 </marker>
                             </defs>
                         </svg>

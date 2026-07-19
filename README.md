@@ -59,7 +59,7 @@ uv pip install -r requirements.txt
    - サーバー側でのワンタイムパスワード詳細検証プロセス（HMAC-SHA1計算、ダイナミックトランケーションの各処理ステップおよび時刻ドリフトを考慮した前後判定ログ）の可視化。
    - QRコードをスマホの Authenticator アプリで読み取って同期できるリアルな検証機能。
 4. **OAuth 2.0 / OIDC フロー (OAuth Flow)**
-   - 認可コードフロー（フロントチャネル・バックチャネル）のステップ実行。
+   - 認可コードフロー（フロントチャネル・バックチャネル）を詳細に表現したシミュレーションシーケンス図のステップ実行（フロントチャネルのリダイレクト処理および直接対話するバックチャネルの経路を正確に再現）。
    - `state` パラメータを除外した際の CSRF 脆弱性の成立過程のビジュアライズ。
 5. **暗号化＆デジタル署名 (Cryptography)**
    - 共通鍵（AES-256-GCM）での暗号化・復号（改ざん検知）。
@@ -88,7 +88,7 @@ uv pip install -r requirements.txt
     - Cookieの送受信フローにおいて、XSS対策の「HttpOnly属性」、盗聴対策の「Secure属性」、およびCSRF対策の「SameSite属性（Strict/Lax/None）」の設定によるブラウザの送信制限挙動をシミュレート。
     - XSSによるセッション強奪や、CSRFによる不正送金といった実際的な攻撃シナリオを実演し、各属性の防御効果を体験学習。
 14. **SAML 認証 & 学認 SSO (SAML & GakuNin SSO)**
-    - 学術認証フェデレーション「学認 (GakuNin)」をモデルにした、SP-initiated SSOフローの体験シミュレーション。
+    - 学術認証フェデレーション「学認 (GakuNin)」をモデルにした、SP-initiated SSOフローの体験シミュレーション（シーケンス図の矢印や線の太さを繊細で視認性の高いサイズにUI調整）。
     - XML構造で記述されたSAMLアサーションの内部データ構造（Issuer, Subject, Conditions, AttributeStatement, SignatureValue等）の解読。
     - **「アサーションの5大検証基準（デジタル署名、有効期限、宛先Audience、リプレイ対策InResponseTo、送信先Recipient）」** の厳密な判定と、アサーションのデータを意図的に改ざんした際にSPがどのように検知してブロックするかを学習する改ざんシミュレータ。
 15. **認証局 (CA) と PKI ライフサイクル (CA & PKI Lifecycle)（UPDATE）**

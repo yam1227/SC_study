@@ -25,10 +25,10 @@ window.SecurityLabModules["oauth"] = {
                     <div class="oauth-flow-diagram">
                         <svg class="oauth-svg" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
                             <!-- Actors Background Line -->
-                            <line x1="80" y1="50" x2="80" y2="280" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
-                            <line x1="220" y1="50" x2="220" y2="280" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
-                            <line x1="380" y1="50" x2="380" y2="280" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
-                            <line x1="520" y1="50" x2="520" y2="280" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
+                            <line x1="80" y1="50" x2="80" y2="300" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
+                            <line x1="220" y1="50" x2="220" y2="300" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
+                            <line x1="380" y1="50" x2="380" y2="300" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
+                            <line x1="520" y1="50" x2="520" y2="300" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
 
                             <!-- Actors Boxes -->
                             <rect id="actor-user" class="svg-actor" x="30" y="15" width="100" height="35" rx="5" />
@@ -46,40 +46,58 @@ window.SecurityLabModules["oauth"] = {
                             <!-- Step Arrows -->
                             <!-- Step 1: User clicks Login (User -> Client) -->
                             <g id="arrow-1" class="flow-arrow-group">
-                                <path class="svg-arrow" d="M 80,75 L 210,75" marker-end="url(#arrowhead)" />
-                                <text class="svg-text svg-text-sub" x="150" y="70">1. ログイン要求</text>
+                                <path class="svg-arrow" d="M 80,70 L 215,70" marker-end="url(#arrowhead)" />
+                                <text class="svg-text svg-text-sub" x="150" y="65">1. ログイン要求</text>
                             </g>
 
-                            <!-- Step 2: Auth Redirect (Client -> User -> AuthServer) -->
+                            <!-- Step-2: Auth Redirect (Client -> User -> AuthServer) -->
                             <g id="arrow-2" class="flow-arrow-group">
-                                <path class="svg-arrow" d="M 220,110 L 80,110 L 370,110" marker-end="url(#arrowhead)" />
-                                <text class="svg-text svg-text-sub" x="220" y="105">2. 認可要求 (リダイレクト)</text>
+                                <!-- 2a: Client -> User (302 Redirect Directive) -->
+                                <path class="svg-arrow" d="M 220,95 L 85,95" marker-end="url(#arrowhead)" stroke-dasharray="2" />
+                                <text class="svg-text svg-text-sub" x="152" y="90">2a. 認可要求リダイレクト指示 (302)</text>
+                                
+                                <!-- 2b: User -> AuthServer (Authorization Request) -->
+                                <path class="svg-arrow" d="M 80,120 L 375,120" marker-end="url(#arrowhead)" />
+                                <text class="svg-text svg-text-sub" x="230" y="115">2b. 認可リクエスト送信</text>
                             </g>
 
                             <!-- Step 3: Auth Consent & Code Redirect (AuthServer -> User -> Client) -->
                             <g id="arrow-3" class="flow-arrow-group">
-                                <path class="svg-arrow" d="M 380,155 L 80,155 L 210,155" marker-end="url(#arrowhead)" />
-                                <text class="svg-text svg-text-sub" x="210" y="150">3. 同意＆認可コード返却</text>
+                                <!-- 3a: Auth Server -> User (302 Found with Code) -->
+                                <path class="svg-arrow" d="M 380,150 L 85,150" marker-end="url(#arrowhead)" stroke-dasharray="2" />
+                                <text class="svg-text svg-text-sub" x="232" y="145">3a. 認可コード返却 (302)</text>
+                                
+                                <!-- 3b: User -> Client (Authorization Code via Callback) -->
+                                <path class="svg-arrow" d="M 80,175 L 215,175" marker-end="url(#arrowhead)" />
+                                <text class="svg-text svg-text-sub" x="150" y="170">3b. コード転送 (Callback)</text>
                             </g>
 
                             <!-- Step 4: Token Exchange (Client -> AuthServer) (Backchannel) -->
                             <g id="arrow-4" class="flow-arrow-group">
-                                <path class="svg-arrow" d="M 220,205 L 370,205" marker-end="url(#arrowhead)" />
-                                <path class="svg-arrow" d="M 370,225 L 225,225" marker-end="url(#arrowhead)" stroke-dasharray="2" />
-                                <text class="svg-text svg-text-sub" x="295" y="200">4. コードとトークン交換</text>
+                                <!-- 4a: Client -> Auth Server (Token Request) -->
+                                <path class="svg-arrow" d="M 220,210 L 375,210" marker-end="url(#arrowhead)" />
+                                <text class="svg-text svg-text-sub" x="300" y="205">4a. トークン要求 (Backchannel)</text>
+                                
+                                <!-- 4b: Auth Server -> Client (Token Response) -->
+                                <path class="svg-arrow" d="M 380,230 L 225,230" marker-end="url(#arrowhead)" stroke-dasharray="2" />
+                                <text class="svg-text svg-text-sub" x="300" y="242">4b. トークン返却</text>
                             </g>
 
                             <!-- Step 5: Resource Access (Client -> ResourceServer) (Backchannel) -->
                             <g id="arrow-5" class="flow-arrow-group">
-                                <path class="svg-arrow" d="M 220,260 L 510,260" marker-end="url(#arrowhead)" />
-                                <path class="svg-arrow" d="M 510,280 L 225,280" marker-end="url(#arrowhead)" stroke-dasharray="2" />
-                                <text class="svg-text svg-text-sub" x="365" y="255">5. アクセストークンでデータ取得</text>
+                                <!-- 5a: Client -> Resource Server (Resource Request) -->
+                                <path class="svg-arrow" d="M 220,265 L 515,265" marker-end="url(#arrowhead)" />
+                                <text class="svg-text svg-text-sub" x="370" y="260">5a. ユーザー情報要求 (Token)</text>
+                                
+                                <!-- 5b: Resource Server -> Client (Resource Response) -->
+                                <path class="svg-arrow" d="M 520,285 L 225,285" marker-end="url(#arrowhead)" stroke-dasharray="2" />
+                                <text class="svg-text svg-text-sub" x="370" y="297">5b. ユーザー情報返却</text>
                             </g>
 
                             <!-- Definitions for marker arrowheads -->
                             <defs>
-                                <marker id="arrowhead" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
-                                    <polygon points="0 0, 7 3.5, 0 7" fill="currentColor" />
+                                <marker id="arrowhead" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+                                    <polygon points="0 0, 5 2.5, 0 5" fill="currentColor" />
                                 </marker>
                             </defs>
                         </svg>
@@ -195,7 +213,7 @@ window.SecurityLabModules["oauth"] = {
                            `    ${pkceParams} HTTP/1.1\n` +
                            `Host: auth.securitylab.local`;
                 },
-                actors: ["actor-user", "actor-auth"],
+                actors: ["actor-client", "actor-user", "actor-auth"],
                 arrows: ["arrow-2"]
             },
             {

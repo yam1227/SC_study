@@ -820,7 +820,7 @@ textarea:focus {
 .svg-arrow {
     fill: none;
     stroke: var(--border-color);
-    stroke-width: 1.5px;
+    stroke-width: 1.2px;
     stroke-dasharray: 4;
     transition: var(--transition-fast);
 }
