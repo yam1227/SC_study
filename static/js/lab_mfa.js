@@ -7,7 +7,7 @@ window.SecurityLabModules["mfa"] = {
             <div class="lab-grid-2">
                 <!-- Part 1: MFA Setup -->
                 <div class="card">
-                    <h3>📱 多要素認証 (MFA) の初期設定</h3>
+                    <h3>📱 TOTP ワンタイムパスワード の初期設定</h3>
                     <p class="card-subtitle">サーバーが生成した秘密の共有鍵（Base32）を、QRコードを用いて認証アプリに安全に共有します。</p>
                     
                     <div class="form-group">
@@ -93,29 +93,29 @@ window.SecurityLabModules["mfa"] = {
             </div>
         </div>
     `,
-    
-    init: function(app) {
+
+    init: function (app) {
         const btnSetupMFA = document.getElementById("btnSetupMFA");
         const mfaUsername = document.getElementById("mfaUsername");
         const mfaSetupVisual = document.getElementById("mfaSetupVisual");
         const mfaQrCode = document.getElementById("mfaQrCode");
         const mfaSecretText = document.getElementById("mfaSecretText");
-        
+
         const totpSimCard = document.getElementById("totpSimCard");
         const totpSimDigits = document.getElementById("totpSimDigits");
         const totpProgressFill = document.getElementById("totpProgressFill");
         const totpTimerSec = document.getElementById("totpTimerSec");
         const btnSyncMockCode = document.getElementById("btnSyncMockCode");
-        
+
         const mfaToken = document.getElementById("mfaToken");
         const btnVerifyMFA = document.getElementById("btnVerifyMFA");
         const mfaVerifyReport = document.getElementById("mfaVerifyReport");
         const mfaVerifyReportBox = document.getElementById("mfaVerifyReportBox");
-        
+
         let mfaUser = "";
         let mfaSecret = "";
         let timerInterval = null;
-        
+
         // 1. Setup MFA Handler
         btnSetupMFA.addEventListener("click", async () => {
             const user = mfaUsername.value.trim();
@@ -123,47 +123,47 @@ window.SecurityLabModules["mfa"] = {
                 alert("ユーザー名（メールアドレス）を入力してください。");
                 return;
             }
-            
+
             try {
                 const res = await app.apiCall(`/api/mfa/setup?user=${encodeURIComponent(user)}`, "GET");
-                
+
                 mfaUser = res.user;
                 mfaSecret = res.secret;
-                
+
                 mfaQrCode.src = res.qr_code_base64;
                 mfaSecretText.innerText = res.secret;
-                
+
                 mfaSetupVisual.style.display = "flex";
                 totpSimCard.style.display = "flex";
-                
+
                 // Start local clock timer
                 startTotpTimer();
-                
+
             } catch (err) {
                 alert("MFAセットアップエラー: " + err.message);
             }
         });
-        
+
         // 2. TOTP Timer and simulated code update
         function startTotpTimer() {
             if (timerInterval) clearInterval(timerInterval);
-            
+
             const updateClock = async () => {
                 const now = Math.floor(Date.now() / 1000);
                 const remaining = 30 - (now % 30);
-                
+
                 // Update countdown bar
                 const percent = (remaining / 30) * 100;
                 totpProgressFill.style.width = `${percent}%`;
                 totpTimerSec.innerText = `${remaining}s`;
-                
+
                 // Color countdown bar warning when time is low
                 if (remaining <= 5) {
                     totpProgressFill.style.backgroundColor = "var(--color-danger)";
                 } else {
                     totpProgressFill.style.backgroundColor = "var(--color-success)";
                 }
-                
+
                 // If it rolls over or we don't have code yet, fetch simulated code
                 if (remaining === 30 || totpSimDigits.innerText === "------") {
                     try {
@@ -179,16 +179,16 @@ window.SecurityLabModules["mfa"] = {
                     }
                 }
             };
-            
+
             updateClock();
             timerInterval = setInterval(updateClock, 1000);
         }
-        
+
         // Copy mock code to verify form
         btnSyncMockCode.addEventListener("click", () => {
             mfaToken.value = totpSimDigits.innerText;
         });
-        
+
         // 3. Verify MFA Handler
         btnVerifyMFA.addEventListener("click", async () => {
             const token = mfaToken.value.trim();
@@ -200,34 +200,34 @@ window.SecurityLabModules["mfa"] = {
                 alert("6桁の数字を入力してください。");
                 return;
             }
-            
+
             try {
                 const res = await app.apiCall("/api/mfa/verify", "POST", {
                     user: mfaUser,
                     token: token
                 });
-                
+
                 const isSuccess = res.valid;
                 mfaVerifyReportBox.style.borderColor = isSuccess ? "var(--color-success)" : "var(--color-danger)";
-                
+
                 let logsHtml = "";
                 if (res.server_info && res.server_info.verification_logs) {
                     logsHtml = `<div style="margin-top: 12px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); line-height: 1.4; overflow-x: auto; max-height: 250px; text-align: left;">
                         <span style="color: var(--color-primary-hover); font-weight: 600;">💻 サーバー側の詳細検証ログ:</span><br>
                         ${res.server_info.verification_logs.map(log => {
-                            let escaped = app.escapeHtml(log);
-                            escaped = escaped.replace(/ /g, "&nbsp;");
-                            if (log.includes("[★一致]")) {
-                                return `<span style="color: var(--color-success);">${escaped}</span>`;
-                            }
-                            if (log.includes("認証成功")) {
-                                return `<span style="color: var(--color-success); font-weight: 600;">${escaped}</span>`;
-                            }
-                            if (log.includes("認証失敗")) {
-                                return `<span style="color: var(--color-danger); font-weight: 600;">${escaped}</span>`;
-                            }
-                            return escaped;
-                        }).join("<br>")}
+                        let escaped = app.escapeHtml(log);
+                        escaped = escaped.replace(/ /g, "&nbsp;");
+                        if (log.includes("[★一致]")) {
+                            return `<span style="color: var(--color-success);">${escaped}</span>`;
+                        }
+                        if (log.includes("認証成功")) {
+                            return `<span style="color: var(--color-success); font-weight: 600;">${escaped}</span>`;
+                        }
+                        if (log.includes("認証失敗")) {
+                            return `<span style="color: var(--color-danger); font-weight: 600;">${escaped}</span>`;
+                        }
+                        return escaped;
+                    }).join("<br>")}
                     </div>`;
                 }
 
@@ -248,7 +248,7 @@ window.SecurityLabModules["mfa"] = {
                 mfaVerifyReport.innerText = "通信エラー: " + err.message;
             }
         });
-        
+
         // Cleanup interval on module unload (when navigation changes)
         // Since main.js destroys the container, we can hooks this to DOM destruction
         const observer = new MutationObserver((mutations, obs) => {

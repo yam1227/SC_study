@@ -63,7 +63,7 @@ MODULES = [
     },
     {
         "id": "mfa",
-        "title": "多要素認証 (MFA) & TOTP",
+        "title": "ワンタイムパスワード（OTP）",
         "description": "TOTPの仕組み、共有鍵、30秒有効期間の計算、QRコード連携を学びます。",
         "jsFile": "lab_mfa.js",
         "category": "technology",
@@ -907,8 +907,8 @@ def build_ipsec_packet(req: IPsecPacketRequest):
     if req.mode == "transport":
         if req.protocol == "esp":
             packet_layout = [
-                {"name": "Original IP Header", "size": "20 bytes", "state": "Cleartext (明文)", "desc": "元のIPアドレス(192.168.1.50 -> 10.0.0.100)を含むIPヘッダー。暗号化されません。"},
-                {"name": "ESP Header", "size": "8 bytes", "state": "Cleartext (明文)", "desc": "SPIやシーケンス番号を含み、パケットの識別やリプレイ攻撃対策に使用されます。"},
+                {"name": "Original IP Header", "size": "20 bytes", "state": "Cleartext (平文)", "desc": "元のIPアドレス(192.168.1.50 -> 10.0.0.100)を含むIPヘッダー。暗号化されません。"},
+                {"name": "ESP Header", "size": "8 bytes", "state": "Cleartext (平文)", "desc": "SPIやシーケンス番号を含み、パケットの識別やリプレイ攻撃対策に使用されます。"},
                 {"name": "Payload Data", "size": "Variable", "state": "🔒 ENCRYPTED (暗号化)", "desc": f"暗号化された実際のペイロードデータ: '{req.payload}'"},
                 {"name": "ESP Trailer", "size": "2-26 bytes", "state": "🔒 ENCRYPTED (暗号化)", "desc": "パディングサイズや次ヘッダー（プロトコル番号）を含みます。暗号化されます。"},
                 {"name": "ESP Auth (ICV)", "size": "12 bytes", "state": "MAC (完全性保証)", "desc": "パケットが改ざんされていないか検証するためのMAC（メッセージ認証コード）データです。"}
@@ -922,8 +922,8 @@ def build_ipsec_packet(req: IPsecPacketRequest):
     else:
         if req.protocol == "esp":
             packet_layout = [
-                {"name": "New IP Header", "size": "20 bytes", "state": "Cleartext (明文)", "desc": "VPNゲートウェイ間の新しいIPヘッダー(GW1 -> GW2)。ルーティングに使用されます。"},
-                {"name": "ESP Header", "size": "8 bytes", "state": "Cleartext (明文)", "desc": "暗号化セキュリティアソシエーションを識別する情報。"},
+                {"name": "New IP Header", "size": "20 bytes", "state": "Cleartext (平文)", "desc": "VPNゲートウェイ間の新しいIPヘッダー(GW1 -> GW2)。ルーティングに使用されます。"},
+                {"name": "ESP Header", "size": "8 bytes", "state": "Cleartext (平文)", "desc": "暗号化セキュリティアソシエーションを識別する情報。"},
                 {"name": "Original IP Header", "size": "20 bytes", "state": "🔒 ENCRYPTED (暗号化)", "desc": "元の端末間のIPヘッダー(192.168.1.50 -> 10.0.0.100)。カプセル化（暗号化）されて隠蔽されます。"},
                 {"name": "Payload Data", "size": "Variable", "state": "🔒 ENCRYPTED (暗号化)", "desc": f"暗号化されたデータ本体: '{req.payload}'"},
                 {"name": "ESP Trailer", "size": "2-26 bytes", "state": "🔒 ENCRYPTED (暗号化)", "desc": "暗号化ブロックサイズ調整用のパディング等。"},
