@@ -21,7 +21,7 @@ window.SecurityLabModules["osi_model"] = {
                         </div>
                     </div>
                     <div style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
-                        <button class="btn" id="btnResetOsi" style="width: 100px; font-size: 11px; border: 1px solid var(--border-color); background: transparent;">リセット</button>
+                        <button class="btn btn-lime-outline" id="btnResetOsi" style="width: 100px; font-size: 11px;">リセット</button>
                     </div>
                 </div>
 
