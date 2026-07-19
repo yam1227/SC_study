@@ -48,6 +48,19 @@ window.SecurityLabModules["jwt"] = {
                                 </tr>
                             </tbody>
                         </table>
+
+                        <h4 style="color: var(--color-primary-hover); margin-top: 16px; margin-bottom: 8px; font-size: 14px; font-weight: 600;">🔒 JWS (JSON Web Signature) と JWE (JSON Web Encryption) の違い</h4>
+                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 8px;">
+                            セキスペ試験対策において非常に重要なJWTの2大規格です。
+                        </p>
+                        <ul style="font-size: 12.5px; line-height: 1.6; color: var(--text-secondary); margin-left: 20px; margin-bottom: 12px; padding-left: 0;">
+                            <li style="margin-bottom: 4px;">
+                                <b>JWS (署名付きJWT):</b> 本ページで扱う標準的なJWTです。データは署名で改ざん防止（<b>完全性</b>）されていますが暗号化はされておらず、Base64URLデコードすれば誰でも中身を閲覧できます。
+                            </li>
+                            <li>
+                                <b>JWE (暗号化JWT):</b> クレーム内に個人情報（PII）などの機微データを含める必要がある場合、暗号キーを用いてペイロード全体を暗号化（<b>機密性</b>）します。
+                            </li>
+                        </ul>
                     </div>
                     
                     <!-- Right: alg none vulnerability -->
@@ -165,17 +178,49 @@ window.SecurityLabModules["jwt"] = {
             
             <!-- Learning Info -->
             <div class="card">
-                <h3>💡 情報処理安全確保支援士試験ポイント: JWTの脅威</h3>
-                <div style="font-size: 14px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 10px;">
+                <h3>💡 情報処理安全確保支援士試験ポイント: JWTと鍵管理</h3>
+                <div style="font-size: 14px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 14px;">
                     <p>
-                        <b>1. 改ざん検知の仕組み</b><br>
-                        JWTは、Base64URLでエンコードされているため誰でもデコードして中身を読むことができます（機密性はありません）。しかし、署名（Signature）部分があるため、改ざんされた場合はサーバー側で秘密鍵（HS256）または公開鍵（RS256）を用いて検証した際に不一致となり、拒否されます。
+                        <b>1. 改ざん検知の仕組み（完全性の確保）</b><br>
+                        JWTはBase64URLで符号化されているため、通信路上での盗聴により中身を解読することが容易です（暗号化されていません）。しかし、ヘッダーとペイロードをもとにサーバーの秘密鍵で生成した「署名（Signature）」を末尾に付加しているため、攻撃者が値を1文字でも改ざんすればサーバーでの署名検証が失敗し、不正トークンとして破棄されます。
                     </p>
                     <p>
                         <b>2. alg: "none" 脆弱性</b><br>
-                        JWTのヘッダーにある <code>alg</code> フィールドは、署名検証アルゴリズムを示します。ライブラリの古いバージョンや誤った設定により、クライアントが <code>alg: "none"</code>（署名なし）を指定したときにサーバーが署名の検証を行わずにペイロードを信頼してしまう脆弱性が存在します。攻撃者は署名部分を空にして、管理者（admin）などのペイロードに改ざんしたトークンを送りつけて認証を突破できてしまいます。
+                        JWTのヘッダーの <code>alg</code> は署名アルゴリズムを指定するフィールドです。サーバーがこの値を鵜呑みにして <code>"none"</code>（署名検証なし）を許可していると、攻撃者が署名部分を空欄にした上でペイロード（<code>role: admin</code> など）を改ざんしたトークンを送り、認証を突破できてしまいます。サーバー側では <code>alg: "none"</code> を明示的に拒否する実装が必須です。
+                    </p>
+                    <p>
+                        <b>3. JWS（署名）と JWE（暗号化）の違い（完全性 vs 機密性）</b><br>
+                        セキスペの記述式問題では、JWSとJWEの違いや使い分けが問われます。
+                        <br>・<b>JWS (JSON Web Signature):</b> 署名により<b>「完全性（改ざん防止）」</b>を担保します。中身は平文（符号化のみ）で見えるため、公開されて困る機微データは含められません。
+                        <br>・<b>JWE (JSON Web Encryption):</b> コンテンツ全体を共通鍵・公開鍵で暗号化し、<b>「機密性（盗聴防止）」</b>を確保します。ユーザーのマイナンバーや詳細な個人情報（PII）をトークン内に含めて配送せざるを得ないシステムで採用されます。
+                    </p>
+                    <p>
+                        <b>4. 対称鍵（HS256）と非対称鍵（RS256）の特性比較</b><br>
+                        ・<b>対称鍵 (HS256):</b> 発行側と検証側で同一の共通鍵（秘密鍵）を共有します。検証を行うWebサーバーすべてに同じ秘密鍵を持たせる必要があるため、サーバーのどれか1台でも侵害されると鍵が漏洩し、偽のトークンが発行可能になるリスクがあります。
+                        <br>・<b>非対称鍵 (RS256/ES256):</b> 発行側（認可サーバー）のみが「秘密鍵」を厳重に保管し、検証側（リソースサーバー）は一般に公開された「公開鍵」で検証します。仮に検証サーバーの1台が乗っ取られても公開鍵しか漏洩しないため、トークンの偽造は不可能です。
+                    </p>
+                    <p>
+                        <b>5. JWKS（JSON Web Key Set）と鍵のローテーション（運用設計）</b><br>
+                        非対称鍵（RS256）を使う場合、認可サーバーは署名検証に必要な公開鍵の情報を <b>JWKS (JSON Web Key Set)</b> というJSON形式の鍵リストとして公開エンドポイント（例: <code>/.well-known/jwks.json</code>）で配信します。
+                        <br>検証側は定期的にこのエンドポイントに問い合わせて公開鍵を更新（ローテーション）します。鍵更新時に検証側サーバーのソースコードや設定ファイルを書き換える必要がないため、<b>鍵の漏洩対策や鍵のライフサイクル管理</b>を円滑に行うことができます。
                     </p>
                 </div>
+            </div>
+
+            <!-- Call to Action: Next steps to OIDC -->
+            <div class="card" style="border: 1px solid rgba(99, 102, 241, 0.3); background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.05)); display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 20px; gap: 20px; margin-top: 16px;">
+                <div style="flex: 1;">
+                    <h4 style="color: var(--color-primary-hover); margin-bottom: 6px; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                        🔗 JWTを実際の認証フローで使ってみましょう！
+                    </h4>
+                    <p style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); margin: 0;">
+                        JWTのデータ構造やセキュリティ（alg: none）を理解したら、次はこれが実際にどのように利用されるかを学びましょう。<br>
+                        現代のWebシステムでは、<b>OAuth 2.0</b> や <b>OpenID Connect (OIDC)</b> のフローにおいて、認証情報やクレームを格納した「IDトークン」としてJWTがやり取りされます。
+                    </p>
+                </div>
+                <button class="btn btn-primary" id="btnGoToOAuth" style="flex-shrink: 0; padding: 12px 20px; font-size: 13px; border-radius: var(--radius-sm); white-space: nowrap;">
+                    🤝 OAuth / OIDC フロー学習に進む ➔
+                </button>
             </div>
         </div>
     `,
@@ -367,5 +412,14 @@ window.SecurityLabModules["jwt"] = {
                 jwtVerificationReport.innerText = "通信エラー: " + err.message;
             }
         });
+
+        // 3. Navigate to OAuth Module
+        const btnGoToOAuth = document.getElementById("btnGoToOAuth");
+        if (btnGoToOAuth) {
+            btnGoToOAuth.addEventListener("click", () => {
+                app.switchTab("oauth");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+        }
     }
 };
