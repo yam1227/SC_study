@@ -102,6 +102,18 @@ window.SecurityLabModules["osi_model"] = {
                     </table>
                 </div>
             </div>
+
+            <!-- Reference Documents Links (Required by AGENTS.md) -->
+            <div class="card" style="margin-top: 24px;">
+                <h3>📚 参照元・公式仕様リファレンス</h3>
+                <p class="card-subtitle">本モジュールの解説およびシミュレーションは、以下の信頼できる仕様書・情報源を参考に構築されています。</p>
+                <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; font-size: 13px;">
+                    <li><a href="https://www.itu.int/rec/T-REC-X.200-199407-I/en" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">ITU-T X.200: Open Systems Interconnection (OSI) Reference Model</a> - OSI参照モデルの国際標準規格。</li>
+                    <li><a href="https://datatracker.ietf.org/doc/html/rfc793" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 793: Transmission Control Protocol (TCP)</a> - トランスポート層プロトコルの仕様。</li>
+                    <li><a href="https://datatracker.ietf.org/doc/html/rfc791" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 791: Internet Protocol (IP)</a> - ネットワーク層プロトコルの仕様。</li>
+                    <li><a href="https://standards.ieee.org/standard/802_3-2022.html" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">IEEE 802.3: Ethernet Standard</a> - 物理層・データリンク層イーサネット規格。</li>
+                </ul>
+            </div>
         </div>
     `,
 

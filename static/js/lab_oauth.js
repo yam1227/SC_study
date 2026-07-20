@@ -161,6 +161,18 @@ window.SecurityLabModules["oauth"] = {
                     </div>
                 </div>
             </div>
+
+            <!-- Reference Documents Links (Required by AGENTS.md) -->
+            <div class="card" style="margin-top: 24px;">
+                <h3>📚 参照元・公式仕様リファレンス</h3>
+                <p class="card-subtitle">本モジュールの解説およびシミュレーションは、以下の信頼できる仕様書・情報源を参考に構築されています。</p>
+                <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; font-size: 13px;">
+                    <li><a href="https://datatracker.ietf.org/doc/html/rfc6749" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 6749: The OAuth 2.0 Authorization Framework</a> - OAuth 2.0の基本仕様書。</li>
+                    <li><a href="https://datatracker.ietf.org/doc/html/rfc7636" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 7636: Proof Key for Code Exchange (PKCE)</a> - 認可コード横取り攻撃に対する防御仕様。</li>
+                    <li><a href="https://openid.net/specs/openid-connect-core-1_0.html" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">OpenID Connect Core 1.0</a> - OIDCおよびIDトークンの仕様。</li>
+                    <li><a href="https://www.ipa.go.jp/security/technicalwatch/20160629.html" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">IPA: API認可設計時におけるセキュリティ対策</a> - OAuth / OIDC に関するセキュリティ設計ガイド。</li>
+                </ul>
+            </div>
         </div>
     `,
     

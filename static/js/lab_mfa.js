@@ -91,6 +91,17 @@ window.SecurityLabModules["mfa"] = {
                     </div>
                 </div>
             </div>
+
+            <!-- Reference Documents Links (Required by AGENTS.md) -->
+            <div class="card" style="margin-top: 24px;">
+                <h3>📚 参照元・公式仕様リファレンス</h3>
+                <p class="card-subtitle">本モジュールの解説およびシミュレーションは、以下の信頼できる仕様書・情報源を参考に構築されています。</p>
+                <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; font-size: 13px;">
+                    <li><a href="https://datatracker.ietf.org/doc/html/rfc6238" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 6238: TOTP: Time-Based One-Time Password Algorithm</a> - 時間ベースのワンタイムパスワード (TOTP) の標準仕様。</li>
+                    <li><a href="https://datatracker.ietf.org/doc/html/rfc4226" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 4226: HOTP: An HMAC-Based One-Time Password Algorithm</a> - イベントベースのワンタイムパスワード (HOTP) の標準仕様。</li>
+                    <li><a href="https://datatracker.ietf.org/doc/html/rfc3548" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 3548: The Base16, Base32, and Base64 Data Encodings</a> - 共有鍵の表現に使用される Base32 を含むエンコーディング仕様。</li>
+                </ul>
+            </div>
         </div>
     `,
 
