@@ -203,6 +203,17 @@ MODULES = [
         "subcategory_name": "3. セキュリティ",
         "overview": "公開鍵基盤 (PKI) における認証局 (CA)、登録局 (RA)、検証局 (VA)、アトリビュート認証局 (AA) の役割を学びます。証明書発行申請 (CSR) から発行、そして証明書の有効性検証 (CRL / OCSP) までのデータと検証の流れを視覚的にシミュレートします。",
         "keywords": ["公開鍵基盤 (PKI)", "認証局 (CA)", "登録局 (RA)", "検証局 (VA)", "アトリビュート認証局 (AA)", "OCSP", "CRL (証明書失効リスト)", "CSR (証明書署名要求)"]
+    },
+    {
+        "id": "eap_auth",
+        "title": "IEEE 802.1X・EAP認証",
+        "description": "IEEE 802.1Xの仕組みと、EAP各種認証方式（MD5、LEAP、EAP-FAST、TLS、TTLS、PEAP）のハンドシェイクの違いを学びます。",
+        "jsFile": "lab_eap.js",
+        "category": "technology",
+        "subcategory": "2_network",
+        "subcategory_name": "2. ネットワーク",
+        "overview": "有線・無線LANのポート制御規格である IEEE 802.1X と、そこで使われるEAP (Extensible Authentication Protocol) フレームワークについて学びます。Supplicant, Authenticator, RADIUSサーバー間の対話と、各EAP認証方式（EAP-TLS, PEAP等）による安全性の違い（証明書や暗号化トンネルの有無）を可視化します。",
+        "keywords": ["IEEE 802.1X", "EAP (Extensible Authentication Protocol)", "EAP-TLS", "PEAP", "EAP-FAST", "RADIUS", "Supplicant", "Authenticator"]
     }
 ]
 
@@ -1671,6 +1682,112 @@ def pki_issue_ac(req: ACRequest):
         "ac_json": ac_content,
         "signature_hex": signature.hex(),
         "aa_public_key_pem": pki_aa_store["public_key_pem"]
+    }
+
+
+# --- LAB 16: EAP Authentication API ---
+class EapVerifyRequest(BaseModel):
+    method: str
+    username: str
+    client_cert_present: bool = False
+    pac_present: bool = False
+    response_hash: str = ""
+
+@app.post("/api/eap/verify")
+def verify_eap(req: EapVerifyRequest):
+    method = req.method.upper()
+    logs = []
+    valid = False
+    message = ""
+    
+    logs.append(f"[RADIUS Info] RADIUS Access-Request received from Authenticator (NAS-IP-Address: 192.168.1.1)")
+    logs.append(f"[RADIUS Info] User Identity parsed: '{req.username}'")
+    logs.append(f"[RADIUS Info] EAP authentication method selected: EAP-{method}")
+    
+    if method == "MD5":
+        logs.append(f"[EAP-MD5] EAP-Request/MD5-Challenge sent to Supplicant.")
+        logs.append(f"[EAP-MD5] Received Supplicant MD5-Response: '{req.response_hash}'")
+        if req.response_hash and req.response_hash != "invalid":
+            logs.append(f"[EAP-MD5] Success: Calculated MD5 hash match for user '{req.username}'")
+            valid = True
+            message = "EAP-MD5認証成功: ハッシュ値が一致しました（盗聴によるオフライン辞書攻撃のリスクに注意してください）。"
+        else:
+            logs.append(f"[EAP-MD5] Error: MD5 hash challenge mismatch.")
+            message = "EAP-MD5認証失敗: ハッシュ値が一致しません。"
+            
+    elif method == "LEAP":
+        logs.append(f"[LEAP] Initiating Cisco proprietary LEAP MS-CHAP v1 challenge.")
+        logs.append(f"[LEAP] Received Peer response hash: '{req.response_hash}'")
+        if req.response_hash and req.response_hash != "invalid":
+            logs.append(f"[LEAP] Success: MS-CHAP challenge match.")
+            logs.append(f"[LEAP] Warning: LEAP is vulnerable to offline dictionary attack tool ASLEAP.")
+            valid = True
+            message = "LEAP認証成功: チャレンジ応答が一致しました。"
+        else:
+            logs.append(f"[LEAP] Error: Challenge mismatch.")
+            message = "LEAP認証失敗: チャレンジ応答が不一致。"
+            
+    elif method == "EAP-FAST":
+        logs.append(f"[EAP-FAST] Establishing TLS tunnel using PAC (Protected Access Credential)...")
+        if req.pac_present:
+            logs.append(f"[EAP-FAST] Valid PAC credential presented by Supplicant. Decrypted PAC-Key successfully.")
+            logs.append(f"[EAP-FAST] Established outer TLS tunnel using PAC-Key. Bypassed server certificate requirement.")
+            logs.append(f"[EAP-FAST] Inner Authentication (MS-CHAPv2) completed inside TLS tunnel.")
+            valid = True
+            message = "EAP-FAST認証成功: クライアント証明書不要で、PACキーを使用してTLSトンネルが確立され、内部認証が完了しました。"
+        else:
+            logs.append(f"[EAP-FAST] Error: PAC credential missing or expired.")
+            message = "EAP-FAST認証失敗: 有効なPAC情報が提示されていません。"
+            
+    elif method == "TLS":
+        logs.append(f"[EAP-TLS] Initiating standard TLS Handshake (Mutual Authentication)...")
+        logs.append(f"[EAP-TLS] Sending RADIUS Server Certificate for verification...")
+        logs.append(f"[EAP-TLS] Requesting Client Certificate from Supplicant (Mutual Auth)...")
+        if req.client_cert_present:
+            logs.append(f"[EAP-TLS] Client Certificate received: CN={req.username}, Issuer=SecurityLabCA")
+            logs.append(f"[EAP-TLS] Verifying signature against CA root... Valid!")
+            logs.append(f"[EAP-TLS] TLS key exchange completed. Established TLS secure session.")
+            valid = True
+            message = "EAP-TLS認証成功: クライアントとサーバーの双方でデジタル証明書を検証し、相互認証（Mutual Authentication）が成功しました。"
+        else:
+            logs.append(f"[EAP-TLS] Error: Client certificate was requested but not presented.")
+            message = "EAP-TLS認証失敗: クライアント証明書が提示されていません（EAP-TLSでは双方向の証明書検証が必須です）。"
+            
+    elif method == "TTLS":
+        logs.append(f"[EAP-TTLS] Initiating TLS Handshake (Server-only Authentication)...")
+        logs.append(f"[EAP-TTLS] Sending RADIUS Server Certificate to Supplicant...")
+        logs.append(f"[EAP-TTLS] established secure TLS tunnel. Client certificate check skipped (Optional).")
+        logs.append(f"[EAP-TTLS] Performing inner authentication (MS-CHAPv2) inside the TLS tunnel...")
+        if req.response_hash and req.response_hash != "invalid":
+            logs.append(f"[EAP-TTLS] Inner MS-CHAPv2 verification succeeded inside TLS tunnel.")
+            valid = True
+            message = "EAP-TTLS認証成功: サーバー側証明書でTLSトンネルを確立し、トンネル内で安全に送信されたユーザーID/パスワードによる認証に成功しました。"
+        else:
+            logs.append(f"[EAP-TTLS] Error: Inner credentials validation failed.")
+            message = "EAP-TTLS認証失敗: トンネル内でのユーザー認証に失敗しました。"
+            
+    elif method == "PEAP":
+        logs.append(f"[PEAP] Initiating PEAP TLS Handshake (Server-only Authentication)...")
+        logs.append(f"[PEAP] Sending RADIUS Server Certificate to Supplicant...")
+        logs.append(f"[PEAP] established outer secure TLS tunnel.")
+        logs.append(f"[PEAP] Executing inner EAP authentication method (typically EAP-MSCHAPv2) inside TLS tunnel...")
+        if req.response_hash and req.response_hash != "invalid":
+            logs.append(f"[PEAP] Inner MS-CHAPv2 authentication successful.")
+            valid = True
+            message = "PEAP認証成功: サーバー証明書によるTLSトンネル内で、EAP-MSCHAPv2を用いた安全なユーザー認証に成功しました。"
+        else:
+            logs.append(f"[PEAP] Error: Inner MS-CHAPv2 authentication failed.")
+            message = "PEAP認証失敗: PEAPトンネル内でのMS-CHAPv2認証に失敗しました。"
+            
+    if valid:
+        logs.append(f"[RADIUS Info] RADIUS Access-Accept sent to Authenticator")
+    else:
+        logs.append(f"[RADIUS Info] RADIUS Access-Reject sent to Authenticator")
+        
+    return {
+        "valid": valid,
+        "message": message,
+        "verification_logs": logs
     }
 
 
