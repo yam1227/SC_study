@@ -111,6 +111,14 @@ window.SecurityLabModules["vuln"] = {
                         </p>
                     </div>
                 </div>
+            <!-- References Section -->
+            <div class="card" style="margin-top: 24px; border-top: 3px solid var(--color-primary);">
+                <h3>📚 参考文献 & 情報源URL</h3>
+                <ul style="font-size: 13px; line-height: 1.8; color: var(--text-secondary); margin-left: 20px; margin-top: 10px;">
+                    <li><b>IPA 安全なウェブサイトの作り方 - 1.1 SQLインジェクション</b>: <a href="https://www.ipa.go.jp/security/vuln/websecurity/sqli.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/security/vuln/websecurity/sqli.html</a></li>
+                    <li><b>IPA 安全なウェブサイトの作り方 - 1.5 クロスサイト・スクリプティング (XSS)</b>: <a href="https://www.ipa.go.jp/security/vuln/websecurity/xss.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/security/vuln/websecurity/xss.html</a></li>
+                    <li><b>OWASP SQL Injection Prevention Cheat Sheet</b>: <a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html</a></li>
+                </ul>
             </div>
         </div>
     `,

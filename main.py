@@ -214,6 +214,17 @@ MODULES = [
         "subcategory_name": "2. ネットワーク",
         "overview": "有線・無線LANのポート制御規格である IEEE 802.1X と、そこで使われるEAP (Extensible Authentication Protocol) フレームワークについて学びます。Supplicant, Authenticator, RADIUSサーバー間の対話と、各EAP認証方式（EAP-TLS, PEAP等）による安全性の違い（証明書や暗号化トンネルの有無）を可視化します。",
         "keywords": ["IEEE 802.1X", "EAP (Extensible Authentication Protocol)", "EAP-TLS", "PEAP", "EAP-FAST", "RADIUS", "Supplicant", "Authenticator"]
+    },
+    {
+        "id": "csrf_vs_xss",
+        "title": "CSRF vs XSS 徹底比較と防衛",
+        "description": "CSRF（クロスサイトリクエストフォージェリ）とXSS（クロスサイトスクリプティング）の違い、発生機構、および抗CSRFトークン・SameSite・HttpOnly・サニタイズによる防御を体験的に学びます。",
+        "jsFile": "lab_csrf_vs_xss.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "情報処理安全確保支援士試験で最も混同しやすいWeb攻撃「CSRF」と「XSS」について、攻撃が実行されるオリジン（発動場所）、目的、Cookieの動作、Same-Origin Policy (同種オリジン制約) の関係を徹底比較します。外部罠サイトからの偽リクエスト（CSRF）と、ターゲットサイト内でのスクリプト注入（XSS）をそれぞれシミュレートし、抗CSRFトークン、SameSite Cookie (Strict/Lax)、HttpOnly属性、HTMLエスケープによる防御をハンズオンで体感します。",
+        "keywords": ["CSRF", "XSS", "Same-Origin Policy (SOP)", "抗CSRFトークン", "SameSite Cookie", "HttpOnly属性", "サニタイズ (HTMLエスケープ)"]
     }
 ]
 
@@ -828,6 +839,127 @@ def simulate_xss(req: XSSRequest):
             "escaped": False,
             "message": "⚠️ 警告: エスケープが施されていません！ブラウザに直接出力されたスクリプトが即座に実行される危険があります。"
         }
+
+
+class CsrfVsXssSimulationRequest(BaseModel):
+    mode: str  # "csrf" または "xss"
+    payload: str = ""
+    csrf_token_enabled: bool = False
+    provided_csrf_token: str = ""
+    samesite_attribute: str = "None"  # "None", "Lax", "Strict"
+    escape_html_enabled: bool = False
+    httponly_enabled: bool = False
+
+@app.post("/api/vuln/csrf-vs-xss/simulate")
+def simulate_csrf_vs_xss(req: CsrfVsXssSimulationRequest):
+    valid_server_csrf_token = "sec_token_9f8a7b6c5d4e"
+    
+    if req.mode == "csrf":
+        # CSRF 攻撃の判定
+        # 1. SameSite Cookie 判定: Strict または Lax の場合、クロスサイトPOSTでCookieが送信されない
+        cookie_attached = True
+        if req.samesite_attribute in ["Strict", "Lax"]:
+            cookie_attached = False
+            
+        # 2. 抗CSRFトークン判定
+        token_valid = True
+        if req.csrf_token_enabled:
+            if req.provided_csrf_token != valid_server_csrf_token:
+                token_valid = False
+
+        if not cookie_attached:
+            return {
+                "success": False,
+                "blocked_by": "SameSite Cookie",
+                "status_code": 401,
+                "message": f"🛡️ 攻撃失敗 (防御成功): Cookie に SameSite={req.samesite_attribute} 属性が設定されているため、外部罠サイトからのPOSTリクエストに認証Cookieが添付されませんでした。",
+                "cookie_attached": False,
+                "token_validated": None,
+                "request_origin": "http://evil-site.net",
+                "target_origin": "http://bank-service.local",
+                "http_headers": {
+                    "Host": "bank-service.local",
+                    "Origin": "http://evil-site.net",
+                    "Referer": "http://evil-site.net/win-prize.html",
+                    "Cookie": "(なし - SameSite属性により遮断)"
+                }
+            }
+        elif req.csrf_token_enabled and not token_valid:
+            return {
+                "success": False,
+                "blocked_by": "CSRF Token Validation",
+                "status_code": 403,
+                "message": "🛡️ 攻撃失敗 (防御成功): リクエストに有効な抗CSRFトークンが含まれていません。外部罠サイトはSOP（同種オリジン制約）のためターゲットサイトのトークン値を取得できず、リクエストがサーバー側で拒否されました。",
+                "cookie_attached": True,
+                "token_validated": False,
+                "request_origin": "http://evil-site.net",
+                "target_origin": "http://bank-service.local",
+                "http_headers": {
+                    "Host": "bank-service.local",
+                    "Origin": "http://evil-site.net",
+                    "Cookie": "session_id=user_alice_sess_777",
+                    "X-CSRF-Token": "(未送信または不正なトークン)"
+                }
+            }
+        else:
+            return {
+                "success": True,
+                "blocked_by": None,
+                "status_code": 200,
+                "message": "🚨 攻撃成功 (CSRF被害発生): ユーザーが罠サイトを閲覧した結果、被害者のセッションCookieが自動送信され、意図しない送金/パスワード変更処理が実行されてしまいました！",
+                "cookie_attached": True,
+                "token_validated": True if req.csrf_token_enabled else None,
+                "request_origin": "http://evil-site.net",
+                "target_origin": "http://bank-service.local",
+                "http_headers": {
+                    "Host": "bank-service.local",
+                    "Origin": "http://evil-site.net",
+                    "Cookie": "session_id=user_alice_sess_777"
+                }
+            }
+
+    elif req.mode == "xss":
+        # XSS 攻撃の判定
+        raw_payload = req.payload or "<script>alert('XSS')</script>"
+        has_script = ("<script>" in raw_payload.lower()) or ("onerror=" in raw_payload.lower()) or ("onload=" in raw_payload.lower()) or ("javascript:" in raw_payload.lower())
+        
+        if req.escape_html_enabled:
+            escaped_content = (raw_payload.replace("&", "&amp;")
+                                         .replace("<", "&lt;")
+                                         .replace(">", "&gt;")
+                                         .replace('"', "&quot;")
+                                         .replace("'", "&#x27;"))
+            return {
+                "success": False,
+                "blocked_by": "HTML Escape (Sanitization)",
+                "rendered_html": escaped_content,
+                "cookie_stolen": False,
+                "cookie_accessible": not req.httponly_enabled,
+                "message": "🛡️ 攻撃失敗 (防御成功): HTMLエスケープが適用されたため、悪意あるコードは安全なプレーンテキストとしてレンダリングされ、スクリプトは実行されませんでした。"
+            }
+        else:
+            cookie_stolen = False
+            if has_script:
+                if req.httponly_enabled:
+                    message = "⚠️ 半防御 (スクリプトは実行されましたがCookieは安全): スクリプトがDOM上で実行されましたが、Cookieに HttpOnly 属性が付与されていたため document.cookie からセッションIDを奪取することは防げました。"
+                    cookie_stolen = False
+                else:
+                    message = "💥 攻撃成功 (XSS実行 & Cookie奪取): ターゲットサイト上で悪意あるスクリプトが実行され、HttpOnlyが付与されていない Cookie (session_id=user_alice_sess_777) が攻撃者のサーバーへ送信されました！さらに、ターゲット画面上のCSRFトークンもJavaScriptで読み取られるため、CSRF対策も破られてしまいます！"
+                    cookie_stolen = True
+            else:
+                message = "入力内容がそのままHTMLとしてレンダリングされました。"
+                
+            return {
+                "success": has_script and not req.httponly_enabled,
+                "blocked_by": "HttpOnly (Partial)" if (has_script and req.httponly_enabled) else None,
+                "rendered_html": raw_payload,
+                "cookie_stolen": cookie_stolen,
+                "cookie_accessible": not req.httponly_enabled,
+                "csrf_token_compromised": has_script,
+                "message": message
+            }
+
+    return {"error": "無効なモードです。"}
 
 
 # --- LAB 8: Kerberos Protocol Simulation API ---

@@ -500,5 +500,36 @@ window.SecurityGlossary = [
         keywords: ["authenticator", "オーセンティケータ", "スイッチ", "無線ap", "ポート制御"],
         definition: "IEEE 802.1X認証において、サプリカント（端末）と直接物理的または無線で接続するネットワーク機器（インテリジェントスイッチや無線LANアクセスポイント）。サプリカントからのEAPOLパケットを受け取ってRADIUSプロトコルに変換し、認証サーバーへ中継する中立な仲介役を担います。認証成功前はEAP以外のパケットを遮断し、認証成功後にそのサプリカントの接続ポートを解放します。",
         exam_tip: "自身では認証合否の判断を行わず、あくまでサプリカントとRADIUSサーバー間のEAPパケットを中継し、ポートの「開閉制御」のみを行う機器である点が重要です。"
+    },
+    // === 8. CSRF vs XSS Webセキュリティ比較関連 ===
+    {
+        term: "Same-Origin Policy (同種オリジン制約 / SOP)",
+        keywords: ["sop", "同種オリジン制約", "same-origin", "オリジン", "スキーム", "ホスト", "ポート"],
+        definition: "Webブラウザの最も基本的なセキュリティモデル。あるオリジン（スキーム・ホスト名・ポート番号の組み合わせ）から取得されたスクリプトが、異なるオリジンのリソース（DOM、Cookie、ローカルストレージ、XMLHttpRequestレスポンスなど）にアクセスすることを制限する仕組み。",
+        exam_tip: "セキスペでは、CSRF攻撃において「罠サイト上のJSからターゲットサイトのレスポンスやCookieの中身を読むことはSOPにより防げるが、自動リクエスト送信自体はブラウザが実行してしまう」という点が頻出します。"
+    },
+    {
+        term: "CSRFトークン (抗CSRFトークン)",
+        keywords: ["csrfトークン", "ワンタイムトークン", "anti-csrf", "state", "隠しフィールド", "hidden"],
+        definition: "CSRF攻撃を防ぐために、WebフォームやAPIリクエストに埋め込まれる一時的で推測不可能な乱数文字列。サーバーはセッションに保持したトークンと、送られてきたトークンが一致するかを検証します。外部の罠サイトはSOPのためターゲットサイト上のトークン値を取得できず、攻撃が失敗します。",
+        exam_tip: "CSRF対策の根本的解決策として「リクエストごとに推測困難なワンタイムトークンを発行・検証する」ことが正解となります。"
+    },
+    {
+        term: "SameSite Cookie 属性",
+        keywords: ["samesite", "samesite=lax", "samesite=strict", "samesite=none", "クッキー属性", "csrf対策"],
+        definition: "Cookieに設定する属性で、クロスサイト（別ドメイン）からのリクエスト送信時にCookieを付与するかどうかをブラウザ側で制御する仕組み。Strict（一切送信しない）、Lax（トップレベルのGET遷移時のみ送信）、None（無制限に送信、Secure必須）があります。",
+        exam_tip: "現代のブラウザではデフォルトで SameSite=Lax が適用されるケースが増えていますが、セキスペ試験では「CSRF対策としてCookieにSameSite属性を適切に設定する」点が重要な選択肢となります。"
+    },
+    {
+        term: "HttpOnly Cookie 属性",
+        keywords: ["httponly", "document.cookie", "xss対策", "クッキー保護"],
+        definition: "Cookieに設定するフラグで、JavaScript（document.cookie）からのアクセスを禁止する属性。WebブラウザはHTTP/HTTPSリクエスト時には自動送信しますが、スクリプトからの読み取りをブロックします。",
+        exam_tip: "HttpOnly属性は「XSSが発生した場合でも、セッションID（Cookie）の盗掘を防ぐ緩和策」として出題されます（CSRF対策ではない点に注意）。"
+    },
+    {
+        term: "DOM-based XSS",
+        keywords: ["dom-based xss", "dom xss", "javascript", "location.hash", "innerHTML"],
+        definition: "サーバー側の出力処理ではなく、クライアント側のJavaScriptコードが不適切にURLパラメータやフラグメント（location.hash等）をDOMに描画（innerHTML等）することで発生するXSS脆弱性。",
+        exam_tip: "反射型・蓄積型XSSがサーバー応答に起因するのに対し、DOM-based XSSはブラウザ内のJavaScript実行時にDOM操作の脆弱さから発生する違いが出題されます。"
     }
 ];
