@@ -1,6 +1,6 @@
 /**
  * Module: CSRF vs XSS Comprehensive Comparison Lab
- * 情報処理安全確保支援士対策: CSRF と XSS の徹底比較と防御実習
+ * 情報処理安全確保支援士対策: CSRF と XSS の徹底比較・トランザクション署名 (MITB対策) 防御実習
  */
 
 window.SecurityLabModules = window.SecurityLabModules || {};
@@ -9,11 +9,12 @@ window.SecurityLabModules["csrf_vs_xss"] = {
     html: `
         <div class="lab-container">
             <!-- Navigation Sub-tabs -->
-            <div style="display: flex; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px;">
-                <button class="btn btn-secondary subtab-btn active" id="subtab-matrix">📊 対比マトリックス & 概念図</button>
-                <button class="btn btn-secondary subtab-btn" id="subtab-csrf">💣 CSRF 攻撃 & 防衛実験</button>
-                <button class="btn btn-secondary subtab-btn" id="subtab-xss">💥 XSS 攻撃 & 防衛実験</button>
-                <button class="btn btn-secondary subtab-btn" id="subtab-quiz">📝 セキスペ過去問クイズ & コード</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; flex-wrap: wrap;">
+                <button class="btn btn-secondary subtab-btn active" id="subtab-matrix" style="font-size: 12px; padding: 8px 14px;">📊 対比マトリックス & 概念図</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-csrf" style="font-size: 12px; padding: 8px 14px;">💣 CSRF 攻撃 & 防衛実験</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-xss" style="font-size: 12px; padding: 8px 14px;">💥 XSS 攻撃 & 防衛実験</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-tx-signing" style="font-size: 12px; padding: 8px 14px; border-color: #3b82f6; color: #60a5fa;">🔐 トランザクション署名 & MITB/CSRF高度防衛</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-quiz" style="font-size: 12px; padding: 8px 14px;">📝 セキスペ過去問クイズ & コード</button>
             </div>
 
             <!-- TAB 1: Comparison Matrix & Concept -->
@@ -23,7 +24,7 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                     <p class="card-subtitle">セキスペ試験で最も出題頻度が高い2大Web脆弱性の決定的な違いを整理します。</p>
                     
                     <div style="overflow-x: auto; margin-top: 16px;">
-                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
                             <thead>
                                 <tr style="background-color: var(--bg-card-header); border-bottom: 2px solid var(--border-color);">
                                     <th style="padding: 12px; border: 1px solid var(--border-color);">比較項目</th>
@@ -78,7 +79,7 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                                     <td style="padding: 10px; border: 1px solid var(--border-color);">
                                         ・抗CSRFトークンの検証<br>
                                         ・SameSite Cookie 属性 (Strict / Lax)<br>
-                                        ・重要な処理でのパスワード再入力
+                                        ・<b>トランザクション署名</b> (高度送金防衛)
                                     </td>
                                     <td style="padding: 10px; border: 1px solid var(--border-color);">
                                         ・HTMLエスケープ (サニタイズ)<br>
@@ -123,9 +124,6 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                     <ul style="margin: 6px 0 0 18px; padding: 0; line-height: 1.6; color: var(--text-secondary);">
                         <li><b>IPA 情報処理安全確保支援士シラバス (Webセキュリティ)</b>: <a href="https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/shiken/syllabus/gaiyou.html</a></li>
                         <li><b>MDN Web Docs: Same-Origin Policy (同種オリジン制約)</b>: <a href="https://developer.mozilla.org/ja/docs/Web/Security/Same-origin_policy" target="_blank" rel="noopener" style="color: var(--color-primary);">https://developer.mozilla.org/ja/docs/Web/Security/Same-origin_policy</a></li>
-                        <li><b>Qiita 技術記事「【図解】CSRFとXSSの違いと対策まとめ」</b>: <a href="https://qiita.com/tags/csrf" target="_blank" rel="noopener" style="color: var(--color-primary);">https://qiita.com/tags/csrf</a></li>
-                        <li><b>Zenn 技術トピック「CSRFとXSSの仕組みと対比解説」</b>: <a href="https://zenn.dev/topics/csrf" target="_blank" rel="noopener" style="color: var(--color-primary);">https://zenn.dev/topics/csrf</a> | <a href="https://zenn.dev/topics/xss" target="_blank" rel="noopener" style="color: var(--color-primary);">https://zenn.dev/topics/xss</a></li>
-                        <li><b>DevelopersIO (クラスメソッド技術ブログ)「Webセキュリティの基礎：CSRFとXSSの違いを整理する」</b>: <a href="https://dev.classmethod.jp/articles/web-security-csrf-xss/" target="_blank" rel="noopener" style="color: var(--color-primary);">https://dev.classmethod.jp/articles/web-security-csrf-xss/</a></li>
                     </ul>
                 </div>
             </div>
@@ -189,18 +187,6 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                         </div>
                     </div>
                 </div>
-
-                <!-- Tab 2 Reference Section -->
-                <div style="margin-top: 16px; padding: 12px 16px; background-color: rgba(245, 158, 11, 0.05); border-left: 4px solid #f59e0b; border-radius: var(--radius-sm); font-size: 13px;">
-                    <b style="color: #f59e0b;">🔗 本機能（CSRF 攻撃 & 防衛）の関連情報源・具体的な参照記事URL:</b>
-                    <ul style="margin: 6px 0 0 18px; padding: 0; line-height: 1.6; color: var(--text-secondary);">
-                        <li><b>IPA 安全なウェブサイトの作り方 - 1.6 クロスサイト・リクエスト・フォージェリ (CSRF)</b>: <a href="https://www.ipa.go.jp/security/vuln/websecurity/csrf.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/security/vuln/websecurity/csrf.html</a></li>
-                        <li><b>OWASP Cheat Sheet: Cross-Site Request Forgery Prevention</b>: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html</a></li>
-                        <li><b>MDN Web Docs: SameSite Cookie 属性</b>: <a href="https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Set-Cookie/SameSite" target="_blank" rel="noopener" style="color: var(--color-primary);">https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Set-Cookie/SameSite</a></li>
-                        <li><b>Qiita 技術記事「CSRF（クロスサイトリクエストフォージェリ）の仕組みと対策」</b>: <a href="https://qiita.com/tags/csrf" target="_blank" rel="noopener" style="color: var(--color-primary);">https://qiita.com/tags/csrf</a></li>
-                        <li><b>Yamory Security Blog「CSRFとは？被害事例とトークン・SameSite属性による対策」</b>: <a href="https://yamory.io/blog/difference-between-xss-and-csrf/" target="_blank" rel="noopener" style="color: var(--color-primary);">https://yamory.io/blog/difference-between-xss-and-csrf/</a></li>
-                    </ul>
-                </div>
             </div>
 
             <!-- TAB 3: XSS Simulation -->
@@ -255,20 +241,169 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Tab 3 Reference Section -->
-                <div style="margin-top: 16px; padding: 12px 16px; background-color: rgba(239, 68, 68, 0.05); border-left: 4px solid #ef4444; border-radius: var(--radius-sm); font-size: 13px;">
-                    <b style="color: #ef4444;">🔗 本機能（XSS 攻撃 & 防衛）の関連情報源・具体的な参照記事URL:</b>
-                    <ul style="margin: 6px 0 0 18px; padding: 0; line-height: 1.6; color: var(--text-secondary);">
-                        <li><b>IPA 安全なウェブサイトの作り方 - 1.5 クロスサイト・スクリプティング (XSS)</b>: <a href="https://www.ipa.go.jp/security/vuln/websecurity/xss.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/security/vuln/websecurity/xss.html</a></li>
-                        <li><b>OWASP Cheat Sheet: Cross Site Scripting Prevention</b>: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html</a></li>
-                        <li><b>MDN Web Docs: HttpOnly Cookie 属性</b>: <a href="https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Set-Cookie#httponly" target="_blank" rel="noopener" style="color: var(--color-primary);">https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Set-Cookie#httponly</a></li>
-                        <li><b>Zenn 技術記事「XSS（クロスサイトスクリプティング）のメカニズムとエスケープ処理」</b>: <a href="https://zenn.dev/topics/xss" target="_blank" rel="noopener" style="color: var(--color-primary);">https://zenn.dev/topics/xss</a></li>
-                    </ul>
+            <!-- TAB 4: Transaction Signing & MITB / CSRF Defense (NEW) -->
+            <div id="tab-content-tx-signing" class="tab-pane" style="display: none;">
+                <div class="card" style="margin-bottom: 20px;">
+                    <h3>🔐 トランザクション署名 ＆ MITB / CSRF 高度送金防衛</h3>
+                    <p class="card-subtitle">
+                        情報処理安全確保支援士 <strong>令和5年秋期 午前Ⅱ 問7</strong> の出題テーマです。<br>
+                        ブラウザ内のマルウェア（MITB攻撃）やCSRF攻撃による「送金先口座・金額の勝手な改ざん」を防ぐため、送金パラメータに紐付いたワンタイム署名を別デバイス（Out-of-Band）で生成・検証する強力な防衛メカニズムを体験します。
+                    </p>
+
+                    <!-- Interactive Transaction Signing Simulator -->
+                    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
+                        <h4 style="margin-top: 0; color: #60a5fa; font-size: 15px;">💸 送金手続き ＆ デバイス間トランザクション署名シミュレータ</h4>
+                        
+                        <div class="lab-grid-2" style="gap: 20px; margin-top: 14px;">
+                            <!-- Left Device: PC Browser / Bank Screen -->
+                            <div style="background: #18181b; border: 1px solid #3b82f6; border-radius: 8px; padding: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #93c5fd; font-size: 13px;">💻 ① PCブラウザ（ネットバンキング画面）</span>
+                                    <span style="font-size: 11px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 6px; border-radius: 4px;">Out-of-Band 前提</span>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label style="font-size: 11px; color: #cbd5e1;">振込先口座番号 (ユーザー入力):</label>
+                                    <input type="text" id="txAccNum" value="123-4567" style="width: 100%; font-size: 13px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label style="font-size: 11px; color: #cbd5e1;">送金額 (円):</label>
+                                    <input type="number" id="txAmount" value="500000" style="width: 100%; font-size: 13px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
+                                </div>
+
+                                <!-- Attack Mode Toggle -->
+                                <div style="background: rgba(239, 68, 68, 0.1); border: 1px dashed #ef4444; border-radius: 6px; padding: 10px; margin-bottom: 12px;">
+                                    <label for="txMitbToggle" style="cursor: pointer; font-size: 12px; color: #fca5a5; font-weight: bold;">
+                                        <input type="checkbox" id="txMitbToggle"> ⚠️ MITB攻撃 / CSRF攻撃を有効化
+                                    </label>
+                                    <div style="font-size: 10px; color: #f87171; margin-top: 4px; line-height: 1.4;">
+                                        ※チェックを入れると、送信時にブラウザ内のマルウェア/CSRFが振込先口座を『999-9999 (攻撃者の口座)』へ自動改ざんします。
+                                    </div>
+                                </div>
+
+                                <!-- Auth Type Choice -->
+                                <div class="form-group" style="margin-bottom: 14px;">
+                                    <label style="font-size: 11px; color: #cbd5e1;">使用する認証方式:</label>
+                                    <select id="txAuthType" style="width: 100%; font-size: 12px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
+                                        <option value="otp">通常のOTP (ログイン時/共通ワンタイムパスワード)</option>
+                                        <option value="transaction_signing" selected>トランザクション署名 (取引データ紐付け型署名)</option>
+                                    </select>
+                                </div>
+
+                                <button class="btn btn-primary" id="btnSendTransaction" style="width: 100%; font-size: 13px; font-weight: bold;">
+                                    💸 送金リクエストを確定・送信
+                                </button>
+                            </div>
+
+                            <!-- Right Device: Separate Hardware Token / Smartphone (Out of Band) -->
+                            <div style="background: #18181b; border: 1px solid #10b981; border-radius: 8px; padding: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #065f46; padding-bottom: 8px; margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #a7f3d0; font-size: 13px;">📱 ② 独立端末 (ハードウェアトークン / スマホ)</span>
+                                    <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 2px 6px; border-radius: 4px;">Out-of-Band</span>
+                                </div>
+
+                                <p style="font-size: 11px; color: #94a3b8; line-height: 1.5; margin-bottom: 10px;">
+                                    <strong>トランザクション署名デバイスの動作:</strong><br>
+                                    PC画面とは独立したこの端末に「振込先口座」を入力・確認すると、取引データと秘密鍵から『この取引専用のワンタイム署名』が算出されます。
+                                </p>
+
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label style="font-size: 11px; color: #a7f3d0;">端末で確認した振込先口座:</label>
+                                    <input type="text" id="txTokenAcc" value="123-4567" readonly style="width: 100%; font-size: 12px; padding: 6px; background: #064e3b; color: #34d399; border: 1px solid #10b981; border-radius: 4px;">
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label style="font-size: 11px; color: #a7f3d0;">算出されたトランザクション署名コード:</label>
+                                    <div style="font-family: monospace; font-size: 16px; font-weight: bold; color: #34d399; background: #022c22; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #059669;" id="txGeneratedSig">
+                                        TX-SIG-1234567-500000
+                                    </div>
+                                </div>
+
+                                <div style="font-size: 10px; color: #94a3b8; line-height: 1.4;">
+                                    💡 攻撃者がリクエスト内の口座を改ざんしても、この端末で生成された署名は『123-4567』に固定されているため、銀行サーバ側でハッシュが不一致となりブロックされます！
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Output & Server Log Box -->
+                        <div style="margin-top: 16px;">
+                            <label style="font-size: 12px; font-weight: bold; color: var(--text-primary);">📡 銀行システム 処理ログ ＆ 判定結果:</label>
+                            <div class="response-box" id="txResultBox" style="background-color: #0c0a09; min-height: 90px; margin-top: 6px; padding: 12px;">
+                                <div id="txResultStatus" style="font-size: 12px; color: #94a3b8;">
+                                    「送金リクエストを確定・送信」ボタンを押すと、銀行サーバでの検証ログが表示されます。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Table: OTP vs Transaction Signing -->
+                    <div style="margin-top: 24px;">
+                        <h4 style="font-size: 14px; margin-bottom: 10px;">📊 通常のOTP と トランザクション署名 の決定的な違い</h4>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                                <thead>
+                                    <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid var(--border-color);">
+                                        <th style="padding: 10px; border: 1px solid var(--border-color);">比較項目</th>
+                                        <th style="padding: 10px; border: 1px solid var(--border-color); color: #f59e0b;">🔑 通常のワンタイムパスワード (OTP)</th>
+                                        <th style="padding: 10px; border: 1px solid var(--border-color); color: #60a5fa;">🔐 トランザクション署名</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: bold;">値の算出根拠</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color);">時刻 (TOTP) や カウンタ (HOTP) のみ</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #93c5fd; font-weight: bold;">時刻/カウンタ ＋ <b>取引データ (振込先口座番号・金額など)</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: bold;">MITB攻撃 (データ書き換え) 対策</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #f87171; font-weight: bold;">❌ 無効 (口座を書き換えられてもOTPが通る)</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #34d399; font-weight: bold;">✅ 完全防御 (取引データ不一致により拒否)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: bold;">CSRF攻撃による強制送金 対策</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color);">⚠️ OTP入力画面を出せば防げるが使い回し時に脆弱</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #34d399; font-weight: bold;">✅ 完全防御 (意図しない振込先への署名生成が不可能)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Exam Question Card: R5 Autumn AM2 Q7 -->
+                    <div class="card" style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); padding: 18px; margin-top: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 11px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和5年秋期 午前Ⅱ 問7</span>
+                            <span style="font-size: 11px; color: var(--text-secondary);">分類: MITB攻撃 ＆ トランザクション署名</span>
+                        </div>
+                        <h4 style="font-size: 14px; line-height: 1.6; margin-top: 0; color: var(--text-primary);">
+                            インターネットバンキングでのMITB攻撃による不正送金について，対策として用いられるトランザクション署名の説明はどれか。
+                        </h4>
+
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;" id="qR5AkiOptions">
+                            <button class="btn btn-secondary quiz-opt-btn" data-qid="qR5Aki" data-ans="A" style="text-align: left; font-size: 13px; padding: 12px; width: 100%; cursor: pointer;">
+                                ア. 携帯端末からの送金取引の場合，金融機関から利用者の登録メールアドレスに送金用のワンタイムパスワードを送信する。
+                            </button>
+                            <button class="btn btn-secondary quiz-opt-btn" data-qid="qR5Aki" data-ans="I" style="text-align: left; font-size: 13px; padding: 12px; width: 100%; cursor: pointer;">
+                                イ. 特定認証業務の認定を受けた認証局が署名したデジタル証明書をインターネットバンキングでの利用者認証に用いることによって，ログインパスワードが漏えいした際の不正ログインを防止する。
+                            </button>
+                            <button class="btn btn-secondary quiz-opt-btn" data-qid="qR5Aki" data-ans="U" style="text-align: left; font-size: 13px; padding: 12px; width: 100%; cursor: pointer;">
+                                ウ. 利用者が送金取引時に，"送金操作を行うPCとは別のデバイスに振込先口座番号などの取引情報を入力して表示された値"をインターネットバンキングに送信する。
+                            </button>
+                            <button class="btn btn-secondary quiz-opt-btn" data-qid="qR5Aki" data-ans="E" style="text-align: left; font-size: 13px; padding: 12px; width: 100%; cursor: pointer;">
+                                エ. ログイン時に，送金操作を行うPCとは別のデバイスによって，一定時間だけ有効なログイン用のワンタイムパスワードを算出し，インターネットバンキングに送信する。
+                            </button>
+                        </div>
+
+                        <!-- Q R5Aki Feedback Box -->
+                        <div id="qR5AkiFeedback" style="margin-top: 14px; display: none; padding: 14px; border-radius: 6px; font-size: 13px; line-height: 1.6;"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- TAB 4: Quiz & Code -->
+            <!-- TAB 5: Quiz & Code -->
             <div id="tab-content-quiz" class="tab-pane" style="display: none;">
                 <div class="card">
                     <h3>📝 セキスペ過去問対比クイズ & セキュアプログラミング</h3>
@@ -323,7 +458,6 @@ response.set_cookie(
                     <ul style="margin: 6px 0 0 18px; padding: 0; line-height: 1.6; color: var(--text-secondary);">
                         <li><b>IPA 情報処理安全確保支援士 過去問題・解答例</b>: <a href="https://www.ipa.go.jp/shiken/mondai-kaiatsu/gaiyou.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/shiken/mondai-kaiatsu/gaiyou.html</a></li>
                         <li><b>Python 標準ライブラリ html.escape 公式ドキュメント</b>: <a href="https://docs.python.org/ja/3/library/html.html#html.escape" target="_blank" rel="noopener" style="color: var(--color-primary);">https://docs.python.org/ja/3/library/html.html#html.escape</a></li>
-                        <li><b>FastAPI Security & Cookies 公式ドキュメント</b>: <a href="https://fastapi.tiangolo.com/tutorial/security/" target="_blank" rel="noopener" style="color: var(--color-primary);">https://fastapi.tiangolo.com/tutorial/security/</a></li>
                     </ul>
                 </div>
             </div>
@@ -334,15 +468,11 @@ response.set_cookie(
                 <p class="card-subtitle">本モジュールで扱った解説および仕様は、以下の公式ドキュメントおよび技術ドキュメント・投稿記事を参考に構成されています。</p>
                 
                 <ul style="font-size: 13px; line-height: 1.8; color: var(--text-secondary); margin-left: 20px; margin-top: 10px;">
-                    <li><b>IPA 情報処理安全確保支援士試験 シラバス・過去問</b>: <a href="https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/shiken/syllabus/gaiyou.html</a></li>
+                    <li><b>IPA 情報処理安全確保支援士 試験問題・解答例（令和5年秋期 午前Ⅱ 問7）</b>: <a href="https://www.sc-siken.com/kakomon/05_aki/am2_7.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.sc-siken.com/kakomon/05_aki/am2_7.html</a></li>
                     <li><b>IPA 安全なウェブサイトの作り方 (CSRF対策 / XSS対策)</b>: <a href="https://www.ipa.go.jp/security/vuln/websecurity.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/security/vuln/websecurity.html</a></li>
-                    <li><b>OWASP Cross-Site Request Forgery (CSRF) Prevention Cheat Sheet</b>: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html</a></li>
-                    <li><b>OWASP Cross Site Scripting (XSS) Prevention Cheat Sheet</b>: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html</a></li>
+                    <li><b>OWASP Out-of-Band Authentication & Transaction Signing Guidelines</b>: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html" target="_blank" rel="noopener" style="color: var(--color-primary);">OWASP Out-of-Band Guidelines</a></li>
+                    <li><b>FISC (金融関連システム安全対策基準) - 送金取引のトランザクション署名指針</b>: <a href="https://www.fisc.or.jp/" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.fisc.or.jp/</a></li>
                     <li><b>MDN Web Docs: Same-Origin Policy (同種オリジン制約)</b>: <a href="https://developer.mozilla.org/ja/docs/Web/Security/Same-origin_policy" target="_blank" rel="noopener" style="color: var(--color-primary);">https://developer.mozilla.org/ja/docs/Web/Security/Same-origin_policy</a></li>
-                    <li><b>Qiita 技術投稿「CSRF（クロスサイトリクエストフォージェリ）の仕組みと対策」</b>: <a href="https://qiita.com/tags/csrf" target="_blank" rel="noopener" style="color: var(--color-primary);">https://qiita.com/tags/csrf</a></li>
-                    <li><b>Zenn 技術投稿「XSSとCSRFの違いを理解して適切な対策を行う」</b>: <a href="https://zenn.dev/topics/csrf" target="_blank" rel="noopener" style="color: var(--color-primary);">https://zenn.dev/topics/csrf</a> | <a href="https://zenn.dev/topics/xss" target="_blank" rel="noopener" style="color: var(--color-primary);">https://zenn.dev/topics/xss</a></li>
-                    <li><b>DevelopersIO (クラスメソッド技術ブログ)「Webセキュリティの基礎：CSRFとXSSの違いを整理する」</b>: <a href="https://dev.classmethod.jp/articles/web-security-csrf-xss/" target="_blank" rel="noopener" style="color: var(--color-primary);">https://dev.classmethod.jp/articles/web-security-csrf-xss/</a></li>
-                    <li><b>Yamory Security Blog「XSSとCSRFの違いとは？仕組みと対策を解説」</b>: <a href="https://yamory.io/blog/difference-between-xss-and-csrf/" target="_blank" rel="noopener" style="color: var(--color-primary);">https://yamory.io/blog/difference-between-xss-and-csrf/</a></li>
                 </ul>
             </div>
         </div>
@@ -361,6 +491,7 @@ response.set_cookie(
             { btnId: "subtab-matrix", paneId: "tab-content-matrix" },
             { btnId: "subtab-csrf", paneId: "tab-content-csrf" },
             { btnId: "subtab-xss", paneId: "tab-content-xss" },
+            { btnId: "subtab-tx-signing", paneId: "tab-content-tx-signing" },
             { btnId: "subtab-quiz", paneId: "tab-content-quiz" }
         ];
 
@@ -396,6 +527,86 @@ response.set_cookie(
                 self.runXssSimulation();
             });
         }
+
+        // Transaction Signing Simulation Handler
+        const txAccNum = document.getElementById("txAccNum");
+        const txTokenAcc = document.getElementById("txTokenAcc");
+        const txGeneratedSig = document.getElementById("txGeneratedSig");
+        const txAmount = document.getElementById("txAmount");
+
+        if (txAccNum && txTokenAcc && txGeneratedSig) {
+            const updateSignature = () => {
+                const acc = txAccNum.value || "123-4567";
+                const amt = txAmount.value || "500000";
+                txTokenAcc.value = acc;
+                txGeneratedSig.textContent = `TX-SIG-${acc.replace("-", "")}-${amt}`;
+            };
+            txAccNum.addEventListener("input", updateSignature);
+            txAmount.addEventListener("input", updateSignature);
+        }
+
+        const btnSendTx = document.getElementById("btnSendTransaction");
+        if (btnSendTx) {
+            btnSendTx.addEventListener("click", function () {
+                self.runTransactionSigningSimulation();
+            });
+        }
+
+        // R5 Autumn Q7 Quiz Handler
+        const r5QuizButtons = document.querySelectorAll('#qR5AkiOptions .quiz-opt-btn');
+        r5QuizButtons.forEach(btn => {
+            btn.addEventListener("click", function (e) {
+                const target = e.currentTarget || this;
+                const ans = target.getAttribute("data-ans");
+                const feedbackEl = document.getElementById("qR5AkiFeedback");
+                const optionsContainer = document.getElementById("qR5AkiOptions");
+
+                if (optionsContainer) {
+                    optionsContainer.querySelectorAll(".quiz-opt-btn").forEach(b => {
+                        b.style.borderColor = "var(--border-color)";
+                        b.style.background = "var(--bg-card)";
+                        b.style.color = "var(--text-primary)";
+                    });
+                }
+
+                if (feedbackEl) feedbackEl.style.display = "block";
+
+                if (ans === "U") {
+                    target.style.borderColor = "var(--color-success)";
+                    target.style.background = "rgba(16, 185, 129, 0.2)";
+                    target.style.color = "#34d399";
+                    if (feedbackEl) {
+                        feedbackEl.className = "alert alert-success";
+                        feedbackEl.innerHTML = `
+                            <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">🎉 正解です！（「ウ」が正解）</div>
+                            <div>
+                                トランザクション署名は、送金操作を行うPCとは別の端末（Out-of-Band端末）に振込先口座番号や金額を入力して表示されたワンタイム署名値をインターネットバンキングに送信・検証する仕組みです。<br><br>
+                                <strong>【選択肢解説】</strong><br>
+                                ・<strong>ア (誤り)</strong>: メールによるワンタイムパスワードの説明（送金パラメータに紐づかないOTP）。<br>
+                                ・<strong>イ (誤り)</strong>: クライアント証明書による利用者認証（ログイン認証の強化）。<br>
+                                ・<strong>ウ (正解)</strong>: <strong>トランザクション署名</strong>の正しい説明！<br>
+                                ・<strong>エ (誤り)</strong>: ログイン用のワンタイムパスワード（TOTP/HOTP等）の説明。
+                            </div>
+                        `;
+                    }
+                    if (window.app) window.app.log("success", "[過去問演習] 令和5年秋問7 (トランザクション署名) に正解しました！");
+                } else {
+                    target.style.borderColor = "var(--color-danger)";
+                    target.style.background = "rgba(239, 68, 68, 0.2)";
+                    target.style.color = "#f87171";
+                    if (feedbackEl) {
+                        feedbackEl.className = "alert alert-danger";
+                        feedbackEl.innerHTML = `
+                            <div style="font-weight: bold; font-size: 14px; margin-bottom: 6px;">❌ 不正解です。正解は「ウ」です。</div>
+                            <div>
+                                トランザクション署名は、「PCとは別のデバイスに振込先口座番号などの取引情報を入力して表示された値（署名）」を送信する仕組みです。
+                            </div>
+                        `;
+                    }
+                    if (window.app) window.app.log("error", "[過去問演習] 令和5年秋問7 で誤った選択肢を選びました。");
+                }
+            });
+        });
     },
 
     runCsrfSimulation: async function () {
@@ -432,8 +643,8 @@ response.set_cookie(
                 }
             }
 
-            if (window.SecurityLabApp) {
-                window.SecurityLabApp.log("network", `[CSRF Sim] Origin: ${data.request_origin} -> Target: ${data.target_origin} | Status: ${data.status_code}`);
+            if (window.app) {
+                window.app.log("network", `[CSRF Sim] Origin: ${data.request_origin} -> Target: ${data.target_origin} | Status: ${data.status_code}`);
             }
         } catch (err) {
             console.error("CSRF simulation error:", err);
@@ -481,11 +692,53 @@ response.set_cookie(
                 }
             }
 
-            if (window.SecurityLabApp) {
-                window.SecurityLabApp.log("network", `[XSS Sim] Escape: ${escapeEnabled} | HttpOnly: ${httpOnlyEnabled} | Result: ${data.message.substring(0, 40)}...`);
+            if (window.app) {
+                window.app.log("network", `[XSS Sim] Escape: ${escapeEnabled} | HttpOnly: ${httpOnlyEnabled} | Result: ${data.message.substring(0, 40)}...`);
             }
         } catch (err) {
             console.error("XSS simulation error:", err);
+        }
+    },
+
+    runTransactionSigningSimulation: async function () {
+        const accNum = document.getElementById("txAccNum")?.value || "123-4567";
+        const amount = parseInt(document.getElementById("txAmount")?.value || "500000", 10);
+        const mitbAttack = document.getElementById("txMitbToggle")?.checked || false;
+        const authType = document.getElementById("txAuthType")?.value || "transaction_signing";
+
+        try {
+            const response = await fetch("/api/vuln/csrf-vs-xss/simulate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    mode: "transaction_signing",
+                    account_number: accNum,
+                    amount: amount,
+                    signed_account: accNum,
+                    auth_type: authType,
+                    mitb_attack: mitbAttack
+                })
+            });
+
+            const data = await response.json();
+
+            const statusBox = document.getElementById("txResultStatus");
+            if (statusBox) {
+                let badge = data.success ? "🚨 【被害発生】" : "🛡️ 【防衛成功】";
+                let color = data.success ? "#ef4444" : "#10b981";
+                statusBox.innerHTML = `
+                    <div style="font-weight: bold; font-size: 13px; color: ${color}; margin-bottom: 4px;">${badge} ${data.message}</div>
+                    <div style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">
+                        送信先口座: <b>${data.account_number}</b> | 送金額: <b>${data.amount.toLocaleString()}円</b> | 認証方式: <b>${data.auth_type}</b>
+                    </div>
+                `;
+            }
+
+            if (window.app) {
+                window.app.log("network", `[TxSigning Sim] Auth: ${authType} | MITB Attack: ${mitbAttack} | Result: ${data.message.substring(0, 35)}...`);
+            }
+        } catch (err) {
+            console.error("Transaction signing simulation error:", err);
         }
     },
 

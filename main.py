@@ -864,19 +864,72 @@ def simulate_xss(req: XSSRequest):
 
 
 class CsrfVsXssSimulationRequest(BaseModel):
-    mode: str  # "csrf" または "xss"
+    mode: str  # "csrf", "xss", または "transaction_signing"
     payload: str = ""
     csrf_token_enabled: bool = False
     provided_csrf_token: str = ""
     samesite_attribute: str = "None"  # "None", "Lax", "Strict"
     escape_html_enabled: bool = False
     httponly_enabled: bool = False
+    # トランザクション署名用フィールド
+    account_number: str = "123-4567"
+    amount: int = 500000
+    signed_account: str = "123-4567"
+    auth_type: str = "transaction_signing"  # "otp" または "transaction_signing"
+    mitb_attack: bool = False
 
 @app.post("/api/vuln/csrf-vs-xss/simulate")
 def simulate_csrf_vs_xss(req: CsrfVsXssSimulationRequest):
     valid_server_csrf_token = "sec_token_9f8a7b6c5d4e"
     
-    if req.mode == "csrf":
+    if req.mode == "transaction_signing":
+        target_account = "999-9999 (攻撃者の口座)" if req.mitb_attack else req.account_number
+        
+        if req.auth_type == "otp":
+            if req.mitb_attack:
+                return {
+                    "success": True,
+                    "blocked_by": None,
+                    "status_code": 200,
+                    "message": "🚨 不正送金成功 (MITB/CSRF被害発生): ブラウザ内のマルウェア(MITB)またはCSRFにより送金先が『999-9999』へ改ざんされました。通常のログインOTPは取引内容に依存しないため改ざんを検証できず、不正送金が完了してしまいました！",
+                    "account_number": target_account,
+                    "amount": req.amount,
+                    "auth_type": "通常のOTP"
+                }
+            else:
+                return {
+                    "success": False,
+                    "blocked_by": None,
+                    "status_code": 200,
+                    "message": f"✅ 正常送金完了: 指定口座({req.account_number})へ {req.amount:,} 円の送金が完了しました。（※ただし攻撃があった場合に防げない脆弱性があります）",
+                    "account_number": req.account_number,
+                    "amount": req.amount,
+                    "auth_type": "通常のOTP"
+                }
+        else:  # transaction_signing
+            # トランザクション署名の検証: 別デバイスで署名した口座(signed_account)と実際の送信先(target_account)の一致判定
+            if req.signed_account == target_account:
+                return {
+                    "success": False,
+                    "blocked_by": "Transaction Signing Verified",
+                    "status_code": 200,
+                    "message": f"🛡️ トランザクション署名検証成功: 別デバイスで承認された取引データ({req.signed_account}, {req.amount:,}円)と一致したため、安全に送金処理を完了しました。",
+                    "account_number": req.account_number,
+                    "amount": req.amount,
+                    "auth_type": "トランザクション署名"
+                }
+            else:
+                return {
+                    "success": False,
+                    "blocked_by": "Transaction Signing Mismatch",
+                    "status_code": 403,
+                    "message": f"🛡️ 攻撃遮断成功 (トランザクション署名による防衛): 別デバイスで生成された署名(口座: {req.signed_account})と、MITB/CSRFにより改ざんされた実際の送金先(口座: {target_account})の不整合を検出！ 銀行サーバで不正送金を自動ブロックしました！",
+                    "account_number": target_account,
+                    "amount": req.amount,
+                    "auth_type": "トランザクション署名"
+                }
+
+    elif req.mode == "csrf":
         # CSRF 攻撃の判定
         # 1. SameSite Cookie 判定: Strict または Lax の場合、クロスサイトPOSTでCookieが送信されない
         cookie_attached = True
