@@ -501,6 +501,18 @@ window.SecurityGlossary = [
         definition: "IEEE 802.1X認証において、サプリカント（端末）と直接物理的または無線で接続するネットワーク機器（インテリジェントスイッチや無線LANアクセスポイント）。サプリカントからのEAPOLパケットを受け取ってRADIUSプロトコルに変換し、認証サーバーへ中継する中立な仲介役を担います。認証成功前はEAP以外のパケットを遮断し、認証成功後にそのサプリカントの接続ポートを解放します。",
         exam_tip: "自身では認証合否の判断を行わず、あくまでサプリカントとRADIUSサーバー間のEAPパケットを中継し、ポートの「開閉制御」のみを行う機器である点が重要です。"
     },
+    {
+        term: "RADIUSクライアント (RADIUS Client)",
+        keywords: ["radiusクライアント", "radius client", "アクセスポイント", "オーセンティケータ", "802.1X"],
+        definition: "RADIUSプロトコルにおいて、バックエンドのRADIUSサーバーに対して認証要求（Access-Request）を送信し、認証結果を受け取るネットワーク機器のこと。IEEE 802.1X環境では、オーセンティケータである無線アクセスポイントやLANスイッチがこの役割を担います。",
+        exam_tip: "セキスペ試験（令和4年春問17など）で極めて頻出です。「アクセスポイントにはIEEE 802.1Xのオーセンティケータを実装し、かつRADIUSクライアントの機能をもたせる」という構成が正解パターンとなります。"
+    },
+    {
+        term: "EAPOL (EAP over LAN / IEEE 802.1X)",
+        keywords: ["eapol", "イーエーピーオーエル", "802.1x", "eap over lan", "レイヤ2"],
+        definition: "IEEE 802.1X規格において、LAN（有線Ethernetや無線Wi-Fi）のデータリンク層（L2）上でEAPフレームを伝送するためのプロトコル。Supplicant（PC）とAuthenticator（AP/スイッチ）の間で交わされ、EAPOL-Start, EAPOL-Packet, EAPOL-Logoffなどのフレームタイプがあります。",
+        exam_tip: "EAPOLは端末とアクセスポイント（L2区間）の間で使われ、アクセスポイントとRADIUSサーバー（L3/IP区間）の間ではRADIUSプロトコルに変換（カプセル化）される違いを押さえましょう。"
+    },
     // === 8. CSRF vs XSS Webセキュリティ比較関連 ===
     {
         term: "Same-Origin Policy (同種オリジン制約 / SOP)",
