@@ -225,6 +225,28 @@ MODULES = [
         "subcategory_name": "3. セキュリティ",
         "overview": "情報処理安全確保支援士試験で最も混同しやすいWeb攻撃「CSRF」と「XSS」について、攻撃が実行されるオリジン（発動場所）、目的、Cookieの動作、Same-Origin Policy (同種オリジン制約) の関係を徹底比較します。外部罠サイトからの偽リクエスト（CSRF）と、ターゲットサイト内でのスクリプト注入（XSS）をそれぞれシミュレートし、抗CSRFトークン、SameSite Cookie (Strict/Lax)、HttpOnly属性、HTMLエスケープによる防御をハンズオンで体感します。",
         "keywords": ["CSRF", "XSS", "Same-Origin Policy (SOP)", "抗CSRFトークン", "SameSite Cookie", "HttpOnly属性", "サニタイズ (HTMLエスケープ)"]
+    },
+    {
+        "id": "stp",
+        "title": "スパニングツリープロトコル (STP / IEEE 802.1D)",
+        "description": "STPのルートブリッジ選出、ルートポート(RP)・代表ポート(DP)・ブロックポート(BP)の選出条件、およびブロードキャストストーム防御を学習します。",
+        "jsFile": "lab_stp.js",
+        "category": "technology",
+        "subcategory": "2_network",
+        "subcategory_name": "2. ネットワーク",
+        "overview": "スイッチドネットワークにおけるL2ループを防ぐ『スパニングツリープロトコル (STP / IEEE 802.1D)』の選出アルゴリズムをインタラクティブに学習します。Bridge ID（優先度 + MACアドレス）によるルートブリッジ選出、ルートポート (RP)、代表ポート (DP / 令和5年春AM2問19出題)、ブロックポート (BP) の選出ロジック、およびSTP無効時のブロードキャストストーム発生メカニズムを体験できます。",
+        "keywords": ["スパニングツリープロトコル (STP)", "IEEE 802.1D", "RSTP (IEEE 802.1w)", "ルートブリッジ (Root Bridge)", "Bridge ID (BID)", "ルートポート (Root Port / RP)", "代表ポート (Designated Port / DP)", "ブロックポート (Blocked Port / BP)", "経路コスト (Path Cost)", "BPDU (Bridge Protocol Data Unit)", "ブロードキャストストーム"]
+    },
+    {
+        "id": "system_reliability",
+        "title": "システム信頼性方式設計 (フェールセーフ / フールプルーフ等)",
+        "description": "フールプルーフ、フェールセーフ、フェールソフト、フォールトトレラントの定義の違いと使い分けを比較・体験学習します。",
+        "jsFile": "lab_system_reliability.js",
+        "category": "technology",
+        "subcategory": "5_mgmt",
+        "subcategory_name": "5. マネジメント・システム設計",
+        "overview": "システム方式設計における信頼性・可用性・安全設計の4大概念（フールプルーフ、フェールセーフ、フェールソフト、フォールトトレラント）を体系的に学習します。誤操作（ヒューマンエラー）対策と機器故障対策の分類、および障害発生時の挙動（安全停止 vs 縮退運転 vs 無停止二重化継続）の違いをインタラクティブな障害シミュレータで体感します。",
+        "keywords": ["フールプルーフ (Foolproof)", "フェールセーフ (Fail-safe)", "フェールソフト (Fail-soft)", "フォールトトレラント (Fault-tolerant)", "フォールトアボイダンス (Fault Avoidance)", "縮退運転 (Degraded Operation)", "Fail-closed / Fail-open", "ヒューマンエラー防止"]
     }
 ]
 
@@ -1922,6 +1944,371 @@ def verify_eap(req: EapVerifyRequest):
         "verification_logs": logs
     }
 
+
+# --- LAB 18: Spanning Tree Protocol (STP) API ---
+class STPBridgeModel(BaseModel):
+    id: str
+    name: str
+    priority: int
+    mac: str
+
+class STPLinkModel(BaseModel):
+    id: str
+    bridge_a: str
+    port_a: str
+    bridge_b: str
+    port_b: str
+    speed: str = "1Gbps"
+    cost: int = 4
+
+class STPCalculateRequest(BaseModel):
+    bridges: List[STPBridgeModel]
+    links: List[STPLinkModel]
+
+class STPSimulateRequest(BaseModel):
+    stp_enabled: bool
+    bridges: List[STPBridgeModel]
+    links: List[STPLinkModel]
+    source_bridge_id: str
+
+@app.post("/api/stp/calculate")
+def calculate_stp(req: STPCalculateRequest):
+    if not req.bridges:
+        raise HTTPException(status_code=400, detail="ブリッジ定義がありません")
+    
+    logs = []
+    logs.append("=== 【ステップ 1】 ルートブリッジ (Root Bridge) の選出 ===")
+    
+    # Sort bridges by (priority, mac)
+    sorted_bridges = sorted(req.bridges, key=lambda b: (b.priority, b.mac.lower()))
+    root_bridge = sorted_bridges[0]
+    
+    for b in req.bridges:
+        is_root = (b.id == root_bridge.id)
+        tag = " 🌟 [ルートブリッジ選出!]" if is_root else ""
+        logs.append(f"・ブリッジ {b.name} ({b.id}): Bridge ID = Priority({b.priority}) + MAC({b.mac}){tag}")
+    
+    logs.append(f"⇒ 最小Bridge IDを持つ 【{root_bridge.name} ({root_bridge.id})】 がルートブリッジに選出されました。")
+    
+    # Graph representation for shortest path calculation
+    adj = {b.id: [] for b in req.bridges}
+    for l in req.links:
+        adj[l.bridge_a].append((l.bridge_b, l.port_a, l.port_b, l.cost, l.id))
+        adj[l.bridge_b].append((l.bridge_a, l.port_b, l.port_a, l.cost, l.id))
+        
+    import heapq
+    bridge_dict = {b.id: b for b in req.bridges}
+    root_id = root_bridge.id
+    
+    dist = {b.id: float('inf') for b in req.bridges}
+    dist[root_id] = 0
+    
+    pq = [(0, (root_bridge.priority, root_bridge.mac.lower()), root_id)]
+    while pq:
+        d, bid_tuple, u = heapq.heappop(pq)
+        if d > dist[u]:
+            continue
+        for v, p_u, p_v, cost, link_id in adj[u]:
+            if dist[u] + cost < dist[v]:
+                dist[v] = dist[u] + cost
+                v_bid_tuple = (bridge_dict[v].priority, bridge_dict[v].mac.lower())
+                heapq.heappush(pq, (dist[v], v_bid_tuple, v))
+                
+    logs.append("\n=== 【ステップ 2】 各非ルートブリッジのルートパスコスト計算 & ルートポート (RP) 選出 ===")
+    root_ports = {}
+    
+    for b in req.bridges:
+        if b.id == root_id:
+            logs.append(f"・ルートブリッジ 【{b.name}】: ルートパスコスト = 0 (ルートポートなし、全ポートが代表ポート)")
+            continue
+            
+        rpc = dist[b.id]
+        logs.append(f"・非ルートブリッジ 【{b.name}】: ルートパスコスト = {rpc}")
+        
+        candidates = []
+        for nbr_id, p_b, p_nbr, link_cost, link_id in adj[b.id]:
+            nbr_rpc = dist[nbr_id]
+            port_path_cost = nbr_rpc + link_cost
+            nbr_bid = (bridge_dict[nbr_id].priority, bridge_dict[nbr_id].mac.lower())
+            candidates.append((port_path_cost, nbr_bid, p_nbr, p_b, nbr_id))
+            
+        candidates.sort()
+        best = candidates[0]
+        best_port = best[3]
+        root_ports[b.id] = best_port
+        
+        logs.append(f"  ⇒ ポート {best_port} を 「ルートポート (Root Port / RP)」 に指定 (経由コスト: {best[0]}, 対向: {best[4]})")
+
+    logs.append("\n=== 【ステップ 3】 各セグメント（リンク）ごとの代表ポート (Designated Port / DP) 選出 ===")
+    logs.append("（※令和5年春期 午前II 問19 題材：リンク両端のブリッジのうち、ルートブリッジまでの経路コストが小さいブリッジ側のポート）")
+
+    port_roles = {}
+    
+    for nbr_id, p_root, p_nbr, link_cost, link_id in adj[root_id]:
+        port_roles[f"{root_id}:{p_root}"] = {
+            "role": "代表ポート (DP)",
+            "state": "Forwarding",
+            "reason": "ルートブリッジの全ポートは代表ポート(DP)となります。"
+        }
+
+    for l in req.links:
+        b_a = bridge_dict[l.bridge_a]
+        b_b = bridge_dict[l.bridge_b]
+        
+        cost_a = dist[b_a.id]
+        cost_b = dist[b_b.id]
+        
+        bid_a = (b_a.priority, b_a.mac.lower())
+        bid_b = (b_b.priority, b_b.mac.lower())
+        
+        dp_bridge = None
+        dp_port = None
+        reason = ""
+        
+        if cost_a < cost_b:
+            dp_bridge, dp_port = b_a, l.port_a
+            reason = f"{b_a.name}のルートパスコスト({cost_a}) < {b_b.name}のコスト({cost_b}) のため"
+        elif cost_b < cost_a:
+            dp_bridge, dp_port = b_b, l.port_b
+            reason = f"{b_b.name}のルートパスコスト({cost_b}) < {b_a.name}のコスト({cost_a}) のため"
+        else:
+            if bid_a < bid_b:
+                dp_bridge, dp_port = b_a, l.port_a
+                reason = f"ルートパスコスト同等({cost_a})のためBridge IDを比較: {b_a.name}(BID:{b_a.priority}) < {b_b.name}(BID:{b_b.priority})"
+            else:
+                dp_bridge, dp_port = b_b, l.port_b
+                reason = f"ルートパスコスト同等({cost_b})のためBridge IDを比較: {b_b.name}(BID:{b_b.priority}) < {b_a.name}(BID:{b_a.priority})"
+
+        port_roles[f"{dp_bridge.id}:{dp_port}"] = {
+            "role": "代表ポート (DP)",
+            "state": "Forwarding",
+            "reason": f"リンク [{l.id}] において{reason}選出。"
+        }
+        logs.append(f"・リンク {l.id} ({b_a.id}:{l.port_a} - {b_b.id}:{l.port_b}): {dp_bridge.name} 側のポート {dp_port} が 「代表ポート (DP)」 に決定 ({reason})")
+
+    logs.append("\n=== 【ステップ 4】 ブロックポート (Blocked Port / BP) の確定 ===")
+    for b in req.bridges:
+        for nbr_id, p_b, p_nbr, link_cost, link_id in adj[b.id]:
+            key = f"{b.id}:{p_b}"
+            if key in port_roles:
+                continue
+            if root_ports.get(b.id) == p_b:
+                port_roles[key] = {
+                    "role": "ルートポート (RP)",
+                    "state": "Forwarding",
+                    "reason": f"{b.name} からルートブリッジへの最少コスト経路ポート。"
+                }
+            else:
+                port_roles[key] = {
+                    "role": "ブロックポート (BP)",
+                    "state": "Blocking",
+                    "reason": "RPでもDPでもないため、L2ループ防止のためにブロッキング状態となります。"
+                }
+                logs.append(f"・ブリッジ 【{b.name}】 ポート {p_b}: 「ブロックポート (BP)」 に決定 （フレーム転送遮断、BPDUのみ監視）")
+
+    return {
+        "root_bridge_id": root_bridge.id,
+        "root_bridge_name": root_bridge.name,
+        "root_path_costs": dist,
+        "port_roles": port_roles,
+        "calculation_steps": logs
+    }
+
+@app.post("/api/stp/simulate_frame")
+def simulate_stp_frame(req: STPSimulateRequest):
+    calc_res = calculate_stp(STPCalculateRequest(bridges=req.bridges, links=req.links))
+    port_roles = calc_res["port_roles"]
+    
+    if req.stp_enabled:
+        visited_links = []
+        visited_bridges = [req.source_bridge_id]
+        queue = [req.source_bridge_id]
+        
+        adj = {b.id: [] for b in req.bridges}
+        for l in req.links:
+            adj[l.bridge_a].append((l.bridge_b, l.port_a, l.port_b, l.id))
+            adj[l.bridge_b].append((l.bridge_a, l.port_b, l.port_a, l.id))
+            
+        frame_events = []
+        frame_events.append(f"【STP有効】 送信元ブリッジ {req.source_bridge_id} からブロードキャストフレーム (ARP Request) を送出。")
+        
+        steps = 0
+        while queue and steps < 20:
+            curr = queue.pop(0)
+            steps += 1
+            for nbr, p_curr, p_nbr, link_id in adj[curr]:
+                role_curr = port_roles.get(f"{curr}:{p_curr}", {}).get("state", "Blocking")
+                role_nbr = port_roles.get(f"{nbr}:{p_nbr}", {}).get("state", "Blocking")
+                
+                if role_curr == "Forwarding" and role_nbr == "Forwarding":
+                    if nbr not in visited_bridges:
+                        visited_bridges.append(nbr)
+                        visited_links.append(link_id)
+                        queue.append(nbr)
+                        frame_events.append(f"  → リンク {link_id} ({curr}:{p_curr} -> {nbr}:{p_nbr}) を正常通過して {nbr} に到達")
+                else:
+                    frame_events.append(f"  🛑 リンク {link_id} ({curr}:{p_curr} -> {nbr}:{p_nbr}) はブロックポート (BP) により遮断。ループを破棄。")
+                    
+        return {
+            "status": "normal",
+            "stp_enabled": True,
+            "message": "STPがループを検知・ブロックしたため、ブロードキャストフレームはネットワーク全体に1回ずつ正しく到達し、正常終了しました。",
+            "events": frame_events,
+            "blocked_count": sum(1 for p in port_roles.values() if p["state"] == "Blocking")
+        }
+    else:
+        frame_events = []
+        frame_events.append(f"【STP無効】 送信元ブリッジ {req.source_bridge_id} からブロードキャストフレームを送出。")
+        frame_events.append("  ⚠️ スイッチ間でフレームが循環増幅される『ブロードキャストストーム』が発生！")
+        
+        loop_trace = []
+        b_ids = [b.id for b in req.bridges]
+        for i in range(1, 10):
+            b_from = b_ids[(i - 1) % len(b_ids)]
+            b_to = b_ids[i % len(b_ids)]
+            loop_trace.append(f"  [ループ {i} 周目] {b_from} -> {b_to} へ複製パケット転送中 (CPU負荷 100% 迫る)")
+            
+        frame_events.extend(loop_trace)
+        frame_events.append("  💥 ネットワーク帯域が枯渇し、全スイッチの通信が完全停止しました！")
+        
+        return {
+            "status": "broadcast_storm",
+            "stp_enabled": False,
+            "message": "警告: STPが無効なためL2ループが発生し、ブロードキャストストームによりネットワークがダウンしました！",
+            "events": frame_events,
+            "blocked_count": 0
+        }
+
+# --- LAB 19: System Reliability & Design Concepts API ---
+class ReliabilitySimulateRequest(BaseModel):
+    event_type: str  # "human_error", "api_failure", "database_crash"
+    policy: str      # "none", "foolproof", "failsafe", "failsoft", "fault_tolerant"
+
+@app.post("/api/system_reliability/simulate")
+def simulate_reliability(req: ReliabilitySimulateRequest):
+    event = req.event_type
+    policy = req.policy
+    
+    logs = []
+    
+    if event == "human_error":
+        logs.append("[イベント発生] ユーザーがフォームで型不整合データ（または1万文字）を誤入力・連打。")
+        if policy == "foolproof":
+            logs.append("[フールプルーフ適用] クライアント/サーバーで入力バリデーションが即座に起動。")
+            logs.append("[防御成功] 不正なリクエストを事前にブロックし、分かりやすいエラーメッセージを表示。")
+            logs.append("[結果] データベース不整合やバックエンドエラーを100%防止し、システムの正常運用を維持。")
+            return {
+                "success": True,
+                "status_label": "✅ フールプルーフ適用 (入力保護・安全制御)",
+                "system_state": "NORMAL_PROTECTED",
+                "logs": logs,
+                "concept_match": "完全適合 (人間の誤操作を構造的に防止)"
+            }
+        else:
+            logs.append("[保護機能なし/不適合] 入力値の検証が行われず、不正データがそのままバックエンドへ通過。")
+            logs.append("[エラー発生] データベースの型エラー/スタックオーバーフローが発生。")
+            logs.append("[結果] システムの一部が異常終了、またはデータ破損が発生しました。")
+            return {
+                "success": False,
+                "status_label": "⚠️ ヒューマンエラーによるデータ破損・異常処理発生",
+                "system_state": "DATA_CORRUPTED",
+                "logs": logs,
+                "concept_match": "不適合 (フールプルーフが未導入)"
+            }
+            
+    elif event == "api_failure":
+        logs.append("[イベント発生] 外部の決済APIサーバーが障害で突然通信不能（ダウン）。")
+        if policy == "failsafe":
+            logs.append("[フェールセーフ適用] 決済通信のタイムアウト・エラーを検知。")
+            logs.append("[安全制御] 誤課金や未決済注文の作成を防ぐため、決済処理を即座に「Fail-Closed (安全全停止)」へ移行。")
+            logs.append("[結果] ユーザーに『現在決済システムを緊急停止中』の安全メッセージを表示し、被害拡大を完全に防護。")
+            return {
+                "success": True,
+                "status_label": "🛡️ フェールセーフ適用 (安全側へシステム緊急遮断)",
+                "system_state": "FAIL_CLOSED_SAFE",
+                "logs": logs,
+                "concept_match": "完全適合 (故障時に安全側へ停止)"
+            }
+        elif policy == "failsoft":
+            logs.append("[フェールソフト適用] 決済API停止を検知。")
+            logs.append("[縮退運転] 決済機能を切り離し、商品閲覧・カート保持サービスのみでサイト運用を維持 (Degraded Operation)。")
+            logs.append("[結果] 全滅を回避し、提供可能な機能のみでサービスを継続。")
+            return {
+                "success": True,
+                "status_label": "📉 フェールソフト適用 (決済除外の縮退運転)",
+                "system_state": "DEGRADED",
+                "logs": logs,
+                "concept_match": "適合 (一部機能を制限してサービス継続)"
+            }
+        elif policy == "fault_tolerant":
+            logs.append("[フォールトトレラント適用] 主決済プロバイダのダウンを検知。")
+            logs.append("[二重化切り替え] 予備のサブ決済プロバイダへ数ミリ秒で自動マルチホーム迂回。")
+            logs.append("[結果] ユーザーに障害を一切認識させることなく、無停止で決済完了。")
+            return {
+                "success": True,
+                "status_label": "⚡ フォールトトレラント適用 (マルチプロバイダ自動迂回)",
+                "system_state": "FAILOVER_NORMAL",
+                "logs": logs,
+                "concept_match": "完全適合 (障害発生時も無停止で継続)"
+            }
+        else:
+            logs.append("[保護機能なし] 決済エラーがそのまま放置され、処理が途中でハングアップ。")
+            logs.append("[結果] 注文データが不整合な状態で残り、システム全体が504 Gateway Timeoutでクラッシュ。")
+            return {
+                "success": False,
+                "status_label": "💥 システム異常終了・二次被害発生",
+                "system_state": "CRASHED",
+                "logs": logs,
+                "concept_match": "不適合"
+            }
+
+    elif event == "database_crash":
+        logs.append("[イベント発生] 主データベース (Master DB) のハードウェア障害でクラッシュ。")
+        if policy == "fault_tolerant":
+            logs.append("[フォールトトレラント適用] DBクラスタ監視プロセスがMasterダウンを検知。")
+            logs.append("[自動フェイルオーバー] Standby DB (レプリカ) を自動的に Master へ昇格。RAID 10構成でデータ損失ゼロ。")
+            logs.append("[結果] ダウンタイムゼロ・パフォーマンス低下ゼロで完全な運用を無停止継続。")
+            return {
+                "success": True,
+                "status_label": "⚡ フォールトトレラント適用 (DB二重化・無停止切替)",
+                "system_state": "HA_NORMAL",
+                "logs": logs,
+                "concept_match": "完全適合 (冗長化により無停止運用)"
+            }
+        elif policy == "failsoft":
+            logs.append("[フェールソフト適用] 主DBの停止を検知。")
+            logs.append("[縮退運転] 書き込み処理（新規登録・購入）をストップし、キャッシュ(Redis)を利用した閲覧専用モードへ自動切り替え。")
+            logs.append("[結果] 完全停止（全滅）を防ぎ、情報閲覧サービスのみを縮退運用で維持。")
+            return {
+                "success": True,
+                "status_label": "📉 フェールソフト適用 (閲覧専用モードの縮退運転)",
+                "system_state": "DEGRADED_READONLY",
+                "logs": logs,
+                "concept_match": "完全適合 (縮退運転によるサービス一部継続)"
+            }
+        elif policy == "failsafe":
+            logs.append("[フェールセーフ適用] 主DB停止を検知。")
+            logs.append("[安全停止] 不整合データの発生を防ぐため、全Webサーバーのデータ処理を安全に緊急停止しメンテナンス画面を表示。")
+            logs.append("[結果] データの破壊や誤った処理の拡散を防止。")
+            return {
+                "success": True,
+                "status_label": "🛑 フェールセーフ適用 (データ保護のための安全停止)",
+                "system_state": "SAFE_SHUTDOWN",
+                "logs": logs,
+                "concept_match": "適合 (安全な状態への移行)"
+            }
+        else:
+            logs.append("[保護機能なし] バックエンドがDB接続不能の例外（NPE/ConnectionError）を吐いて崩壊。")
+            logs.append("[結果] 全画面で 500 Internal Server Error が発生し、システム全滅。")
+            return {
+                "success": False,
+                "status_label": "💥 DB接続不能によるシステム全滅",
+                "system_state": "CRASHED",
+                "logs": logs,
+                "concept_match": "不適合"
+            }
+            
+    raise HTTPException(status_code=400, detail="未定義のイベントタイプです")
 
 # --- Server Route: Serve index.html or fallback ---
 @app.get("/")
