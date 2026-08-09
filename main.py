@@ -40,6 +40,17 @@ jwt_secrets: Dict[str, str] = {"default": "super-secret-key-12345"}
 # List of modules for dynamic frontend registration
 MODULES = [
     {
+        "id": "mac",
+        "title": "メッセージ認証符号 (MAC) ＆ デジタル署名",
+        "description": "MAC (HMAC/CMAC) の仕組み、改ざん検知・共通鍵による送信元認証、およびデジタル署名（否認防止・第三者検証）との違いを学びます。",
+        "jsFile": "lab_mac.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "通信メッセージの「完全性（Integrity）」と「送信元認証（Authenticity）」を保証する メッセージ認証符号 (MAC) のメカニズムを可視化します。共通鍵を使用するMACと、送信者の秘密鍵・公開鍵を使用する「デジタル署名」との決定的な違い（第三者への証明・否認防止の有無）を徹底対比します。",
+        "keywords": ["メッセージ認証符号 (MAC)", "HMAC", "CMAC", "完全性", "送信元認証", "否認防止 (Non-repudiation)", "共通鍵", "デジタル署名"]
+    },
+    {
         "id": "hashing",
         "title": "パスワードハッシュ化＆ソルト",
         "description": "SHA-256 vs bcrypt の比較、辞書攻撃シミュレーションを通じて、ソルトとストレッチングの重要性を学びます。",
@@ -2361,7 +2372,40 @@ def simulate_reliability(req: ReliabilitySimulateRequest):
                 "concept_match": "不適合"
             }
             
-    raise HTTPException(status_code=400, detail="未定義のイベントタイプです")
+# --- MAC (Message Authentication Code) Simulation Route ---
+class MacVerifyRequest(BaseModel):
+    message: str
+    key: str = "SharedKey123"
+    tampered_message: str = ""
+    auth_type: str = "mac"  # "mac" または "digital_signature" または "hash_only"
+
+@app.post("/api/mac/verify")
+def verify_mac(req: MacVerifyRequest):
+    import hmac, hashlib
+    
+    secret_key_bytes = req.key.encode('utf-8')
+    orig_msg_bytes = req.message.encode('utf-8')
+    computed_mac = hmac.new(secret_key_bytes, orig_msg_bytes, hashlib.sha256).hexdigest()
+    
+    received_message = req.tampered_message if req.tampered_message else req.message
+    is_tampered = (received_message != req.message)
+    
+    rx_msg_bytes = received_message.encode('utf-8')
+    bob_computed_mac = hmac.new(secret_key_bytes, rx_msg_bytes, hashlib.sha256).hexdigest()
+    
+    mac_valid = (bob_computed_mac == computed_mac)
+    
+    return {
+        "original_message": req.message,
+        "received_message": received_message,
+        "is_tampered": is_tampered,
+        "sender_mac": computed_mac,
+        "receiver_recalculated_mac": bob_computed_mac,
+        "integrity_verified": mac_valid,
+        "authenticity_verified": mac_valid,
+        "third_party_verifiable": False,  # MACは第三者検証不可（否認防止機能なし）
+        "message": "✅ メッセージ完全性 ＆ 送信元認証 成功 (改ざん・捏造なし)" if mac_valid else "🚨 MAC不一致：メッセージ改ざん検知 (または不正な送信元)！"
+    }
 
 # --- Server Route: Serve index.html or fallback ---
 @app.get("/")
