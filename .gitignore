@@ -38,6 +38,8 @@ test_app.py
 test_saml.py
 test_eap.py
 test_stp.py
+test_mac.py
+test_block_cipher.py
 test_system_reliability.py
 .pytest_cache/
 test-results/

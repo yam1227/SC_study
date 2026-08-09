@@ -40,6 +40,17 @@ jwt_secrets: Dict[str, str] = {"default": "super-secret-key-12345"}
 # List of modules for dynamic frontend registration
 MODULES = [
     {
+        "id": "block_cipher",
+        "title": "ブロック暗号 ＆ 暗号利用モード (CTR / CBC / ECB / GCM)",
+        "description": "ブロック暗号の構造、利用モード (CTR, CBC, ECB, GCM) の違い、鍵ストリーム ⊕ 入力のXOR処理、パディング、並列処理可否、誤り伝搬を学びます。",
+        "jsFile": "lab_block_cipher.js",
+        "category": "technology",
+        "subcategory": "3_security",
+        "subcategory_name": "3. セキュリティ",
+        "overview": "長大なメッセージをブロック単位で暗号化する『暗号利用モード (Cipher Operation Mode)』のメカニズムを比較・可視化します。令和5年春期 午前Ⅱ 問7で問われた CTR(Counter)モードの特徴（鍵ストリームと入力の排他的論理和、パディング不要、暗号化・復号の完全並列実行）や、CBCモードのビット誤り伝搬、ECBモードのパターン露出危険性をビジュアル体験します。",
+        "keywords": ["ブロック暗号", "暗号利用モード", "CTRモード", "CBCモード", "ECBモード", "GCMモード", "鍵ストリーム", "排他的論理和 (XOR)", "並列処理", "ビット誤り伝搬", "パディング"]
+    },
+    {
         "id": "mac",
         "title": "メッセージ認証符号 (MAC) ＆ デジタル署名",
         "description": "MAC (HMAC/CMAC) の仕組み、改ざん検知・共通鍵による送信元認証、およびデジタル署名（否認防止・第三者検証）との違いを学びます。",
@@ -2406,6 +2417,107 @@ def verify_mac(req: MacVerifyRequest):
         "third_party_verifiable": False,  # MACは第三者検証不可（否認防止機能なし）
         "message": "✅ メッセージ完全性 ＆ 送信元認証 成功 (改ざん・捏造なし)" if mac_valid else "🚨 MAC不一致：メッセージ改ざん検知 (または不正な送信元)！"
     }
+
+# --- Block Cipher Modes (CTR, CBC, ECB) Simulation Route ---
+class BlockCipherSimulationRequest(BaseModel):
+    mode: str = "CTR"  # "CTR", "CBC", "ECB"
+    plaintext: str = "PASS_ALL_EXAMS_2026"
+    key: str = "SecretKey128Bit!"
+    bit_error: bool = False
+
+@app.post("/api/block-cipher/simulate")
+def simulate_block_cipher(req: BlockCipherSimulationRequest):
+    import hashlib
+    
+    # 簡易的に16バイト(128-bit)ブロック単位で分割処理を表現
+    blocks = [req.plaintext[i:i+8] for i in range(0, len(req.plaintext), 8)]
+    
+    simulation_steps = []
+    
+    if req.mode == "CTR":
+        # CTRモード: Counterを暗号化してキーストリーム生成 ➔ 平文とXOR
+        for idx, block in enumerate(blocks):
+            nonce_counter = f"NONCE_001_CTR_{idx:04d}"
+            # 鍵ストリーム = AES(Key, Counter)
+            keystream = hashlib.sha256(f"{req.key}:{nonce_counter}".encode()).hexdigest()[:len(block)*2]
+            
+            # XOR演算 (Hex)
+            block_hex = block.encode().hex()
+            cipher_hex = hex(int(block_hex, 16) ^ int(keystream, 16))[2:].zfill(len(block_hex))
+            
+            simulation_steps.append({
+                "block_index": idx + 1,
+                "input_plain": block,
+                "counter_val": nonce_counter,
+                "keystream": keystream,
+                "xor_operation": f"{block_hex} ⊕ {keystream} = {cipher_hex}",
+                "output_cipher": cipher_hex
+            })
+            
+        return {
+            "mode": "CTR (Counter)",
+            "output_formula": "入力ブロック ⊕ 鍵ストリーム (Key Stream)",
+            "padding_required": False,
+            "padding_note": "ストリーム暗号として機能するため、ブロック長の倍数でなくてもパディングは不要",
+            "parallel_encryption": True,
+            "parallel_decryption": True,
+            "error_propagation": "暗号文の1ビット誤りは復号後も同じ1ビットの誤りのみ（影響が他ブロックに及ばない）",
+            "steps": simulation_steps,
+            "message": "⚡ CTRモード: 独立したカウンタ値から鍵ストリームを生成しXORするため、暗号化・復号の完全並列実行が可能でありパディングも不要です。"
+        }
+    
+    elif req.mode == "CBC":
+        # CBCモード: 前の暗号文とXORしてから暗号化
+        prev_cipher = "IV_INITIAL_VECTOR"
+        for idx, block in enumerate(blocks):
+            padded_block = block.ljust(8, ' ')  # パディング表現
+            block_hex = padded_block.encode().hex()
+            prev_hex = hashlib.md5(prev_cipher.encode()).hexdigest()[:len(block_hex)]
+            
+            xored_hex = hex(int(block_hex, 16) ^ int(prev_hex, 16))[2:].zfill(len(block_hex))
+            cipher_hex = hashlib.sha256(f"{req.key}:{xored_hex}".encode()).hexdigest()[:len(block_hex)]
+            prev_cipher = cipher_hex
+            
+            simulation_steps.append({
+                "block_index": idx + 1,
+                "input_plain": padded_block,
+                "prev_chain": prev_hex,
+                "output_cipher": cipher_hex
+            })
+            
+        return {
+            "mode": "CBC (Cipher Block Chaining)",
+            "output_formula": "AES_Encrypt(Key, 平文 ⊕ 前暗号文)",
+            "padding_required": True,
+            "padding_note": "ブロック長の倍数に切りそろえるためのパディングが必須",
+            "parallel_encryption": False,  # 暗号化は並列不可
+            "parallel_decryption": True,   # 復号は並列可能
+            "error_propagation": "暗号文の1ビット誤りを復号すると【該当ブロック全体】＋【次ブロックの対応1ビット】がビット誤りになる",
+            "steps": simulation_steps,
+            "message": "🛡️ CBCモード: チェーニング構造により暗号化の並列処理は不可能ですが、復号処理は並列実行が可能です。"
+        }
+    
+    else:  # ECB
+        for idx, block in enumerate(blocks):
+            padded_block = block.ljust(8, ' ')
+            cipher_hex = hashlib.sha256(f"{req.key}:{padded_block}".encode()).hexdigest()[:16]
+            simulation_steps.append({
+                "block_index": idx + 1,
+                "input_plain": padded_block,
+                "output_cipher": cipher_hex
+            })
+            
+        return {
+            "mode": "ECB (Electronic Codebook)",
+            "output_formula": "AES_Encrypt(Key, 平文)",
+            "padding_required": True,
+            "padding_note": "パディング必須",
+            "parallel_encryption": True,
+            "parallel_decryption": True,
+            "error_propagation": "該当ブロックのみ影響",
+            "steps": simulation_steps,
+            "message": "⚠️ ECBモード: 単純なブロックごとの暗号化のため、同じ平文は常に同じ暗号文になりパターンが漏洩するため通常使用は推奨されません。"
+        }
 
 # --- Server Route: Serve index.html or fallback ---
 @app.get("/")
