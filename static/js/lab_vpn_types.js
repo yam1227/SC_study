@@ -13,8 +13,8 @@ window.SecurityLabModules["vpn_types"] = {
                     <div style="display: flex; flex-direction: column; gap: 10px; justify-content: flex-end;">
                         <label style="font-weight: bold; color: var(--text-primary);">🔌 VPNトンネル構築ステップ:</label>
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-primary" id="btnIkePhase1" style="flex: 1; font-size: 11px; padding: 8px;">1. IKE Phase 1 (IKE SA)</button>
-                            <button class="btn btn-primary" id="btnIkePhase2" style="flex: 1; font-size: 11px; padding: 8px;" disabled>2. IKE Phase 2 (IPsec SA)</button>
+                            <button class="btn btn-primary" id="btnIkePhase1" style="flex: 1; font-size: 12px; padding: 8px;">1. IKE Phase 1 (IKE SA)</button>
+                            <button class="btn btn-primary" id="btnIkePhase2" style="flex: 1; font-size: 12px; padding: 8px;" disabled>2. IKE Phase 2 (IPsec SA)</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -31,7 +31,7 @@ window.SecurityLabModules["vpn_types"] = {
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label style="font-weight: bold; color: var(--text-primary);">📊 確立された SA テーブル</label>
-                            <button class="btn" id="btnClearSa" style="font-size: 10px; padding: 2px 8px; background: transparent; border: 1px solid var(--border-color);">SAのクリア</button>
+                            <button class="btn" id="btnClearSa" style="font-size: 12px; padding: 4px 10px; background: transparent; border: 1px solid var(--border-color);">SAのクリア</button>
                         </div>
                         <table class="sa-table">
                             <thead>
@@ -65,7 +65,7 @@ window.SecurityLabModules["vpn_types"] = {
                         </table>
 
                         <div class="sa-diagram-container">
-                            <span style="font-weight: bold; font-size: 11px; color: var(--text-secondary);">🌐 拠点A・B間の SA トンネル構成図</span>
+                            <span style="font-weight: bold; font-size: 12px; color: var(--text-secondary);">🌐 拠点A・B間の SA トンネル構成図</span>
                             <div class="sa-box" id="ikeSaBox" style="opacity: 0.3;">
                                 <span>IKE SA (制御用チャネル)</span>
                                 <span id="ikeSaBoxLabel">未確立</span>
@@ -95,7 +95,7 @@ window.SecurityLabModules["vpn_types"] = {
                         <div class="form-group" style="margin: 0; flex: 1; display: flex; flex-direction: column;">
                             <label>SA 制御・転送プロセスログ:</label>
                             <div class="response-box" style="flex: 1; min-height: 160px; max-height: 220px; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3);">
-                                <code id="saSimLogText" style="font-size: 11px; color: #fbbf24; white-space: pre-wrap;">「IKE Phase 1」ボタンを押して、SAの確立シーケンスを開始してください。</code>
+                                <code id="saSimLogText" style="font-size: 12px; color: #fbbf24; white-space: pre-wrap;">「IKE Phase 1」ボタンを押して、SAの確立シーケンスを開始してください。</code>
                             </div>
                         </div>
                     </div>
@@ -119,8 +119,8 @@ window.SecurityLabModules["vpn_types"] = {
                         <!-- Tokyo Office -->
                         <div style="text-align: center; width: 100px;">
                             <div style="font-size: 32px;">🏢</div>
-                            <div style="font-size: 11px; font-weight: bold; margin-top: 4px; color: var(--text-primary);">東京本社</div>
-                            <div style="font-size: 10px; color: var(--text-secondary);">192.168.1.0/24</div>
+                            <div style="font-size: 13px; font-weight: bold; margin-top: 4px; color: var(--text-primary);">東京本社</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">192.168.1.0/24</div>
                         </div>
                         
                         <!-- Connecting Network Cloud -->
@@ -128,7 +128,7 @@ window.SecurityLabModules["vpn_types"] = {
                             <!-- Connection Line -->
                             <div style="position: absolute; top: 50%; left: 0; right: 0; height: 3px; background-color: var(--border-color); z-index: -1;" id="vpnDiagramLine"></div>
                             <!-- Encapsulated Packet Indicator -->
-                            <div style="position: absolute; top: 38%; left: 20%; font-size: 11px; padding: 3px 8px; border-radius: 20px; background-color: var(--primary-color); color: white; display: none;" id="vpnPacketIndicator">IPsec ESP Packet</div>
+                            <div style="position: absolute; top: 38%; left: 20%; font-size: 12px; padding: 3px 8px; border-radius: 20px; background-color: var(--primary-color); color: white; display: none;" id="vpnPacketIndicator">IPsec ESP Packet</div>
                             
                             <!-- Network Cloud Graphic -->
                             <div style="font-size: 40px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" id="vpnCloudIcon">🌐</div>
@@ -138,8 +138,8 @@ window.SecurityLabModules["vpn_types"] = {
                         <!-- Osaka Branch -->
                         <div style="text-align: center; width: 100px;">
                             <div style="font-size: 32px;">🏬</div>
-                            <div style="font-size: 11px; font-weight: bold; margin-top: 4px; color: var(--text-primary);">大阪支店</div>
-                            <div style="font-size: 10px; color: var(--text-secondary);">192.168.2.0/24</div>
+                            <div style="font-size: 13px; font-weight: bold; margin-top: 4px; color: var(--text-primary);">大阪支店</div>
+                            <div style="font-size: 12px; color: var(--text-secondary);">192.168.2.0/24</div>
                         </div>
                     </div>
                 </div>

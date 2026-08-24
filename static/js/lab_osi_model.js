@@ -10,18 +10,18 @@ window.SecurityLabModules["osi_model"] = {
                 
                 <div class="lab-grid-3" style="grid-template-columns: 1.2fr 1fr 1.2fr; gap: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
                     <div class="form-group">
-                        <label for="osiPayloadInput">送信メッセージ (HTTP data):</label>
-                        <input type="text" id="osiPayloadInput" value="POST /login HTTP/1.1\\r\\nHost: internal.portal" style="width: 100%;">
+                        <label for="osiPayloadInput" style="font-size: 13px;">送信メッセージ (HTTP data):</label>
+                        <input type="text" id="osiPayloadInput" value="POST /login HTTP/1.1\\r\\nHost: internal.portal" style="width: 100%; font-size: 13px; padding: 6px;">
                     </div>
                     <div class="form-group" style="display: flex; flex-direction: column; justify-content: flex-end;">
-                        <label style="font-weight: bold; color: var(--text-primary);">🚀 シミュレーション制御:</label>
+                        <label style="font-weight: bold; color: var(--text-primary); font-size: 13px;">🚀 シミュレーション制御:</label>
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-primary" id="btnStartOsiSend" style="flex: 1; font-size: 11px;">1. 送信 (カプセル化)</button>
-                            <button class="btn btn-secondary" id="btnStartOsiRecv" style="flex: 1; font-size: 11px;" disabled>2. 受信 (非カプセル化)</button>
+                            <button class="btn btn-primary" id="btnStartOsiSend" style="flex: 1; font-size: 13px; padding: 6px;">1. 送信 (カプセル化)</button>
+                            <button class="btn btn-secondary" id="btnStartOsiRecv" style="flex: 1; font-size: 13px; padding: 6px;" disabled>2. 受信 (非カプセル化)</button>
                         </div>
                     </div>
                     <div style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
-                        <button class="btn btn-lime-outline" id="btnResetOsi" style="width: 100px; font-size: 11px;">リセット</button>
+                        <button class="btn btn-lime-outline" id="btnResetOsi" style="width: 100px; font-size: 13px; padding: 6px;">リセット</button>
                     </div>
                 </div>
 
@@ -40,11 +40,11 @@ window.SecurityLabModules["osi_model"] = {
                             <label style="font-weight: bold; color: var(--text-primary);">📦 カプセル化パケット (PDU)</label>
                             <div class="osi-packet-preview-container">
                                 <span style="font-weight: bold; color: var(--text-secondary); display: block; margin-bottom: 6px;">現在のパケット配置:</span>
-                                <div id="osiPacketTypeLabel" style="font-size: 10px; color: var(--color-primary-hover); font-weight: bold; margin-bottom: 8px;">PDU: N/A</div>
+                                <div id="osiPacketTypeLabel" style="font-size: 12px; color: var(--color-primary-hover); font-weight: bold; margin-bottom: 8px;">PDU: N/A</div>
                                 <div class="osi-packet-block" id="osiPacketSegmentsBlock">
                                     <div class="osi-packet-segment osi-segment-data" id="osiSegData">HTTP DATA</div>
                                 </div>
-                                <div id="osiPhysicalBits" style="font-size: 9px; color: #10b981; font-family: monospace; word-break: break-all; margin-top: 10px; display: none;"></div>
+                                <div id="osiPhysicalBits" style="font-size: 12px; color: #10b981; font-family: monospace; word-break: break-all; margin-top: 10px; display: none;"></div>
                             </div>
                         </div>
 
@@ -57,7 +57,7 @@ window.SecurityLabModules["osi_model"] = {
                                 <div class="osi-flow-packet" id="osiFlowPacket"></div>
                                 <span class="osi-flow-node" title="宛先 Webサーバー">🛢️</span>
                             </div>
-                            <div style="text-align: center; font-size: 9px; color: var(--text-secondary); margin-top: 6px;" id="osiFlowLabel">通信待機中</div>
+                            <div style="text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 6px;" id="osiFlowLabel">通信待機中</div>
                         </div>
                     </div>
 
@@ -74,7 +74,7 @@ window.SecurityLabModules["osi_model"] = {
                         <div class="form-group" style="margin: 0; flex: 1; display: flex; flex-direction: column;">
                             <label>カプセル化通信ログ:</label>
                             <div class="response-box" style="flex: 1; min-height: 130px; max-height: 180px; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3);">
-                                <code id="osiSimLogText" style="font-size: 11px; color: #fbbf24; white-space: pre-wrap;">「1. 送信 (カプセル化)」ボタンを押すと、各階層でのヘッダー付加プロセスが開始されます。</code>
+                                <code id="osiSimLogText" style="font-size: 12px; color: #fbbf24; white-space: pre-wrap;">「1. 送信 (カプセル化)」ボタンを押すと、各階層でのヘッダー付加プロセスが開始されます。</code>
                             </div>
                         </div>
                     </div>
@@ -389,7 +389,7 @@ window.SecurityLabModules["osi_model"] = {
                         <td style="font-weight: bold; color: var(--text-primary);">L${num} ${layerName}</td>
                         <td class="field-name">${f.name}</td>
                         <td class="field-value">${f.val}</td>
-                        <td style="color: var(--text-secondary); font-size: 11px;">${f.desc}</td>
+                        <td style="color: var(--text-secondary); font-size: 12px;">${f.desc}</td>
                     </tr>
                 `;
             }).join("");

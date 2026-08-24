@@ -101,7 +101,7 @@ window.SecurityLabModules["saml"] = {
                         <label id="samlPacketLabel">通信メッセージ詳細 (SAML XML):</label>
                         
                         <!-- XML viewer and editor -->
-                        <div id="samlNormalXmlContainer" class="response-box" style="background-color: #0c0a09; height: 260px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.4;">
+                        <div id="samlNormalXmlContainer" class="response-box" style="background-color: #0c0a09; height: 260px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.4;">
                             <code id="samlPacketCode" style="color: #60a5fa; white-space: pre;">フローを開始するとここにSAML Request/ResponseのXMLデータが表示されます。</code>
                         </div>
                         
@@ -109,14 +109,14 @@ window.SecurityLabModules["saml"] = {
                             <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
                                 ⚠️ <strong>改ざんテスト</strong>: XMLデータを自由に編集できます。以下のボタンでプリセットを試すことも可能です。
                             </p>
-                            <textarea id="samlResponseTextarea" class="response-box" style="width: 100%; height: 200px; background-color: #0c0a09; color: #a7f3d0; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.4; border: 1px solid #34d399; resize: vertical; padding: 10px;"></textarea>
+                            <textarea id="samlResponseTextarea" class="response-box" style="width: 100%; height: 200px; background-color: #0c0a09; color: #a7f3d0; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.4; border: 1px solid #34d399; resize: vertical; padding: 10px;"></textarea>
                             
                             <!-- Preset Buttons for Tampering -->
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
-                                <button class="btn btn-secondary" style="font-size: 11px; padding: 6px;" id="btnTamperSignature">❌ 署名値を改ざんする</button>
-                                <button class="btn btn-secondary" style="font-size: 11px; padding: 6px;" id="btnTamperExpiry">❌ 有効期限を過去にする</button>
-                                <button class="btn btn-secondary" style="font-size: 11px; padding: 6px;" id="btnTamperAudience">❌ 宛先SP(Audience)を書き換える</button>
-                                <button class="btn btn-secondary" style="font-size: 11px; padding: 6px;" id="btnTamperRole">❌ 所属(属性)を教員に昇格</button>
+                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperSignature">❌ 署名値を改ざんする</button>
+                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperExpiry">❌ 有効期限を過去にする</button>
+                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperAudience">❌ 宛先SP(Audience)を書き換える</button>
+                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperRole">❌ 所属(属性)を教員に昇格</button>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-top: 10px; gap: 10px;">
                                 <button class="btn btn-secondary" style="font-size: 12px; width: 45%;" id="btnTamperRestore">🔄 正常なXMLに戻す</button>
@@ -145,60 +145,60 @@ window.SecurityLabModules["saml"] = {
                     <div class="check-box-card" id="chk-signature" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">1. デジタル署名の検証</h4>
-                            <span class="status-badge" style="font-size: 11px; padding: 2px 6px; border-radius: 4px;" id="badge-signature">待機中</span>
+                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-signature">待機中</span>
                         </div>
                         <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
                             あらかじめメタデータで共有されたIdPの公開鍵を用いて、SAMLアサーション内の署名が有効であることを確認します。これにより、<strong>アサーション内容の改ざんやなりすましを防止</strong>します。
                         </p>
-                        <div style="font-size: 11px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-signature"></div>
+                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-signature"></div>
                     </div>
 
                     <!-- Check 2 -->
                     <div class="check-box-card" id="chk-conditions" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">2. 有効期限の検証</h4>
-                            <span class="status-badge" style="font-size: 11px; padding: 2px 6px; border-radius: 4px;" id="badge-conditions">待機中</span>
+                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-conditions">待機中</span>
                         </div>
                         <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
                             <code>&lt;saml:Conditions&gt;</code> の <code>NotBefore</code> (この時間以降有効) と <code>NotOnOrAfter</code> (この時間未満有効) を確認し、現在時刻が範囲内にあるかを検証します。
                         </p>
-                        <div style="font-size: 11px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-conditions"></div>
+                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-conditions"></div>
                     </div>
 
                     <!-- Check 3 -->
                     <div class="check-box-card" id="chk-audience" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">3. 宛先 (Audience) の検証</h4>
-                            <span class="status-badge" style="font-size: 11px; padding: 2px 6px; border-radius: 4px;" id="badge-audience">待機中</span>
+                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-audience">待機中</span>
                         </div>
                         <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
                             <code>&lt;saml:Audience&gt;</code> に記録されたEntityIDが、自SPのEntityID (<code>https://sp.sciencesearch.jp/saml2</code>) と完全一致するか検証します。他SP向けのアサーションを使い回す<strong>アサーション差し替え攻撃を防ぎます</strong>。
                         </p>
-                        <div style="font-size: 11px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-audience"></div>
+                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-audience"></div>
                     </div>
 
                     <!-- Check 4 -->
                     <div class="check-box-card" id="chk-in-response-to" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">4. リプレイ攻撃の検証</h4>
-                            <span class="status-badge" style="font-size: 11px; padding: 2px 6px; border-radius: 4px;" id="badge-in-response-to">待機中</span>
+                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-in-response-to">待機中</span>
                         </div>
                         <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
                             <code>&lt;saml:SubjectConfirmationData&gt;</code> の <code>InResponseTo</code> が、SPがステップ1で送信した <code>SAMLRequest (ID)</code> と一致するか検証します。また、アサーションのIDをキャッシュし、使い回されていないか検証して<strong>リプレイ攻撃を防ぎます</strong>。
                         </p>
-                        <div style="font-size: 11px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-in-response-to"></div>
+                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-in-response-to"></div>
                     </div>
 
                     <!-- Check 5 -->
                     <div class="check-box-card" id="chk-recipient" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">5. 受信エンドポイント (Recipient)</h4>
-                            <span class="status-badge" style="font-size: 11px; padding: 2px 6px; border-radius: 4px;" id="badge-recipient">待機中</span>
+                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-recipient">待機中</span>
                         </div>
                         <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
                             <code>Recipient</code> 属性値が、自SPのACS URL（SAML応答受け取り窓口: <code>https://sp.sciencesearch.jp/saml2/acs</code>）と完全一致するか検証します。
                         </p>
-                        <div style="font-size: 11px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-recipient"></div>
+                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-recipient"></div>
                     </div>
                 </div>
 

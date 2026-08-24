@@ -67,7 +67,7 @@ window.SecurityLabModules["pki"] = {
             }
             .node-label {
                 font-family: 'Inter', sans-serif;
-                font-size: 11px;
+                font-size: 12px;
                 fill: #94a3b8;
                 text-anchor: middle;
                 font-weight: 500;
@@ -175,13 +175,13 @@ window.SecurityLabModules["pki"] = {
                 height: 120px;
                 overflow-y: auto;
                 font-family: 'JetBrains Mono', monospace;
-                font-size: 11px;
+                font-size: 12px;
                 color: #38bdf8;
                 margin-top: 14px;
             }
             .pem-text {
                 font-family: 'JetBrains Mono', monospace;
-                font-size: 10px;
+                font-size: 12px;
                 background: rgba(0,0,0,0.3);
                 border: 1px solid var(--border-color);
                 padding: 8px;
@@ -200,7 +200,7 @@ window.SecurityLabModules["pki"] = {
             <div class="topology-container">
                 <div class="topology-header">
                     <h4>📡 PKI エンティティ & データフロー・マップ</h4>
-                    <span id="pkiFlowStatus" style="font-size: 11px; color: var(--text-secondary);">ノードをクリックすると役割が表示されます</span>
+                    <span id="pkiFlowStatus" style="font-size: 12px; color: var(--text-secondary);">ノードをクリックすると役割が表示されます</span>
                 </div>
                 
                 <div class="topology-body" style="display: flex; flex: 1; min-height: 240px; overflow: hidden; position: relative;">
@@ -342,7 +342,7 @@ window.SecurityLabModules["pki"] = {
                             <div id="pkiCertInventory">
                                 <div class="form-group">
                                     <label>身元証明書 (PKC) のデータ構造解析:</label>
-                                    <div class="response-box" style="padding: 10px; font-size: 11px; line-height: 1.5;">
+                                    <div class="response-box" style="padding: 10px; font-size: 12px; line-height: 1.5;">
                                         <table class="info-table">
                                             <tr>
                                                 <td style="color: var(--text-secondary); width: 110px;">シリアル番号:</td>
@@ -365,7 +365,7 @@ window.SecurityLabModules["pki"] = {
                                 </div>
                                 <div class="form-group" style="margin-top: 10px;">
                                     <details style="border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.15);">
-                                        <summary style="padding: 6px 10px; font-size: 11px; color: var(--text-secondary); cursor: pointer; user-select: none;">
+                                        <summary style="padding: 6px 10px; font-size: 12px; color: var(--text-secondary); cursor: pointer; user-select: none;">
                                             📄 X.509 証明書 (PEM生データ) を表示 / 非表示
                                         </summary>
                                         <div style="padding: 8px; border-top: 1px solid var(--border-color);">
@@ -448,7 +448,7 @@ window.SecurityLabModules["pki"] = {
                             <div id="pkiAcResultArea">
                                 <div class="form-group">
                                     <label>属性証明書 (AC) のデータ構造解析:</label>
-                                    <div class="response-box" style="padding: 10px; font-size: 11px; line-height: 1.5;">
+                                    <div class="response-box" style="padding: 10px; font-size: 12px; line-height: 1.5;">
                                         <table class="info-table">
                                             <tr>
                                                 <td style="color: var(--text-secondary); width: 110px;">対象PKCシリアル:</td>
@@ -471,7 +471,7 @@ window.SecurityLabModules["pki"] = {
                                 </div>
                                 <div class="form-group" style="margin-top: 10px;">
                                     <details style="border: 1px solid var(--border-color); border-radius: 4px; background: rgba(0,0,0,0.15);">
-                                        <summary style="padding: 6px 10px; font-size: 11px; color: var(--text-secondary); cursor: pointer; user-select: none;">
+                                        <summary style="padding: 6px 10px; font-size: 12px; color: var(--text-secondary); cursor: pointer; user-select: none;">
                                             📄 属性証明書 (AC JSON生データ) を表示 / 非表示
                                         </summary>
                                         <div style="padding: 8px; border-top: 1px solid var(--border-color);">
@@ -1044,7 +1044,7 @@ window.SecurityLabModules["pki"] = {
                             pkiVerifyReport.innerHTML = `
                                 <span style="color: var(--color-danger); font-weight: bold;">🔴 接続拒否 (CRLにより失効検知)</span><br>
                                 証明書はCRLに登録されています（失効済み）。アクセスを遮断しました。<br>
-                                <pre style="font-size: 9px; margin-top:6px; background:rgba(0,0,0,0.2); padding:4px;">${crlRes.crl_text}</pre>
+                                <pre style="font-size: 12px; margin-top:6px; background:rgba(0,0,0,0.4); padding:8px; border-radius:4px; font-family:var(--font-mono);">${crlRes.crl_text}</pre>
                             `;
                             logConsole("警告: 証明書がCRL上で見つかりました。接続を拒否します。");
                         } else {

@@ -25,7 +25,7 @@ window.SecurityLabModules["mfa"] = {
                                 <code id="mfaSecretText" style="font-weight: bold; color: var(--color-primary-hover);">未生成</code>
                             </div>
                         </div>
-                        <p style="font-size: 11px; color: var(--text-secondary); text-align: center;">
+                        <p style="font-size: 12px; color: var(--text-secondary); text-align: center;">
                             💡 スマートフォンの認証アプリ（Google Authenticator等）でこのQRコードをスキャンすると、実際のワンタイムパスワードが生成されます。
                         </p>
                     </div>
@@ -41,7 +41,7 @@ window.SecurityLabModules["mfa"] = {
                         <div class="totp-digits" id="totpSimDigits">------</div>
                         
                         <div class="totp-progress">
-                            <span style="font-size: 11px; color: var(--text-secondary); min-width: 50px;">次の更新まで:</span>
+                            <span style="font-size: 12px; color: var(--text-secondary); min-width: 50px;">次の更新まで:</span>
                             <div class="attack-progress-bar" style="flex: 1; height: 8px;">
                                 <div class="attack-progress-fill" id="totpProgressFill" style="background-color: var(--color-success); width: 100%;"></div>
                             </div>
@@ -223,7 +223,7 @@ window.SecurityLabModules["mfa"] = {
 
                 let logsHtml = "";
                 if (res.server_info && res.server_info.verification_logs) {
-                    logsHtml = `<div style="margin-top: 12px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px; font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); line-height: 1.4; overflow-x: auto; max-height: 250px; text-align: left;">
+                    logsHtml = `<div style="margin-top: 12px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); line-height: 1.4; overflow-x: auto; max-height: 250px; text-align: left;">
                         <span style="color: var(--color-primary-hover); font-weight: 600;">💻 サーバー側の詳細検証ログ:</span><br>
                         ${res.server_info.verification_logs.map(log => {
                         let escaped = app.escapeHtml(log);

@@ -116,7 +116,7 @@ body {
 }
 
 .brand-text span {
-    font-size: 11px;
+    font-size: 12px;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -181,7 +181,7 @@ body {
     border: 1px solid var(--border-color);
     padding: 6px 12px;
     border-radius: 50px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     text-align: center;
     color: var(--color-primary-hover);
@@ -308,7 +308,7 @@ body {
     color: var(--color-primary-hover);
     padding: 4px 12px;
     border-radius: 50px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -612,7 +612,7 @@ textarea:focus {
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
     padding: 4px 8px;
-    font-size: 11px;
+    font-size: 12px;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -807,14 +807,14 @@ textarea:focus {
 .svg-text {
     fill: var(--text-primary);
     font-family: var(--font-sans);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     text-anchor: middle;
 }
 
 .svg-text-sub {
     fill: var(--text-secondary);
-    font-size: 9px;
+    font-size: 12px;
 }
 
 .svg-arrow {
@@ -905,7 +905,7 @@ textarea:focus {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
-    font-size: 11px;
+    font-size: 12px;
     padding: 4px 10px;
     border-radius: 4px;
     cursor: pointer;
@@ -957,7 +957,7 @@ textarea:focus {
 .status-indicator {
     padding: 4px 8px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     display: inline-block;
 }
@@ -1244,7 +1244,7 @@ details.ref-card[open] summary::after {
 }
 
 .category-section-title span.badge-cat {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--color-primary-hover);
     background-color: var(--color-primary-glow);
@@ -1273,14 +1273,14 @@ details.ref-card[open] summary::after {
 }
 
 .nav-category-header {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-primary-hover);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 14px 16px 4px 16px;
     margin-top: 12px;
-    opacity: 0.8;
+    opacity: 0.9;
     border-top: 1px dashed rgba(255, 255, 255, 0.05);
 }
 
@@ -1290,11 +1290,11 @@ details.ref-card[open] summary::after {
 }
 
 .nav-subcategory-header {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-secondary);
     padding: 6px 16px 2px 24px;
-    opacity: 0.7;
+    opacity: 0.8;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -1323,7 +1323,7 @@ details.ref-card[open] summary::after {
     position: absolute;
     top: 16px;
     right: 16px;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text-secondary);
     background-color: var(--bg-card);
@@ -1364,7 +1364,7 @@ details.ref-card[open] summary::after {
 }
 
 .keyword-badge {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--color-primary-hover);
     background-color: var(--color-primary-glow);
@@ -1429,7 +1429,7 @@ details.ref-card[open] summary::after {
 .sa-box {
     padding: 10px 14px;
     border-radius: var(--radius-sm);
-    font-size: 11px;
+    font-size: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1488,7 +1488,7 @@ details.ref-card[open] summary::after {
 }
 
 .osi-layer-num {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-primary-hover);
     background-color: var(--color-primary-glow);
@@ -1507,7 +1507,7 @@ details.ref-card[open] summary::after {
 }
 
 .osi-pdu-badge {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 12px;
@@ -1524,7 +1524,7 @@ details.ref-card[open] summary::after {
 }
 
 .osi-header-tag {
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 700;
     color: white;
     padding: 2px 6px;
@@ -1541,7 +1541,7 @@ details.ref-card[open] summary::after {
     padding: 14px;
     margin-top: 14px;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     color: #fbbf24;
     min-height: 120px;
     position: relative;
@@ -1557,7 +1557,7 @@ details.ref-card[open] summary::after {
 .osi-packet-segment {
     padding: 6px 10px;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
     color: white;
     text-align: center;
@@ -1654,7 +1654,7 @@ details.ref-card[open] summary::after {
 .osi-decoder-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .osi-decoder-table th,
@@ -1770,4 +1770,129 @@ details.ref-card[open] summary::after {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
     color: #ffffff;
+}
+
+/* ==========================================================================
+   UX & High-Contrast Visual Enhancement System
+   ========================================================================== */
+
+/* Subtab & Navigation Buttons UI */
+.subtab-btn, .btn-tab {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.subtab-btn:hover, .btn-tab:hover {
+    color: var(--text-primary);
+    border-color: var(--color-primary-hover);
+    background-color: var(--bg-card-hover);
+    transform: translateY(-1px);
+}
+
+.subtab-btn.active, .btn-tab.active {
+    background: linear-gradient(135deg, var(--color-primary), #4f46e5) !important;
+    border-color: #818cf8 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35) !important;
+}
+
+/* High Contrast Response Boxes & Code Display */
+.response-box {
+    background-color: #0c0a09 !important;
+    border: 1px solid #27272a !important;
+    border-radius: var(--radius-sm) !important;
+    color: #e2e8f0 !important;
+    font-family: var(--font-mono) !important;
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.response-box code {
+    color: #f1f5f9 !important;
+    font-family: var(--font-mono) !important;
+}
+
+/* Quiz & Past Exam Question UI Enhancements */
+.quiz-opt-btn {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    transition: all 0.15s ease;
+    line-height: 1.5;
+}
+
+.quiz-opt-btn:hover {
+    border-color: var(--color-primary-hover);
+    background-color: var(--bg-card-hover);
+    color: #ffffff;
+}
+
+/* Alert Boxes High Contrast */
+.alert {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    margin-top: 14px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.alert-success {
+    background-color: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.4) !important;
+    color: #34d399 !important;
+}
+
+.alert-danger {
+    background-color: rgba(239, 68, 68, 0.12) !important;
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    color: #f87171 !important;
+}
+
+.alert-warning {
+    background-color: rgba(245, 158, 11, 0.12) !important;
+    border: 1px solid rgba(245, 158, 11, 0.4) !important;
+    color: #fbbf24 !important;
+}
+
+/* Form Label & Input UX Fixes */
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+.card-subtitle {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+/* Typography Base Legibility */
+.lab-container {
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.lab-container h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.lab-container h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
 }

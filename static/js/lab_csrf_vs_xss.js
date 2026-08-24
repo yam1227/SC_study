@@ -10,11 +10,11 @@ window.SecurityLabModules["csrf_vs_xss"] = {
         <div class="lab-container">
             <!-- Navigation Sub-tabs -->
             <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; flex-wrap: wrap;">
-                <button class="btn btn-secondary subtab-btn active" id="subtab-matrix" style="font-size: 12px; padding: 8px 14px;">📊 対比マトリックス & 概念図</button>
-                <button class="btn btn-secondary subtab-btn" id="subtab-csrf" style="font-size: 12px; padding: 8px 14px;">💣 CSRF 攻撃 & 防衛実験</button>
-                <button class="btn btn-secondary subtab-btn" id="subtab-xss" style="font-size: 12px; padding: 8px 14px;">💥 XSS 攻撃 & 防衛実験</button>
-                <button class="btn btn-secondary subtab-btn" id="subtab-tx-signing" style="font-size: 12px; padding: 8px 14px; border-color: #3b82f6; color: #60a5fa;">🔐 トランザクション署名 & MITB/CSRF高度防衛</button>
-                <button class="btn btn-secondary subtab-btn" id="subtab-quiz" style="font-size: 12px; padding: 8px 14px;">📝 セキスペ過去問クイズ & コード</button>
+                <button class="btn btn-secondary subtab-btn active" id="subtab-matrix" style="font-size: 13px; font-weight: 600; padding: 9px 16px;">📊 対比マトリックス & 概念図</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-csrf" style="font-size: 13px; font-weight: 600; padding: 9px 16px;">💣 CSRF 攻撃 & 防衛実験</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-xss" style="font-size: 13px; font-weight: 600; padding: 9px 16px;">💥 XSS 攻撃 & 防衛実験</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-tx-signing" style="font-size: 13px; font-weight: 600; padding: 9px 16px; border-color: #3b82f6; color: #60a5fa;">🔐 トランザクション署名 & MITB/CSRF高度防衛</button>
+                <button class="btn btn-secondary subtab-btn" id="subtab-quiz" style="font-size: 13px; font-weight: 600; padding: 9px 16px;">📝 セキスペ過去問クイズ & コード</button>
             </div>
 
             <!-- TAB 1: Comparison Matrix & Concept -->
@@ -261,16 +261,16 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                             <div style="background: #18181b; border: 1px solid #3b82f6; border-radius: 8px; padding: 16px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
                                     <span style="font-weight: bold; color: #93c5fd; font-size: 13px;">💻 ① PCブラウザ（ネットバンキング画面）</span>
-                                    <span style="font-size: 11px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 6px; border-radius: 4px;">Out-of-Band 前提</span>
+                                    <span style="font-size: 12px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 6px; border-radius: 4px;">Out-of-Band 前提</span>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 10px;">
-                                    <label style="font-size: 11px; color: #cbd5e1;">振込先口座番号 (ユーザー入力):</label>
+                                    <label style="font-size: 12px; color: #cbd5e1;">振込先口座番号 (ユーザー入力):</label>
                                     <input type="text" id="txAccNum" value="123-4567" style="width: 100%; font-size: 13px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 12px;">
-                                    <label style="font-size: 11px; color: #cbd5e1;">送金額 (円):</label>
+                                    <label style="font-size: 12px; color: #cbd5e1;">送金額 (円):</label>
                                     <input type="number" id="txAmount" value="500000" style="width: 100%; font-size: 13px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
                                 </div>
 
@@ -279,14 +279,14 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                                     <label for="txMitbToggle" style="cursor: pointer; font-size: 12px; color: #fca5a5; font-weight: bold;">
                                         <input type="checkbox" id="txMitbToggle"> ⚠️ MITB攻撃 / CSRF攻撃を有効化
                                     </label>
-                                    <div style="font-size: 10px; color: #f87171; margin-top: 4px; line-height: 1.4;">
+                                     <div style="font-size: 12px; color: #f87171; margin-top: 4px; line-height: 1.4;">
                                         ※チェックを入れると、送信時にブラウザ内のマルウェア/CSRFが振込先口座を『999-9999 (攻撃者の口座)』へ自動改ざんします。
                                     </div>
                                 </div>
 
                                 <!-- Auth Type Choice -->
                                 <div class="form-group" style="margin-bottom: 14px;">
-                                    <label style="font-size: 11px; color: #cbd5e1;">使用する認証方式:</label>
+                                    <label style="font-size: 12px; color: #cbd5e1;">使用する認証方式:</label>
                                     <select id="txAuthType" style="width: 100%; font-size: 12px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
                                         <option value="otp">通常のOTP (ログイン時/共通ワンタイムパスワード)</option>
                                         <option value="transaction_signing" selected>トランザクション署名 (取引データ紐付け型署名)</option>
@@ -302,27 +302,27 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                             <div style="background: #18181b; border: 1px solid #10b981; border-radius: 8px; padding: 16px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #065f46; padding-bottom: 8px; margin-bottom: 12px;">
                                     <span style="font-weight: bold; color: #a7f3d0; font-size: 13px;">📱 ② 独立端末 (ハードウェアトークン / スマホ)</span>
-                                    <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 2px 6px; border-radius: 4px;">Out-of-Band</span>
+                                    <span style="font-size: 12px; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 2px 6px; border-radius: 4px;">Out-of-Band</span>
                                 </div>
 
-                                <p style="font-size: 11px; color: #94a3b8; line-height: 1.5; margin-bottom: 10px;">
+                                <p style="font-size: 12px; color: #94a3b8; line-height: 1.5; margin-bottom: 10px;">
                                     <strong>トランザクション署名デバイスの動作:</strong><br>
                                     PC画面とは独立したこの端末に「振込先口座」を入力・確認すると、取引データと秘密鍵から『この取引専用のワンタイム署名』が算出されます。
                                 </p>
 
                                 <div class="form-group" style="margin-bottom: 10px;">
-                                    <label style="font-size: 11px; color: #a7f3d0;">端末で確認した振込先口座:</label>
+                                    <label style="font-size: 12px; color: #a7f3d0;">端末で確認した振込先口座:</label>
                                     <input type="text" id="txTokenAcc" value="123-4567" readonly style="width: 100%; font-size: 12px; padding: 6px; background: #064e3b; color: #34d399; border: 1px solid #10b981; border-radius: 4px;">
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 12px;">
-                                    <label style="font-size: 11px; color: #a7f3d0;">算出されたトランザクション署名コード:</label>
+                                    <label style="font-size: 12px; color: #a7f3d0;">算出されたトランザクション署名コード:</label>
                                     <div style="font-family: monospace; font-size: 16px; font-weight: bold; color: #34d399; background: #022c22; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #059669;" id="txGeneratedSig">
                                         TX-SIG-1234567-500000
                                     </div>
                                 </div>
 
-                                <div style="font-size: 10px; color: #94a3b8; line-height: 1.4;">
+                                <div style="font-size: 12px; color: #94a3b8; line-height: 1.4;">
                                     💡 攻撃者がリクエスト内の口座を改ざんしても、この端末で生成された署名は『123-4567』に固定されているため、銀行サーバ側でハッシュが不一致となりブロックされます！
                                 </div>
                             </div>
@@ -375,8 +375,8 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                     <!-- Exam Question Card: R5 Autumn AM2 Q7 -->
                     <div class="card" style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); padding: 18px; margin-top: 24px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <span style="font-size: 11px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和5年秋期 午前Ⅱ 問7</span>
-                            <span style="font-size: 11px; color: var(--text-secondary);">分類: MITB攻撃 ＆ トランザクション署名</span>
+                            <span style="font-size: 12px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和5年秋期 午前Ⅱ 問7</span>
+                            <span style="font-size: 12px; color: var(--text-secondary);">分類: MITB攻撃 ＆ トランザクション署名</span>
                         </div>
                         <h4 style="font-size: 14px; line-height: 1.6; margin-top: 0; color: var(--text-primary);">
                             インターネットバンキングでのMITB攻撃による不正送金について，対策として用いられるトランザクション署名の説明はどれか。
@@ -728,7 +728,7 @@ response.set_cookie(
                 let color = data.success ? "#ef4444" : "#10b981";
                 statusBox.innerHTML = `
                     <div style="font-weight: bold; font-size: 13px; color: ${color}; margin-bottom: 4px;">${badge} ${data.message}</div>
-                    <div style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">
+                    <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">
                         送信先口座: <b>${data.account_number}</b> | 送金額: <b>${data.amount.toLocaleString()}円</b> | 認証方式: <b>${data.auth_type}</b>
                     </div>
                 `;

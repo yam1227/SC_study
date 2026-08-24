@@ -30,9 +30,9 @@ window.SecurityLabModules["mac"] = {
                         <div class="lab-grid-2" style="gap: 16px; margin-top: 12px;">
                             <div>
                                 <div class="form-group" style="margin-bottom: 12px;">
-                                    <label style="font-size: 12px; font-weight: bold; color: #93c5fd;">🔑 共有鍵 (Shared Secret Key):</label>
+                                    <label style="font-size: 13px; font-weight: bold; color: #93c5fd;">🔑 共有鍵 (Shared Secret Key):</label>
                                     <input type="text" id="macSharedKey" value="SharedKeySecret123" style="width: 100%; padding: 8px; background: #09090b; color: #38bdf8; border: 1px solid #0284c7; border-radius: 4px; font-family: monospace; font-weight: bold;">
-                                    <span style="font-size: 10px; color: var(--text-secondary);">※AliceとBobのみが知る事前共有鍵です。</span>
+                                    <span style="font-size: 12px; color: var(--text-secondary);">※AliceとBobのみが知る事前共有鍵です。</span>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 12px;">
@@ -48,7 +48,7 @@ window.SecurityLabModules["mac"] = {
                                         <input type="checkbox" id="macTamperToggle"> 😈 中間者 (Mallory) によるデータ改ざんを実行
                                     </label>
                                     <div class="form-group" style="margin-top: 8px; margin-bottom: 0;">
-                                        <label style="font-size: 11px; color: #f87171;">改ざん後のメッセージ (Bobが受信):</label>
+                                        <label style="font-size: 12px; color: #f87171;">改ざん後のメッセージ (Bobが受信):</label>
                                         <textarea id="macTamperedMessageInput" style="width: 100%; height: 55px; padding: 6px; background: #18181b; color: #ef4444; border: 1px solid #ef4444; border-radius: 4px; font-size: 12px;">Transfer 900,000 JPY to Mallory (Account: 99999)</textarea>
                                     </div>
                                 </div>
@@ -67,10 +67,10 @@ window.SecurityLabModules["mac"] = {
                             <!-- Alice Node -->
                             <div style="background: #18181b; border: 1px solid #0284c7; border-radius: 6px; padding: 12px;">
                                 <div style="font-weight: bold; color: #38bdf8; font-size: 13px; margin-bottom: 6px;">👩 送信者 (Alice)</div>
-                                <div style="font-size: 11px; color: #cbd5e1; line-height: 1.5;">
+                                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
                                     計算式: <code>HMAC-SHA256(Key, Message)</code><br>
                                     生成されたMAC:<br>
-                                    <div style="font-family: monospace; font-size: 11px; color: #38bdf8; background: #09090b; padding: 6px; border-radius: 4px; margin-top: 4px; word-break: break-all;" id="outAliceMac">
+                                    <div style="font-family: monospace; font-size: 12px; color: #38bdf8; background: #09090b; padding: 6px; border-radius: 4px; margin-top: 4px; word-break: break-all;" id="outAliceMac">
                                         (未送信)
                                     </div>
                                 </div>
@@ -79,9 +79,9 @@ window.SecurityLabModules["mac"] = {
                             <!-- Bob Node -->
                             <div style="background: #18181b; border: 1px solid #10b981; border-radius: 6px; padding: 12px;">
                                 <div style="font-weight: bold; color: #34d399; font-size: 13px; margin-bottom: 6px;">👨 受信者 (Bob)</div>
-                                <div style="font-size: 11px; color: #cbd5e1; line-height: 1.5;">
+                                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
                                     受信用共通鍵で再計算したMAC:<br>
-                                    <div style="font-family: monospace; font-size: 11px; color: #34d399; background: #09090b; padding: 6px; border-radius: 4px; margin-top: 4px; word-break: break-all;" id="outBobMac">
+                                    <div style="font-family: monospace; font-size: 12px; color: #34d399; background: #09090b; padding: 6px; border-radius: 4px; margin-top: 4px; word-break: break-all;" id="outBobMac">
                                         (未送信)
                                     </div>
                                 </div>
@@ -175,21 +175,21 @@ window.SecurityLabModules["mac"] = {
                         <div class="lab-grid-3" style="gap: 12px; align-items: stretch; margin-top: 14px;">
                             <div style="background: #18181b; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
                                 <div style="font-weight: bold; color: #38bdf8; font-size: 12px;">👩 1. 送信者 (Alice)</div>
-                                <div style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">
+                                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">
                                     共通鍵 <code>SharedKey</code> を知っている。<br>
                                     メッセージ＋MACをBobへ送信。
                                 </div>
                             </div>
                             <div style="background: #18181b; padding: 12px; border-radius: 6px; border: 1px solid #334155;">
                                 <div style="font-weight: bold; color: #34d399; font-size: 12px;">👨 2. 受信者 (Bob)</div>
-                                <div style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">
+                                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">
                                     共通鍵 <code>SharedKey</code> を知っている。<br>
                                     完全性を確認後、第三者Charlieへ転送！
                                 </div>
                             </div>
                             <div style="background: #18181b; padding: 12px; border-radius: 6px; border: 1px solid #ef4444;">
                                 <div style="font-weight: bold; color: #fca5a5; font-size: 12px;">👤 3. 第三者 (Charlie)</div>
-                                <div style="font-size: 11px; color: #cbd5e1; margin-top: 4px;">
+                                <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">
                                     共通鍵を知らない！<br>
                                     公開鍵は知っているがMACには公開鍵が使われない。
                                 </div>
@@ -220,8 +220,8 @@ window.SecurityLabModules["mac"] = {
                         <!-- Question 1: R6 Spring AM2 Q2 (Real Exam Question) -->
                         <div class="card" style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); padding: 18px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <span style="font-size: 11px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和6年春期 午前Ⅱ 問2</span>
-                                <span style="font-size: 11px; color: var(--text-secondary);">分類: メッセージ認証符号 (MAC) の性質</span>
+                                <span style="font-size: 12px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和6年春期 午前Ⅱ 問2</span>
+                                <span style="font-size: 12px; color: var(--text-secondary);">分類: メッセージ認証符号 (MAC) の性質</span>
                             </div>
                             <h4 style="font-size: 14px; line-height: 1.6; margin-top: 0; color: var(--text-primary);">
                                 送信者から受信者にメッセージ認証符号(MAC:Message Authentication Code)を付与したメッセージを送り，次に受信者が第三者に転送した。そのときのMACに関する記述のうち，適切なものはどれか。ここで，共通鍵は送信者と受信者だけが知っており，送信者と受信者のそれぞれの公開鍵は第三者を含めた3名が知っているものとする。
@@ -329,7 +329,7 @@ window.SecurityLabModules["mac"] = {
                     if (data.integrity_verified) {
                         resultBox.innerHTML = `
                             <div style="color: #34d399; font-weight: bold; font-size: 14px; margin-bottom: 4px;">${data.message}</div>
-                            <div style="font-size: 11px; color: #cbd5e1; line-height: 1.5;">
+                            <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
                                 受信メッセージ: "<b>${data.received_message}</b>"<br>
                                 ・<strong>完全性 (Integrity)</strong>: OK (メッセージは改ざんされていません)<br>
                                 ・<strong>送信元認証 (Authenticity)</strong>: OK (共有鍵を知る相手から届きました)
@@ -338,7 +338,7 @@ window.SecurityLabModules["mac"] = {
                     } else {
                         resultBox.innerHTML = `
                             <div style="color: #f87171; font-weight: bold; font-size: 14px; margin-bottom: 4px;">${data.message}</div>
-                            <div style="font-size: 11px; color: #fca5a5; line-height: 1.5;">
+                            <div style="font-size: 12px; color: #fca5a5; line-height: 1.5;">
                                 送信時データ: "${data.original_message}"<br>
                                 受信時データ: "<b>${data.received_message}</b>"<br>
                                 🚨 送信元が生成したMACと、Bobが計算したMACが一致しません。通信途中でデータが改ざんされたか、異なる鍵が使われています！
@@ -367,7 +367,7 @@ window.SecurityLabModules["mac"] = {
                     <div style="font-weight: bold; color: #f59e0b; font-size: 13px; margin-bottom: 4px;">
                         ⚠️ 第三者 (Charlie) はMACを検証できません！ (否認防止機能なし)
                     </div>
-                    <div style="font-size: 11px; line-height: 1.6; color: #cbd5e1;">
+                    <div style="font-size: 12px; line-height: 1.6; color: #cbd5e1;">
                         1. <strong>検証不能</strong>: Charlieは共通鍵 <code>SharedKey</code> を所有していないため、受信したMACの正当性を計算・確認できません。<br>
                         2. <strong>第三者への非証明</strong>: 仮に共通鍵を教えたとしても、Bob自身も同一の共通鍵を使って任意メッセージのMACを生成できるため、Charlieに対して「これはBobではなくAliceが作成したメッセージだ」と客観的に証明することは不可能です。<br>
                         👉 <strong>【結論】</strong> 第三者に対する送信元の証明（否認防止）を行うには、MACではなく「送信者の秘密鍵で署名するデジタル署名」が必要になります！

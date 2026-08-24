@@ -69,13 +69,13 @@ window.SecurityLabModules["crypto"] = {
                     <button class="btn btn-secondary" id="btnGenRsaKeys">RSA 2048鍵ペアを生成</button>
                     
                     <div id="rsaKeysArea" style="display: none; flex-direction: column; gap: 10px;">
-                        <div class="form-group">
-                            <label>公開鍵 (Public Key PEM - 受信者に送る鍵):</label>
-                            <textarea id="outRsaPublicKey" class="jwt-editor" style="height: 100px; font-size: 10px;" readonly></textarea>
+                        <div class="form-group" style="margin-top: 14px;">
+                            <label>生成された公開鍵 (RSA Public Key PEM):</label>
+                            <textarea id="outRsaPublicKey" class="jwt-editor" style="height: 100px; font-size: 12px;" readonly></textarea>
                         </div>
-                        <div class="form-group">
-                            <label>秘密鍵 (Private Key PEM - 本人が隠し持つ鍵):</label>
-                            <textarea id="outRsaPrivateKey" class="jwt-editor" style="height: 100px; font-size: 10px;" readonly></textarea>
+                        <div class="form-group" style="margin-top: 14px;">
+                            <label>生成された秘密鍵 (RSA Private Key PEM):</label>
+                            <textarea id="outRsaPrivateKey" class="jwt-editor" style="height: 100px; font-size: 12px;" readonly></textarea>
                         </div>
                     </div>
                     

@@ -154,15 +154,15 @@ window.SecurityLabModules["jwt"] = {
                         <div class="jwt-col">
                             <div class="jwt-part header">
                                 <h4>Header (ヘッダー)</h4>
-                                <pre id="jwtDecodedHeader" style="font-family: var(--font-mono); font-size: 11px; color: #fb7185; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">{}</pre>
+                                <pre id="jwtDecodedHeader" style="font-family: var(--font-mono); font-size: 12px; color: #fb7185; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">{}</pre>
                             </div>
                             <div class="jwt-part payload">
                                 <h4>Payload (ペイロード)</h4>
-                                <pre id="jwtDecodedPayload" style="font-family: var(--font-mono); font-size: 11px; color: #38bdf8; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">{}</pre>
+                                <pre id="jwtDecodedPayload" style="font-family: var(--font-mono); font-size: 12px; color: #38bdf8; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">{}</pre>
                             </div>
                             <div class="jwt-part signature">
                                 <h4>Signature (署名部分)</h4>
-                                <span id="jwtDecodedSignature" style="font-family: var(--font-mono); font-size: 11px; color: #4ade80; overflow-wrap: anywhere;">[署名データ]</span>
+                                <span id="jwtDecodedSignature" style="font-family: var(--font-mono); font-size: 12px; color: #4ade80; overflow-wrap: anywhere;">[署名データ]</span>
                             </div>
                         </div>
                     </div>

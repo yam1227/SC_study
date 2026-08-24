@@ -33,24 +33,24 @@ window.SecurityLabModules["kerberos"] = {
                     <!-- Visual Actor Statuses -->
                     <div style="background-color: var(--bg-app); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-top: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center;">
                         <div id="krb-node-client" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 20px;">💻</div>
-                            <span style="font-size: 11px; font-weight: bold;">クライアント</span><br>
-                            <span id="status-client" style="font-size: 9px; color: var(--text-secondary);">チケットなし</span>
+                            <div style="font-size: 28px;">💻</div>
+                            <span style="font-size: 13px; font-weight: bold;">クライアント</span><br>
+                            <span id="status-client" style="font-size: 12px; color: var(--text-secondary);">チケットなし</span>
                         </div>
                         <div id="krb-node-as" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 20px;">🏢</div>
-                            <span style="font-size: 11px; font-weight: bold; color: #fb7185;">KDC: AS</span><br>
-                            <span style="font-size: 9px; color: var(--text-secondary);">認証サービス</span>
+                            <div style="font-size: 28px;">🏢</div>
+                            <span style="font-size: 13px; font-weight: bold; color: #fb7185;">KDC: AS</span><br>
+                            <span style="font-size: 12px; color: var(--text-secondary);">認証サービス</span>
                         </div>
                         <div id="krb-node-tgs" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 20px;">🎟️</div>
-                            <span style="font-size: 11px; font-weight: bold; color: #fbbf24;">KDC: TGS</span><br>
-                            <span style="font-size: 9px; color: var(--text-secondary);">チケット交付</span>
+                            <div style="font-size: 28px;">🎟️</div>
+                            <span style="font-size: 13px; font-weight: bold; color: #fbbf24;">KDC: TGS</span><br>
+                            <span style="font-size: 12px; color: var(--text-secondary);">チケット交付</span>
                         </div>
                         <div id="krb-node-ap" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 20px;">🖥️</div>
-                            <span style="font-size: 11px; font-weight: bold; color: #38bdf8;">APサーバー</span><br>
-                            <span id="status-ap" style="font-size: 9px; color: var(--text-secondary);">未認証</span>
+                            <div style="font-size: 28px;">🖥️</div>
+                            <span style="font-size: 13px; font-weight: bold; color: #38bdf8;">APサーバー</span><br>
+                            <span id="status-ap" style="font-size: 12px; color: var(--text-secondary);">未認証</span>
                         </div>
                     </div>
                 </div>

@@ -68,20 +68,20 @@ window.SecurityLabModules["ipsec"] = {
                         <div id="ikeNodeClient" style="text-align: center; width: 140px; padding: 12px; background: rgba(99, 102, 241, 0.1); border: 2px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); transition: all 0.3s ease;">
                             <div style="font-size: 28px;">💻</div>
                             <div style="font-weight: bold; font-size: 13px; margin-top: 4px; color: var(--text-primary);">Initiator (Client)</div>
-                            <div id="ikeStateClient" style="font-size: 10px; color: var(--text-secondary); margin-top: 4px; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
+                            <div id="ikeStateClient" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
                         </div>
                         
                         <!-- Mid details -->
                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 0 10px;">
-                            <span id="ikePhaseLabel" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; letter-spacing: 0.5px; transition: all 0.3s ease;">準備完了</span>
-                            <div id="ikeStatusText" style="color: var(--text-secondary); font-size: 11px; margin-top: 8px; text-align: center; max-width: 280px; min-height: 32px;">ボタンを押してシミュレーションを開始してください</div>
+                            <span id="ikePhaseLabel" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; transition: all 0.3s ease;">準備完了</span>
+                            <div id="ikeStatusText" style="color: var(--text-secondary); font-size: 12px; margin-top: 8px; text-align: center; max-width: 280px; min-height: 32px;">ボタンを押してシミュレーションを開始してください</div>
                         </div>
                         
                         <!-- Gateway -->
                         <div id="ikeNodeGateway" style="text-align: center; width: 140px; padding: 12px; background: rgba(16, 185, 129, 0.1); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); transition: all 0.3s ease;">
                             <div style="font-size: 28px;">🛡️</div>
                             <div style="font-weight: bold; font-size: 13px; margin-top: 4px; color: var(--text-primary);">Responder (GW)</div>
-                            <div id="ikeStateGateway" style="font-size: 10px; color: var(--text-secondary); margin-top: 4px; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
+                            <div id="ikeStateGateway" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
                         </div>
                     </div>
                     
@@ -103,7 +103,7 @@ window.SecurityLabModules["ipsec"] = {
                     <div>
                         <label>IKE シーケンスログ:</label>
                         <div class="response-box" style="height: 240px; overflow-y: auto; background-color: #08080a;">
-                            <code id="ikeSeqLog" style="font-size: 11px; color: #fbbf24;">「鍵交換シーケンス実行」を押すと通信ログが表示されます。</code>
+                            <code id="ikeSeqLog" style="font-size: 12px; color: #fbbf24;">「鍵交換シーケンス実行」を押すと通信ログが表示されます。</code>
                         </div>
                     </div>
                     
@@ -190,7 +190,7 @@ window.SecurityLabModules["ipsec"] = {
                 background: rgba(15, 23, 42, 0.9);
                 border: 1px solid rgba(245, 158, 11, 0.5);
                 border-radius: var(--radius-sm);
-                font-size: 11px;
+                font-size: 12px;
                 font-weight: bold;
                 color: #f59e0b;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.4);
@@ -273,7 +273,7 @@ window.SecurityLabModules["ipsec"] = {
 
                     block.innerHTML = `
                         <div>${segment.name}</div>
-                        <div style="font-size: 9px; font-weight: normal; margin-top: 4px; opacity: 0.8;">${segment.size}</div>
+                        <div style="font-size: 12px; font-weight: normal; margin-top: 4px; opacity: 0.9;">${segment.size}</div>
                     `;
 
                     block.addEventListener("click", () => {

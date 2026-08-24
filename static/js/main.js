@@ -583,7 +583,7 @@ class SecurityLab {
                         <span style="font-size: 18px;">📖</span>
                         <h3 style="border-bottom: none; padding-bottom: 0; font-size: 14px; font-weight: 600; margin: 0; color: var(--text-primary);">セキスペ試験対策・用語検索</h3>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-secondary); background-color: var(--bg-card); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">全 ${window.SecurityGlossary ? window.SecurityGlossary.length : 0} 単語</span>
+                    <span style="font-size: 12px; color: var(--text-secondary); background-color: var(--bg-card); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">全 ${window.SecurityGlossary ? window.SecurityGlossary.length : 0} 単語</span>
                 </div>
                 <div class="inline-group" style="margin-top: 12px;">
                     <input type="text" class="glossary-search-input" placeholder="意味を調べたいセキュリティ用語を入力（例: JWT, ソルト, PKCE, デジタル署名...）" style="width: 100%;">

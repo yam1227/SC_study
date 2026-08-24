@@ -225,8 +225,8 @@ window.SecurityLabModules["block_cipher"] = {
                         <!-- Question 1: R5 Spring AM2 Q7 (Target Exam Question) -->
                         <div class="card" style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); padding: 18px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <span style="font-size: 11px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和5年春期 午前Ⅱ 問7</span>
-                                <span style="font-size: 11px; color: var(--text-secondary);">分類: 暗号利用モード (CTRモード)</span>
+                                <span style="font-size: 12px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和5年春期 午前Ⅱ 問7</span>
+                                <span style="font-size: 12px; color: var(--text-secondary);">分類: 暗号利用モード (CTRモード)</span>
                             </div>
                             <h4 style="font-size: 14px; line-height: 1.6; margin-top: 0; color: var(--text-primary);">
                                 ブロック暗号の暗号利用モードの一つであるCTR(Counter)モードに関する記述のうち，適切なものはどれか。
@@ -313,20 +313,20 @@ window.SecurityLabModules["block_cipher"] = {
             const mode = bcModeSelect.value;
             if (mode === "CTR") {
                 bcFeatureBadges.innerHTML = `
-                    <span style="font-size: 11px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; padding: 3px 8px; border-radius: 4px; font-weight: bold;">⚡ 鍵ストリーム ⊕ 入力のXOR</span>
-                    <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; padding: 3px 8px; border-radius: 4px; font-weight: bold;">✅ パディング不要 (ストリーム化)</span>
-                    <span style="font-size: 11px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; padding: 3px 8px; border-radius: 4px; font-weight: bold;">🚀 暗号化・復号 全並列処理化</span>
+                    <span style="font-size: 12px; background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 4px; font-weight: bold;">⚡ 鍵ストリーム ⊕ 入力のXOR</span>
+                    <span style="font-size: 12px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; padding: 4px 10px; border-radius: 4px; font-weight: bold;">✅ パディング不要 (ストリーム化)</span>
+                    <span style="font-size: 12px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; padding: 4px 10px; border-radius: 4px; font-weight: bold;">🚀 暗号化・復号 全並列処理化</span>
                 `;
             } else if (mode === "CBC") {
                 bcFeatureBadges.innerHTML = `
-                    <span style="font-size: 11px; background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; padding: 3px 8px; border-radius: 4px; font-weight: bold;">🛡️ 前暗号文とのチェーニング</span>
-                    <span style="font-size: 11px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 3px 8px; border-radius: 4px; font-weight: bold;">⚠️ パディング必須</span>
-                    <span style="font-size: 11px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; padding: 3px 8px; border-radius: 4px; font-weight: bold;">復号のみ並列可 (暗号化並列不可)</span>
+                    <span style="font-size: 12px; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 4px 10px; border-radius: 4px; font-weight: bold;">🛡️ 前暗号文とのチェーニング</span>
+                    <span style="font-size: 12px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 4px 10px; border-radius: 4px; font-weight: bold;">⚠️ パディング必須</span>
+                    <span style="font-size: 12px; background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 4px; font-weight: bold;">復号のみ並列可 (暗号化並列不可)</span>
                 `;
             } else {
                 bcFeatureBadges.innerHTML = `
-                    <span style="font-size: 11px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 3px 8px; border-radius: 4px; font-weight: bold;">⚠️ パターン露出危険 (単純分割)</span>
-                    <span style="font-size: 11px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 3px 8px; border-radius: 4px; font-weight: bold;">⚠️ パディング必須</span>
+                    <span style="font-size: 12px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 4px 10px; border-radius: 4px; font-weight: bold;">⚠️ パターン露出危険 (単純分割)</span>
+                    <span style="font-size: 12px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 4px 10px; border-radius: 4px; font-weight: bold;">⚠️ パディング必須</span>
                 `;
             }
         }
@@ -367,9 +367,9 @@ window.SecurityLabModules["block_cipher"] = {
                                     <div style="background: #18181b; border: 1px solid #3b82f6; border-radius: 6px; padding: 12px; font-size: 12px;">
                                         <div style="display: flex; justify-content: space-between; font-weight: bold; color: #60a5fa; margin-bottom: 6px;">
                                             <span>📦 ブロック #${step.block_index} (入力: "${step.input_plain}")</span>
-                                            <span style="font-size: 10px; background: rgba(59, 130, 246, 0.2); padding: 2px 6px; border-radius: 3px;">カウンタ値: ${step.counter_val}</span>
+                                            <span style="font-size: 12px; background: rgba(59, 130, 246, 0.2); padding: 2px 8px; border-radius: 4px;">カウンタ値: ${step.counter_val}</span>
                                         </div>
-                                        <div style="font-family: monospace; font-size: 11px; color: #cbd5e1; line-height: 1.6;">
+                                        <div style="font-family: monospace; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
                                             1. AES_Encrypt(Key, ${step.counter_val}) ➔ <strong>鍵ストリーム(KeyStream)</strong>: <code style="color: #34d399;">${step.keystream}</code><br>
                                             2. <strong>XOR演算 (問7の核心)</strong>: ${step.xor_operation}<br>
                                             3. 最終暗号文出力: <code style="color: #fb7185;">${step.output_cipher}</code>
@@ -382,7 +382,7 @@ window.SecurityLabModules["block_cipher"] = {
                                         <div style="font-weight: bold; color: #f59e0b; margin-bottom: 6px;">
                                             📦 ブロック #${step.block_index} (平文: "${step.input_plain}")
                                         </div>
-                                        <div style="font-family: monospace; font-size: 11px; color: #cbd5e1; line-height: 1.6;">
+                                        <div style="font-family: monospace; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
                                             前暗号文/IVとXOR (チェーニング): <code>${step.prev_chain}</code><br>
                                             暗号文出力: <code style="color: #fb7185;">${step.output_cipher}</code>
                                         </div>
@@ -394,7 +394,7 @@ window.SecurityLabModules["block_cipher"] = {
                                         <div style="font-weight: bold; color: #f87171; margin-bottom: 6px;">
                                             📦 ブロック #${step.block_index} (平文: "${step.input_plain}")
                                         </div>
-                                        <div style="font-family: monospace; font-size: 11px; color: #cbd5e1; line-height: 1.6;">
+                                        <div style="font-family: monospace; font-size: 12px; color: #cbd5e1; line-height: 1.6;">
                                             単純ブロック暗号化出力: <code style="color: #fb7185;">${step.output_cipher}</code>
                                         </div>
                                     </div>
