@@ -1,3 +1,10 @@
+# Environment & Secrets
+.env
+.env.*
+*.pem
+*.key
+*.cert
+
 # Python Virtual Environment
 .venv/
 venv/

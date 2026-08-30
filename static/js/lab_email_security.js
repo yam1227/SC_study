@@ -114,9 +114,9 @@ window.SecurityLabModules["email_security"] = {
                             <div style="flex: 1; display: flex; flex-direction: column; min-height: 250px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <label style="font-size: 13px; font-weight: 700; color: var(--text-primary);">💻 SMTP / POP3 セッションプロトコル通信ログ:</label>
-                                    <span style="font-size: 12px; color: #fbbf24;">Terminal Stream</span>
+                                    <span style="font-size: 12px; color: #38bdf8;">Terminal Stream</span>
                                 </div>
-                                <div class="response-box" style="flex: 1; overflow-y: auto; background-color: #090d16; border: 1px solid rgba(99,102,241,0.3); border-radius: var(--radius-md); padding: 12px; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: #fbbf24;">
+                                <div class="response-box" style="flex: 1; overflow-y: auto; background-color: #090d16; border: 1px solid rgba(99,102,241,0.3); border-radius: var(--radius-md); padding: 12px; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; color: #38bdf8;">
                                     <div id="emailProtocolLog">送信を実行すると、SMTP/POP3セッションのコマンドとレスポンスのリアルタイム履歴がここに展開されます。</div>
                                 </div>
                             </div>
@@ -310,13 +310,13 @@ window.SecurityLabModules["email_security"] = {
                                 </div>
                             </div>
                             
-                            <div style="background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.25); border-radius: var(--radius-md); padding: 16px; font-size: 12px; line-height: 1.6; color: var(--text-secondary); max-height: 480px; overflow-y: auto;">
-                                <span style="font-weight: 700; color: #fbbf24; font-size: 14px; border-bottom: 1px solid rgba(251,191,36,0.25); padding-bottom: 6px; display: block; margin-bottom: 10px;">
+                            <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-md); padding: 16px; font-size: 12px; line-height: 1.6; color: var(--text-secondary); max-height: 480px; overflow-y: auto;">
+                                <span style="font-weight: 700; color: #d97706; font-size: 14px; border-bottom: 1px solid rgba(245, 158, 11, 0.25); padding-bottom: 6px; display: block; margin-bottom: 10px;">
                                     🔑 セキスペ試験・超重要キーワード解説
                                 </span>
                                 <div style="display: flex; flex-direction: column; gap: 12px;">
                                     <div>
-                                        <strong style="color: #fef08a; font-size: 13px; display: block; margin-bottom: 2px;">■ SPFレコード (Sender Policy Framework)</strong>
+                                        <strong style="color: #d97706; font-size: 13px; display: block; margin-bottom: 2px;">■ SPFレコード (Sender Policy Framework)</strong>
                                         送信ドメインのDNSに登録する、正当なメール送信サーバのIPアドレスリストです。<br>
                                         <code style="font-size: 12px; display: block; background: #090d16; padding: 4px 8px; margin-top: 4px; border-radius: 4px; color: #cbd5e1; border: 1px solid var(--border-color);">v=spf1 ip4:192.0.2.0/24 -all</code>
                                         末尾の修飾子 (Qualifier):
@@ -327,7 +327,7 @@ window.SecurityLabModules["email_security"] = {
                                     </div>
 
                                     <div>
-                                        <strong style="color: #fef08a; font-size: 13px; display: block; margin-bottom: 2px;">■ SPF / DKIM アライメント (DMARC必須条件)</strong>
+                                        <strong style="color: #d97706; font-size: 13px; display: block; margin-bottom: 2px;">■ SPF / DKIM アライメント (DMARC必須条件)</strong>
                                         DMARC認証をパスするためのドメイン整合性チェックです。
                                         <ul style="margin: 4px 0 0 16px; padding: 0;">
                                             <li><strong>SPFアライメント</strong>: メーラーの表示差出人 (<code>Header From</code>) と SMTP送信元 (<code>Envelope-From</code>) が一致しているかを検証。</li>
@@ -336,12 +336,12 @@ window.SecurityLabModules["email_security"] = {
                                     </div>
 
                                     <div>
-                                        <strong style="color: #fef08a; font-size: 13px; display: block; margin-bottom: 2px;">■ SMTP-AUTH (SMTP認証)</strong>
+                                        <strong style="color: #d97706; font-size: 13px; display: block; margin-bottom: 2px;">■ SMTP-AUTH (SMTP認証)</strong>
                                         メールクライアントが送信MTAに対してID・パスワードで認証を行い、許可された正規ユーザーのみに送信を許可する技術（<strong>送信側の防衛策</strong>）。
                                     </div>
 
-                                    <div style="border-top: 1px dashed rgba(251,191,36,0.3); padding-top: 8px;">
-                                        <strong style="color: #fef08a; font-size: 13px; display: block; margin-bottom: 2px;">💡 セキスペ試験での問われ方</strong>
+                                    <div style="border-top: 1px dashed rgba(245, 158, 11, 0.3); padding-top: 8px;">
+                                        <strong style="color: #d97706; font-size: 13px; display: block; margin-bottom: 2px;">💡 セキスペ試験での問われ方</strong>
                                         試験では「送信者認証 (SMTP-AUTH)」と「送信ドメイン認証 (SPF/DKIM/DMARC)」の役割の違いが頻出します。
                                         <ul style="margin: 4px 0 0 16px; padding: 0;">
                                             <li><strong>SMTP-AUTH</strong> ➔ 第三者によるオープンリレー（迷惑メール踏み台化）を防止。</li>
@@ -628,7 +628,7 @@ window.SecurityLabModules["email_security"] = {
                     .replace(/(DKIM-Signature:)/g, '<span style="color: #38bdf8; font-weight: 700;">$1</span>')
                     .replace(/(From:)/g, '<span style="color: #34d399; font-weight: 700;">$1</span>')
                     .replace(/(To:)/g, '<span style="color: #f472b6; font-weight: 700;">$1</span>')
-                    .replace(/(Subject:)/g, '<span style="color: #fbbf24; font-weight: 700;">$1</span>')
+                    .replace(/(Subject:)/g, '<span style="color: #f59e0b; font-weight: 700;">$1</span>')
                     .replace(/(Message-ID:)/g, '<span style="color: #22d3ee; font-weight: 700;">$1</span>');
             };
 

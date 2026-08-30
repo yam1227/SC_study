@@ -61,19 +61,19 @@ window.SecurityLabModules["ipsec"] = {
                 <button class="btn btn-primary" id="btnRunIke" style="width: 200px; margin-top: 10px;">IKEシーケンス実行</button>
                 
                 <!-- Visualizer Container -->
-                <div id="ikeVisualContainer" style="margin-top: 20px; padding: 20px; background: #0c0c10; border: 1px solid var(--border-color); border-radius: var(--radius-md); display: flex; flex-direction: column; position: relative; min-height: 280px; overflow: hidden;">
+                <div id="ikeVisualContainer" style="margin-top: 20px; padding: 20px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); display: flex; flex-direction: column; position: relative; min-height: 280px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.04);">
                     <!-- Node Info Row -->
                     <div style="display: flex; justify-content: space-between; width: 100%; z-index: 10;">
                         <!-- Client -->
                         <div id="ikeNodeClient" style="text-align: center; width: 140px; padding: 12px; background: rgba(99, 102, 241, 0.1); border: 2px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); transition: all 0.3s ease;">
                             <div style="font-size: 28px;">💻</div>
                             <div style="font-weight: bold; font-size: 13px; margin-top: 4px; color: var(--text-primary);">Initiator (Client)</div>
-                            <div id="ikeStateClient" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
+                            <div id="ikeStateClient" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
                         </div>
                         
                         <!-- Mid details -->
                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 0 10px;">
-                            <span id="ikePhaseLabel" style="background: rgba(245, 158, 11, 0.1); color: var(--color-warning); border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; transition: all 0.3s ease;">準備完了</span>
+                            <span id="ikePhaseLabel" style="background: rgba(245, 158, 11, 0.12); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; transition: all 0.3s ease;">準備完了</span>
                             <div id="ikeStatusText" style="color: var(--text-secondary); font-size: 12px; margin-top: 8px; text-align: center; max-width: 280px; min-height: 32px;">ボタンを押してシミュレーションを開始してください</div>
                         </div>
                         
@@ -81,15 +81,15 @@ window.SecurityLabModules["ipsec"] = {
                         <div id="ikeNodeGateway" style="text-align: center; width: 140px; padding: 12px; background: rgba(16, 185, 129, 0.1); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); transition: all 0.3s ease;">
                             <div style="font-size: 28px;">🛡️</div>
                             <div style="font-weight: bold; font-size: 13px; margin-top: 4px; color: var(--text-primary);">Responder (GW)</div>
-                            <div id="ikeStateGateway" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
+                            <div id="ikeStateGateway" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
                         </div>
                     </div>
                     
                     <!-- Diagram Space (where lines/arrows live) -->
-                    <div style="position: relative; width: 100%; min-height: 270px; margin-top: 15px; border-radius: var(--radius-sm); background: rgba(0, 0, 0, 0.25); overflow: visible; border: 1px dashed rgba(255,255,255,0.05);">
+                    <div style="position: relative; width: 100%; min-height: 270px; margin-top: 15px; border-radius: var(--radius-sm); background: var(--bg-app); overflow: visible; border: 1px dashed var(--border-color);">
                         <!-- Vertical Lifelines -->
-                        <div style="position: absolute; left: 70px; top: 0; bottom: 0; width: 1px; border-left: 1px dashed rgba(99, 102, 241, 0.3); z-index: 1;"></div>
-                        <div style="position: absolute; right: 70px; top: 0; bottom: 0; width: 1px; border-left: 1px dashed rgba(16, 185, 129, 0.3); z-index: 1;"></div>
+                        <div style="position: absolute; left: 70px; top: 0; bottom: 0; width: 1px; border-left: 1px dashed rgba(99, 102, 241, 0.4); z-index: 1;"></div>
+                        <div style="position: absolute; right: 70px; top: 0; bottom: 0; width: 1px; border-left: 1px dashed rgba(16, 185, 129, 0.4); z-index: 1;"></div>
                         
                         <!-- Arrow container -->
                         <div id="ikeArrowSpace" style="position: absolute; left: 70px; right: 70px; top: 0; bottom: 0; z-index: 2;">
@@ -102,12 +102,12 @@ window.SecurityLabModules["ipsec"] = {
                 <div class="lab-grid-2" style="margin-top: 20px; gap: 20px;">
                     <div>
                         <label>IKE シーケンスログ:</label>
-                        <div class="response-box" style="height: 240px; overflow-y: auto; background-color: #08080a;">
-                            <code id="ikeSeqLog" style="font-size: 12px; color: #fbbf24;">「鍵交換シーケンス実行」を押すと通信ログが表示されます。</code>
+                        <div class="response-box" style="height: 240px; overflow-y: auto;">
+                            <code id="ikeSeqLog" style="font-size: 12px; color: #38bdf8;">「鍵交換シーケンス実行」を押すと通信ログが表示されます。</code>
                         </div>
                     </div>
                     
-                    <div id="ikeExplanationCard" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 10px; background: rgba(24, 24, 32, 0.4); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md);">
+                    <div id="ikeExplanationCard" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md);">
                         <span style="font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">💡 IKE (Internet Key Exchange) 試験攻略知識</span>
                         <p>
                             IPsecでは、通信を行う2者間でセキュリティ属性の合意（暗号方式や鍵など）である **SA (Security Association)** を結びます。この SA を動的に確立するためのプロトコルが **IKE** です。
@@ -187,13 +187,13 @@ window.SecurityLabModules["ipsec"] = {
                 left: 50%;
                 transform: translate(-50%, -50%);
                 padding: 4px 10px;
-                background: rgba(15, 23, 42, 0.9);
-                border: 1px solid rgba(245, 158, 11, 0.5);
+                background: var(--bg-card);
+                border: 1px solid #d97706;
                 border-radius: var(--radius-sm);
                 font-size: 12px;
                 font-weight: bold;
-                color: #f59e0b;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+                color: #d97706;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
                 z-index: 8;
                 opacity: 0;
                 animation: ikeFadeInUp 0.4s forwards;

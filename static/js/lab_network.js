@@ -76,7 +76,7 @@ window.SecurityLabModules["network"] = {
                             <!-- IDS/IPS -->
                             <div id="node-idsips" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
                                 <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: var(--radius-sm); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">👁️</div>
-                                <span style="font-size: 13px; font-weight: bold; color: #fbbf24;">IDS/IPS</span><br>
+                                <span style="font-size: 13px; font-weight: bold; color: #d97706;">IDS/IPS</span><br>
                                 <span style="font-size: 12px; color: var(--text-secondary);">L4〜L7</span>
                             </div>
                             

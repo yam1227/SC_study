@@ -74,7 +74,7 @@ window.SecurityLabModules["osi_model"] = {
                         <div class="form-group" style="margin: 0; flex: 1; display: flex; flex-direction: column;">
                             <label>カプセル化通信ログ:</label>
                             <div class="response-box" style="flex: 1; min-height: 130px; max-height: 180px; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3);">
-                                <code id="osiSimLogText" style="font-size: 12px; color: #fbbf24; white-space: pre-wrap;">「1. 送信 (カプセル化)」ボタンを押すと、各階層でのヘッダー付加プロセスが開始されます。</code>
+                                <code id="osiSimLogText" style="font-size: 12px; color: #38bdf8; white-space: pre-wrap;">「1. 送信 (カプセル化)」ボタンを押すと、各階層でのヘッダー付加プロセスが開始されます。</code>
                             </div>
                         </div>
                     </div>

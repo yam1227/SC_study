@@ -44,7 +44,7 @@ window.SecurityLabModules["system_reliability"] = {
                                 <tr style="background: rgba(255, 255, 255, 0.05); border-bottom: 2px solid var(--border-color);">
                                     <th style="padding: 10px; color: #818cf8; width: 18%;">設計方式</th>
                                     <th style="padding: 10px; color: #34d399; width: 18%;">対象（何を防ぐか）</th>
-                                    <th style="padding: 10px; color: #fbbf24; width: 34%;">障害・ミス発生時の動作方針</th>
+                                    <th style="padding: 10px; color: #d97706; width: 34%;">障害・ミス発生時の動作方針</th>
                                     <th style="padding: 10px; color: var(--text-secondary); width: 30%;">代表的な具体例</th>
                                 </tr>
                             </thead>
@@ -62,8 +62,8 @@ window.SecurityLabModules["system_reliability"] = {
                                     <td style="padding: 10px; color: var(--text-secondary);">・全方向赤信号になる故障信号機<br>・Fail-closed型ファイアウォール<br>・圧力安全弁</td>
                                 </tr>
                                 <tr style="border-bottom: 1px solid var(--border-color); background: rgba(245, 158, 11, 0.05);">
-                                    <td style="padding: 10px; font-weight: bold; color: #fbbf24;">フェールソフト<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Fail-soft)</span></td>
-                                    <td style="padding: 10px;"><span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fde68a;">物・ソフト (機器故障)</span></td>
+                                    <td style="padding: 10px; font-weight: bold; color: #d97706;">フェールソフト<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Fail-soft)</span></td>
+                                    <td style="padding: 10px;"><span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #d97706;">物・ソフト (機器故障)</span></td>
                                     <td style="padding: 10px;">全停止せず、一部機能を制限・切り離して重要機能のみで運用を継続する（<strong>縮退運転</strong>）。</td>
                                     <td style="padding: 10px; color: var(--text-secondary);">・DBダウン時にキャッシュ閲覧のみ継続<br>・帯域低下時に低画質配信切り替え<br>・1台マルチサーバー障害時の性能低下継続</td>
                                 </tr>
@@ -95,10 +95,10 @@ window.SecurityLabModules["system_reliability"] = {
                     </div>
 
                     <div class="card" style="border-left: 4px solid #f59e0b;">
-                        <h4 style="font-size: 0.95rem; color: #fbbf24; margin-bottom: 8px;">💡 【識別テクニック 2】 故障発生後の「システムの状態」</h4>
+                        <h4 style="font-size: 0.95rem; color: #d97706; margin-bottom: 8px;">💡 【識別テクニック 2】 故障発生後の「システムの状態」</h4>
                         <ul style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; padding-left: 18px;">
                             <li><strong>安全最優先で全停止・遮断する:</strong> → <strong style="color: #f87171;">フェールセーフ (Fail-safe)</strong></li>
-                            <li><strong>一部機能を落として（縮退運転）継続する:</strong> → <strong style="color: #fbbf24;">フェールソフト (Fail-soft)</strong></li>
+                            <li><strong>一部機能を落として（縮退運転）継続する:</strong> → <strong style="color: #d97706;">フェールソフト (Fail-soft)</strong></li>
                             <li><strong>二重化により完全無停止（機能低下ゼロ）で継続する:</strong> → <strong style="color: #34d399;">フォールトトレラント (Fault-tolerant)</strong></li>
                         </ul>
                     </div>

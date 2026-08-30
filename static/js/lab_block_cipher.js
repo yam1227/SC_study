@@ -319,7 +319,7 @@ window.SecurityLabModules["block_cipher"] = {
                 `;
             } else if (mode === "CBC") {
                 bcFeatureBadges.innerHTML = `
-                    <span style="font-size: 12px; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; padding: 4px 10px; border-radius: 4px; font-weight: bold;">🛡️ 前暗号文とのチェーニング</span>
+                    <span style="font-size: 12px; background: rgba(245, 158, 11, 0.2); color: #d97706; border: 1px solid #f59e0b; padding: 4px 10px; border-radius: 4px; font-weight: bold;">🛡️ 前暗号文とのチェーニング</span>
                     <span style="font-size: 12px; background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; padding: 4px 10px; border-radius: 4px; font-weight: bold;">⚠️ パディング必須</span>
                     <span style="font-size: 12px; background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid #3b82f6; padding: 4px 10px; border-radius: 4px; font-weight: bold;">復号のみ並列可 (暗号化並列不可)</span>
                 `;

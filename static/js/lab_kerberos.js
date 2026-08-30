@@ -44,7 +44,7 @@ window.SecurityLabModules["kerberos"] = {
                         </div>
                         <div id="krb-node-tgs" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
                             <div style="font-size: 28px;">🎟️</div>
-                            <span style="font-size: 13px; font-weight: bold; color: #fbbf24;">KDC: TGS</span><br>
+                            <span style="font-size: 13px; font-weight: bold; color: #d97706;">KDC: TGS</span><br>
                             <span style="font-size: 12px; color: var(--text-secondary);">チケット交付</span>
                         </div>
                         <div id="krb-node-ap" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">

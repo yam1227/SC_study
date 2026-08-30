@@ -172,8 +172,8 @@ window.SecurityLabModules["stp"] = {
                                         <td style="color: #a1a1aa;">0x00 (Configuration) / 0x80 (TCN)</td>
                                     </tr>
                                     <tr style="border-bottom: 1px solid #18181b; background: rgba(99, 102, 241, 0.1);">
-                                        <td style="color: #fbbf24; font-weight: 600; padding: 4px;">Root ID (Root BID)</td>
-                                        <td style="color: #fbbf24;">Priority (4096) + Root MAC (00:11:22...)</td>
+                                        <td style="color: #d97706; font-weight: 600; padding: 4px;">Root ID (Root BID)</td>
+                                        <td style="color: #d97706;">Priority (4096) + Root MAC (00:11:22...)</td>
                                     </tr>
                                     <tr style="border-bottom: 1px solid #18181b; background: rgba(16, 185, 129, 0.1);">
                                         <td style="color: #34d399; font-weight: 600; padding: 4px;">Root Path Cost</td>
@@ -202,7 +202,7 @@ window.SecurityLabModules["stp"] = {
                         
                         <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.82rem;">
                             <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px;">
-                                <div style="font-weight: 600; color: #fbbf24; margin-bottom: 6px;">1. 収束時間 (Convergence Speed)</div>
+                                <div style="font-weight: 600; color: #d97706; margin-bottom: 6px;">1. 収束時間 (Convergence Speed)</div>
                                 <ul style="padding-left: 18px; color: var(--text-secondary); line-height: 1.5;">
                                     <li><strong>STP (802.1D):</strong> 約 30 〜 50 秒（Listening: 15s → Learning: 15s タイマー経過後にForwarding化）</li>
                                     <li><strong>RSTP (802.1w):</strong> 数秒以内（Proposal / Agreement ハンドシェイクにより即座に状態遷移）</li>

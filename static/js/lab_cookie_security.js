@@ -91,9 +91,9 @@ window.SecurityLabModules["cookie_security"] = {
 
                             <div style="flex: 1; display: flex; flex-direction: column; min-height: 180px;">
                                 <label style="font-size: 13px;">シミュレーション詳細判定:</label>
-                                <div class="response-box" style="flex: 1; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3); padding: 12px; font-family: var(--font-mono); font-size: 13px; line-height: 1.5; color: #fbbf24; display: flex; flex-direction: column; gap: 8px;">
+                                <div class="response-box" style="flex: 1; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3); padding: 12px; font-family: var(--font-mono); font-size: 13px; line-height: 1.5; color: #38bdf8; display: flex; flex-direction: column; gap: 8px;">
                                     <div id="textCookieAttrHeader" style="border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 4px; color: #34d399; font-weight: bold;">Set-Cookie ヘッダー例がここに表示されます。</div>
-                                    <div id="textCookieSentResult" style="color: #fbbf24;">シミュレーションを実行してください。</div>
+                                    <div id="textCookieSentResult" style="color: #38bdf8;">シミュレーションを実行してください。</div>
                                     <div id="textCookieJsResult" style="color: #60a5fa;">JavaScript からの読み取り可否も判定します。</div>
                                 </div>
                             </div>
@@ -156,7 +156,7 @@ window.SecurityLabModules["cookie_security"] = {
                                 <button class="btn btn-primary" id="btnExecuteXss" style="font-size: 13px; padding: 7px 14px;">XSS攻撃を実行</button>
                             </div>
 
-                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 13px; color: #fbbf24;" id="logXssAttack">
+                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 13px; color: #38bdf8;" id="logXssAttack">
                                 攻撃を実行すると、悪意あるスクリプトの実行ログと結果がここに表示されます。
                             </div>
                         </div>
@@ -187,7 +187,7 @@ window.SecurityLabModules["cookie_security"] = {
                                 <button class="btn btn-primary" id="btnExecuteCsrf" style="font-size: 13px; padding: 7px 14px;">CSRF攻撃を実行</button>
                             </div>
 
-                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 13px; color: #fbbf24;" id="logCsrfAttack">
+                            <div class="response-box" style="height: 100px; overflow-y: auto; background-color: #0c0a09; padding: 10px; font-family: var(--font-mono); font-size: 13px; color: #38bdf8;" id="logCsrfAttack">
                                 攻撃を実行すると、リクエスト送信時のCookie挙動と攻撃結果がここに表示されます。
                             </div>
                         </div>
@@ -195,8 +195,8 @@ window.SecurityLabModules["cookie_security"] = {
                     </div>
 
                     <!-- Footnotes: Detailed SameSite specs -->
-                    <div style="background: rgba(251,191,36,0.03); border: 1px solid rgba(251,191,36,0.2); border-radius: var(--radius-md); padding: 14px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-top: 20px;">
-                        <span style="font-weight: bold; color: #fbbf24; border-bottom: 1px solid rgba(251,191,36,0.2); padding-bottom: 4px; display: block; margin-bottom: 8px;">🔑 セキスペ重要出題ポイント：SameSite 3属性の挙動</span>
+                    <div style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: var(--radius-md); padding: 14px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-top: 20px;">
+                        <span style="font-weight: bold; color: #d97706; border-bottom: 1px solid rgba(245, 158, 11, 0.25); padding-bottom: 4px; display: block; margin-bottom: 8px;">🔑 セキスペ重要出題ポイント：SameSite 3属性の挙動</span>
                         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
                             <thead>
                                 <tr style="border-bottom: 1px solid rgba(251,191,36,0.2); color: var(--text-primary);">
@@ -464,7 +464,7 @@ window.SecurityLabModules["cookie_security"] = {
                 app.log("success", "[XSS攻撃実証] HttpOnlyが有効なため、悪意あるスクリプトによるセッションハイジャックを阻止しました。");
             } else {
                 logXssAttack.innerHTML += `<span style="color: #f87171;">🚨 警告: Cookieの取得に成功しました！</span><br>`;
-                logXssAttack.innerHTML += `<span style="color: #fbbf24;">&nbsp;&nbsp;➔ 取得値: [session_id=sess_abc123]</span><br>`;
+                logXssAttack.innerHTML += `<span style="color: #d97706;">&nbsp;&nbsp;➔ 取得値: [session_id=sess_abc123]</span><br>`;
                 logXssAttack.innerHTML += `<span style="color: #f87171;">📡 攻撃者サーバ (http://attacker.com/leak) へセッション情報を転送完了。アカウントが乗っ取られました。</span>`;
                 badgeXssStatus.innerText = "攻撃成立";
                 badgeXssStatus.className = "badge badge-danger";

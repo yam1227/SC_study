@@ -95,7 +95,7 @@ window.SecurityLabModules["vpn_types"] = {
                         <div class="form-group" style="margin: 0; flex: 1; display: flex; flex-direction: column;">
                             <label>SA 制御・転送プロセスログ:</label>
                             <div class="response-box" style="flex: 1; min-height: 160px; max-height: 220px; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3);">
-                                <code id="saSimLogText" style="font-size: 12px; color: #fbbf24; white-space: pre-wrap;">「IKE Phase 1」ボタンを押して、SAの確立シーケンスを開始してください。</code>
+                                <code id="saSimLogText" style="font-size: 12px; color: #38bdf8; white-space: pre-wrap;">「IKE Phase 1」ボタンを押して、SAの確立シーケンスを開始してください。</code>
                             </div>
                         </div>
                     </div>
