@@ -22,7 +22,7 @@ window.SecurityLabModules["eap_auth"] = {
                     </p>
 
                     <!-- Interactive Select Assignment Section -->
-                    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
                         <h4 style="margin-top: 0; color: var(--color-primary-hover); font-size: 14px;">🧩 機器別 役割割り当てチャレンジ</h4>
                         <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
                             各機器のドロップダウンメニューから、正しい「802.1Xの役割」と「RADIUSでの役割」を選択し、【構成を検証する】ボタンを押してください。
@@ -32,17 +32,17 @@ window.SecurityLabModules["eap_auth"] = {
                         <div class="lab-grid-3" style="gap: 16px; align-items: stretch;">
                             
                             <!-- Box 1: Client PC -->
-                            <div style="background: #18181b; border: 2px solid #27272a; border-radius: 8px; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div style="background: var(--bg-panel); border: 2px solid var(--border-color); border-radius: 8px; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
                                 <div>
                                     <div style="font-size: 32px; margin-bottom: 6px;">💻</div>
-                                    <div style="font-weight: bold; color: #f4f4f5; font-size: 15px;">① クライアントPC</div>
-                                    <div style="font-size: 12px; color: #cbd5e1; margin-top: 4px;">(有線/無線LAN接続を要求する端末)</div>
+                                    <div style="font-weight: bold; color: var(--text-primary); font-size: 15px;">① クライアントPC</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">(有線/無線LAN接続を要求する端末)</div>
                                 </div>
                                 
-                                <div style="margin-top: 16px; text-align: left; background: #09090b; padding: 12px; border-radius: 6px; border: 1px solid #3f3f46;">
+                                <div style="margin-top: 16px; text-align: left; background: var(--bg-app); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
                                     <div class="form-group" style="margin-bottom: 10px;">
-                                        <label style="font-size: 12px; color: #cbd5e1;">IEEE 802.1Xでの役割:</label>
-                                        <select id="rolePcDot1x" style="width: 100%; font-size: 12px; padding: 6px; background: #18181b; color: #fff; border: 1px solid #52525b; border-radius: 4px;">
+                                        <label style="font-size: 12px; color: var(--text-secondary);">IEEE 802.1Xでの役割:</label>
+                                        <select id="rolePcDot1x" style="width: 100%; font-size: 12px; padding: 6px; border-radius: 4px;">
                                             <option value="">-- 選択してください --</option>
                                             <option value="Supplicant">サプリカント (Supplicant)</option>
                                             <option value="Authenticator">オーセンティケータ (Authenticator)</option>
@@ -50,8 +50,8 @@ window.SecurityLabModules["eap_auth"] = {
                                         </select>
                                     </div>
                                     <div class="form-group" style="margin: 0;">
-                                        <label style="font-size: 12px; color: #cbd5e1;">RADIUSでの役割:</label>
-                                        <select id="rolePcRadius" style="width: 100%; font-size: 12px; padding: 6px; background: #18181b; color: #fff; border: 1px solid #52525b; border-radius: 4px;">
+                                        <label style="font-size: 12px; color: var(--text-secondary);">RADIUSでの役割:</label>
+                                        <select id="rolePcRadius" style="width: 100%; font-size: 12px; padding: 6px; border-radius: 4px;">
                                             <option value="">-- 選択してください --</option>
                                             <option value="None">なし (RADIUSプロトコルは直接扱わない)</option>
                                             <option value="Client">RADIUSクライアント</option>
@@ -62,17 +62,17 @@ window.SecurityLabModules["eap_auth"] = {
                             </div>
 
                             <!-- Box 2: Access Point / Switch -->
-                            <div style="background: #18181b; border: 2px solid var(--color-primary); border-radius: 8px; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);">
+                            <div style="background: var(--bg-panel); border: 2px solid var(--color-primary); border-radius: 8px; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);">
                                 <div>
                                     <div style="font-size: 32px; margin-bottom: 6px;">📡</div>
-                                    <div style="font-weight: bold; color: #60a5fa; font-size: 15px;">② 無線AP / L2スイッチ</div>
-                                    <div style="font-size: 12px; color: #a1a1aa; margin-top: 4px;">★試験最頻出ポイント！ (中継・制御機器)</div>
+                                    <div style="font-weight: bold; color: var(--color-primary); font-size: 15px;">② 無線AP / L2スイッチ</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">★試験最頻出ポイント！ (中継・制御機器)</div>
                                 </div>
                                 
-                                <div style="margin-top: 16px; text-align: left; background: #09090b; padding: 12px; border-radius: 6px; border: 1px solid #3b82f6;">
+                                <div style="margin-top: 16px; text-align: left; background: var(--bg-app); padding: 12px; border-radius: 6px; border: 1px solid var(--color-primary);">
                                     <div class="form-group" style="margin-bottom: 10px;">
-                                        <label style="font-size: 12px; color: #93c5fd;">IEEE 802.1Xでの役割:</label>
-                                        <select id="roleApDot1x" style="width: 100%; font-size: 12px; padding: 6px; background: #18181b; color: #fff; border: 1px solid #3b82f6; border-radius: 4px;">
+                                        <label style="font-size: 12px; color: var(--color-primary);">IEEE 802.1Xでの役割:</label>
+                                        <select id="roleApDot1x" style="width: 100%; font-size: 12px; padding: 6px; border-radius: 4px;">
                                             <option value="">-- 選択してください --</option>
                                             <option value="Supplicant">サプリカント (Supplicant)</option>
                                             <option value="Authenticator">オーセンティケータ (Authenticator)</option>
@@ -80,8 +80,8 @@ window.SecurityLabModules["eap_auth"] = {
                                         </select>
                                     </div>
                                     <div class="form-group" style="margin: 0;">
-                                        <label style="font-size: 12px; color: #93c5fd;">RADIUSでの役割:</label>
-                                        <select id="roleApRadius" style="width: 100%; font-size: 12px; padding: 6px; background: #18181b; color: #fff; border: 1px solid #3b82f6; border-radius: 4px;">
+                                        <label style="font-size: 12px; color: var(--color-primary);">RADIUSでの役割:</label>
+                                        <select id="roleApRadius" style="width: 100%; font-size: 12px; padding: 6px; border-radius: 4px;">
                                             <option value="">-- 選択してください --</option>
                                             <option value="None">なし (RADIUSプロトコルは直接扱わない)</option>
                                             <option value="Client">RADIUSクライアント</option>
@@ -92,17 +92,17 @@ window.SecurityLabModules["eap_auth"] = {
                             </div>
 
                             <!-- Box 3: Authentication Server -->
-                            <div style="background: #18181b; border: 2px solid #27272a; border-radius: 8px; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div style="background: var(--bg-panel); border: 2px solid var(--border-color); border-radius: 8px; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
                                 <div>
                                     <div style="font-size: 32px; margin-bottom: 6px;">🖥️</div>
-                                    <div style="font-weight: bold; color: #f4f4f5; font-size: 15px;">③ 認証サーバ</div>
-                                    <div style="font-size: 12px; color: #a1a1aa; margin-top: 4px;">(ユーザーDB照合・判定を行うサーバ)</div>
+                                    <div style="font-weight: bold; color: var(--text-primary); font-size: 15px;">③ 認証サーバ</div>
+                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">(ユーザーDB照合・判定を行うサーバ)</div>
                                 </div>
                                 
-                                <div style="margin-top: 16px; text-align: left; background: #09090b; padding: 12px; border-radius: 6px; border: 1px solid #3f3f46;">
+                                <div style="margin-top: 16px; text-align: left; background: var(--bg-app); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
                                     <div class="form-group" style="margin-bottom: 10px;">
-                                        <label style="font-size: 12px; color: #cbd5e1;">IEEE 802.1Xでの役割:</label>
-                                        <select id="roleServerDot1x" style="width: 100%; font-size: 12px; padding: 6px; background: #18181b; color: #fff; border: 1px solid #52525b; border-radius: 4px;">
+                                        <label style="font-size: 12px; color: var(--text-secondary);">IEEE 802.1Xでの役割:</label>
+                                        <select id="roleServerDot1x" style="width: 100%; font-size: 12px; padding: 6px; border-radius: 4px;">
                                             <option value="">-- 選択してください --</option>
                                             <option value="Supplicant">サプリカント (Supplicant)</option>
                                             <option value="Authenticator">オーセンティケータ (Authenticator)</option>
@@ -110,8 +110,8 @@ window.SecurityLabModules["eap_auth"] = {
                                         </select>
                                     </div>
                                     <div class="form-group" style="margin: 0;">
-                                        <label style="font-size: 12px; color: #cbd5e1;">RADIUSでの役割:</label>
-                                        <select id="roleServerRadius" style="width: 100%; font-size: 12px; padding: 6px; background: #18181b; color: #fff; border: 1px solid #52525b; border-radius: 4px;">
+                                        <label style="font-size: 12px; color: var(--text-secondary);">RADIUSでの役割:</label>
+                                        <select id="roleServerRadius" style="width: 100%; font-size: 12px; padding: 6px; border-radius: 4px;">
                                             <option value="">-- 選択してください --</option>
                                             <option value="None">なし (RADIUSプロトコルは直接扱わない)</option>
                                             <option value="Client">RADIUSクライアント</option>
@@ -352,7 +352,7 @@ window.SecurityLabModules["eap_auth"] = {
                     <div id="quizContainer" style="display: flex; flex-direction: column; gap: 24px; margin-top: 20px;">
                         
                         <!-- Question 1: R4 Spring AM2 Q17 (Real Exam Question) -->
-                        <div class="card" style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); padding: 18px;">
+                        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 18px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                 <span style="font-size: 12px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和4年春期 午前Ⅱ 問17</span>
                                 <span style="font-size: 12px; color: var(--text-secondary);">分類: IEEE 802.1X と RADIUS 認証</span>
@@ -381,7 +381,7 @@ window.SecurityLabModules["eap_auth"] = {
                         </div>
 
                         <!-- Question 2: General Practice Question (Protocol Conversion & EAP Types) -->
-                        <div class="card" style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); padding: 18px;">
+                        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 18px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                 <span style="font-size: 12px; background: #065f46; color: #a7f3d0; padding: 2px 8px; border-radius: 4px; font-weight: bold;">応用演習問題問2</span>
                                 <span style="font-size: 12px; color: var(--text-secondary);">分類: EAP認証方式の安全性比較</span>

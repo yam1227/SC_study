@@ -131,7 +131,7 @@ window.SecurityLabModules["email_security"] = {
                                     <button class="btn btn-tab-mini" id="btnToggleDkimOff" style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 4px; cursor: pointer;">DKIMなし (無署名)</button>
                                 </div>
                             </div>
-                            <div style="flex: 1; background: #0b0f19; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; overflow-y: auto; max-height: 440px; min-height: 350px; color: #e4e4e7; white-space: pre-wrap;" id="emailHeaderViewer">※ メールを受信すると、ここに構築されたメールヘッダが表示されます。右上の「DKIMあり / なし」のトグルを切り替えることで、署名ヘッダ (DKIM-Signature) の有無を瞬時に確認できます。</div>
+                            <div style="flex: 1; background: var(--bg-app); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; font-family: var(--font-mono); font-size: 12px; line-height: 1.5; overflow-y: auto; max-height: 440px; min-height: 350px; color: var(--text-primary); white-space: pre-wrap;" id="emailHeaderViewer">※ メールを受信すると、ここに構築されたメールヘッダが表示されます。右上の「DKIMあり / なし」のトグルを切り替えることで、署名ヘッダ (DKIM-Signature) の有無を瞬時に確認できます。</div>
                         </div>
                     </div>
                 </div>
@@ -149,7 +149,7 @@ window.SecurityLabModules["email_security"] = {
                                 接続元メールサーバのIPアドレスや模擬DNSレコードをもとに、受信サーバ（受信MTA）がどのように送信元詐称を検知するか、および <strong>DMARCアライメント判定</strong> のフローをシミュレーションします。
                             </p>
                         </div>
-                        <span class="badge" style="font-size: 12px; padding: 6px 12px; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3);">
+                        <span class="badge" style="font-size: 12px; padding: 6px 12px; background: rgba(16,185,129,0.15); color: var(--color-success); border: 1px solid rgba(16,185,129,0.3);">
                             試験最重要: DMARCアライメント
                         </span>
                     </div>
@@ -158,7 +158,7 @@ window.SecurityLabModules["email_security"] = {
                         
                         <!-- Left: Simulation Environment & Configuration -->
                         <div style="display: flex; flex-direction: column; gap: 16px;">
-                            <div style="background: rgba(15,23,42,0.4); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                            <div style="background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px;">
                                 <span style="font-weight: 700; color: var(--text-primary); font-size: 14px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">1. 検証条件シナリオの設定</span>
                                 
                                 <div class="form-group" style="margin: 0;">

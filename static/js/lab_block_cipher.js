@@ -25,14 +25,14 @@ window.SecurityLabModules["block_cipher"] = {
                     </p>
 
                     <!-- Settings & Controls -->
-                    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
-                        <h4 style="margin-top: 0; color: #60a5fa; font-size: 14px;">⚙️ 暗号化パラメータの設定</h4>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
+                        <h4 style="margin-top: 0; color: var(--color-primary-hover); font-size: 14px;">⚙️ 暗号化パラメータの設定</h4>
 
                         <div class="lab-grid-2" style="gap: 16px; margin-top: 12px;">
                             <div>
                                 <div class="form-group" style="margin-bottom: 12px;">
                                     <label style="font-size: 12px; font-weight: bold; color: var(--text-primary);">暗号利用モードの選択:</label>
-                                    <select id="bcModeSelect" style="width: 100%; padding: 8px; background: #09090b; color: #60a5fa; border: 1px solid #3b82f6; border-radius: 4px; font-weight: bold; font-size: 13px;">
+                                    <select id="bcModeSelect" style="width: 100%; padding: 8px; border-radius: 4px; font-weight: bold; font-size: 13px;">
                                         <option value="CTR" selected>⚡ CTR (Counter) モード【問7本命: 鍵ストリーム ⊕ 入力のXOR / 全並列可 / パディング不要】</option>
                                         <option value="CBC">🛡️ CBC (Cipher Block Chaining) モード【チェーニング / 復号並列可 / パディング要 / 誤り伝搬あり】</option>
                                         <option value="ECB">⚠️ ECB (Electronic Codebook) モード【単純分割 / パターン露出危険 / パディング要】</option>
@@ -41,14 +41,14 @@ window.SecurityLabModules["block_cipher"] = {
 
                                 <div class="form-group" style="margin-bottom: 12px;">
                                     <label style="font-size: 12px; font-weight: bold; color: var(--text-primary);">暗号化する平文メッセージ (複数ブロックに分割):</label>
-                                    <input type="text" id="bcPlaintextInput" value="PASS_ALL_EXAMS_2026_SC" style="width: 100%; padding: 8px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px; font-size: 13px;">
+                                    <input type="text" id="bcPlaintextInput" value="PASS_ALL_EXAMS_2026_SC" style="width: 100%; padding: 8px; border-radius: 4px; font-size: 13px;">
                                 </div>
                             </div>
 
                             <div>
                                 <div class="form-group" style="margin-bottom: 12px;">
-                                    <label style="font-size: 12px; font-weight: bold; color: #a7f3d0;">🔑 暗号化共通鍵 (Secret Key):</label>
-                                    <input type="text" id="bcSecretKey" value="SecretKey128Bit!" style="width: 100%; padding: 8px; background: #09090b; color: #34d399; border: 1px solid #059669; border-radius: 4px; font-family: monospace; font-size: 13px;">
+                                    <label style="font-size: 12px; font-weight: bold; color: var(--color-success);">🔑 暗号化共通鍵 (Secret Key):</label>
+                                    <input type="text" id="bcSecretKey" value="SecretKey128Bit!" style="width: 100%; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 13px;">
                                 </div>
 
                                 <!-- Dynamic Badges based on Selected Mode -->
@@ -68,7 +68,7 @@ window.SecurityLabModules["block_cipher"] = {
                         <h4 style="font-size: 13px; margin-bottom: 8px; color: var(--text-primary);">📡 ブロック処理ステップ ＆ 鍵ストリーム計算結果</h4>
                         
                         <div id="bcBlockStepsContainer" style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
-                            <div style="font-size: 12px; color: var(--text-secondary); background: #0c0a09; padding: 14px; border-radius: 6px;">
+                            <div style="font-size: 12px; color: var(--text-secondary); background: var(--bg-app); padding: 14px; border-radius: 6px; border: 1px solid var(--border-color);">
                                 上記の「暗号化処理シミュレーションを実行」ボタンを押すと、各ブロックの処理ステップが表示されます。
                             </div>
                         </div>
@@ -223,7 +223,7 @@ window.SecurityLabModules["block_cipher"] = {
                     <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 20px;">
                         
                         <!-- Question 1: R5 Spring AM2 Q7 (Target Exam Question) -->
-                        <div class="card" style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); padding: 18px;">
+                        <div class="card" style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 18px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                                 <span style="font-size: 12px; background: #1e3a8a; color: #93c5fd; padding: 2px 8px; border-radius: 4px; font-weight: bold;">令和5年春期 午前Ⅱ 問7</span>
                                 <span style="font-size: 12px; color: var(--text-secondary);">分類: 暗号利用モード (CTRモード)</span>

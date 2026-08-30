@@ -18,7 +18,7 @@ window.SecurityLabModules["saml"] = {
                     </div>
 
                     <!-- SVG Sequence Diagram -->
-                    <div class="oauth-flow-diagram" style="background: #121214; border-radius: 8px; padding: 10px;">
+                    <div class="oauth-flow-diagram" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px;">
                         <svg class="oauth-svg" viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
                             <!-- Lifelines -->
                             <line x1="100" y1="50" x2="100" y2="300" stroke="#2d2d34" stroke-width="1" stroke-dasharray="4" />
@@ -142,7 +142,7 @@ window.SecurityLabModules["saml"] = {
                 
                 <div class="verification-checks-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
                     <!-- Check 1 -->
-                    <div class="check-box-card" id="chk-signature" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
+                    <div class="check-box-card" id="chk-signature" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">1. デジタル署名の検証</h4>
                             <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-signature">待機中</span>
@@ -154,7 +154,7 @@ window.SecurityLabModules["saml"] = {
                     </div>
 
                     <!-- Check 2 -->
-                    <div class="check-box-card" id="chk-conditions" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
+                    <div class="check-box-card" id="chk-conditions" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">2. 有効期限の検証</h4>
                             <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-conditions">待機中</span>
@@ -166,7 +166,7 @@ window.SecurityLabModules["saml"] = {
                     </div>
 
                     <!-- Check 3 -->
-                    <div class="check-box-card" id="chk-audience" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
+                    <div class="check-box-card" id="chk-audience" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">3. 宛先 (Audience) の検証</h4>
                             <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-audience">待機中</span>
@@ -178,7 +178,7 @@ window.SecurityLabModules["saml"] = {
                     </div>
 
                     <!-- Check 4 -->
-                    <div class="check-box-card" id="chk-in-response-to" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
+                    <div class="check-box-card" id="chk-in-response-to" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">4. リプレイ攻撃の検証</h4>
                             <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-in-response-to">待機中</span>
@@ -190,7 +190,7 @@ window.SecurityLabModules["saml"] = {
                     </div>
 
                     <!-- Check 5 -->
-                    <div class="check-box-card" id="chk-recipient" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: #18181b;">
+                    <div class="check-box-card" id="chk-recipient" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                             <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">5. 受信エンドポイント (Recipient)</h4>
                             <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-recipient">待機中</span>

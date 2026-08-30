@@ -37,9 +37,14 @@ class SecurityLab {
         this.clearConsoleBtn = document.getElementById("clearConsoleBtn");
         this.closeConsoleBtn = document.getElementById("closeConsoleBtn");
         this.resizeHandle = document.getElementById("consoleResizeHandle");
+
+        this.themeToggleBtn = document.getElementById("themeToggleBtn");
+        this.themeToggleIcon = document.getElementById("themeToggleIcon");
+        this.themeToggleLabel = document.getElementById("themeToggleLabel");
     }
 
     async init() {
+        this.setupTheme();
         this.setupConsole();
         this.setupSidebar();
         this.setupKeyboardShortcuts();
@@ -51,6 +56,33 @@ class SecurityLab {
             this.renderQuickReference();
         } catch (error) {
             this.log('error', 'モジュール一覧の取得に失敗しました。サーバーが起動しているか確認してください。', error);
+        }
+    }
+
+    setupTheme() {
+        const savedTheme = localStorage.getItem("security_lab_theme") || "dark";
+        this.applyTheme(savedTheme);
+
+        if (this.themeToggleBtn) {
+            this.themeToggleBtn.addEventListener("click", () => {
+                const currentTheme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+                const nextTheme = currentTheme === "dark" ? "light" : "dark";
+                this.applyTheme(nextTheme);
+                localStorage.setItem("security_lab_theme", nextTheme);
+                this.log("info", `[SYSTEM] テーマを「${nextTheme === "light" ? "ライトモード" : "ダークモード"}」に切り替えました。`);
+            });
+        }
+    }
+
+    applyTheme(theme) {
+        if (theme === "light") {
+            document.documentElement.setAttribute("data-theme", "light");
+            if (this.themeToggleIcon) this.themeToggleIcon.textContent = "☀️";
+            if (this.themeToggleLabel) this.themeToggleLabel.textContent = "ライト";
+        } else {
+            document.documentElement.removeAttribute("data-theme");
+            if (this.themeToggleIcon) this.themeToggleIcon.textContent = "🌙";
+            if (this.themeToggleLabel) this.themeToggleLabel.textContent = "ダーク";
         }
     }
 

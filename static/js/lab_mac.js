@@ -24,32 +24,32 @@ window.SecurityLabModules["mac"] = {
                     </p>
 
                     <!-- Simulation Controls -->
-                    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
                         <h4 style="margin-top: 0; color: var(--color-primary-hover); font-size: 14px;">✉️ 通信メッセージ ＆ 共有鍵の設定</h4>
 
                         <div class="lab-grid-2" style="gap: 16px; margin-top: 12px;">
                             <div>
                                 <div class="form-group" style="margin-bottom: 12px;">
-                                    <label style="font-size: 13px; font-weight: bold; color: #93c5fd;">🔑 共有鍵 (Shared Secret Key):</label>
-                                    <input type="text" id="macSharedKey" value="SharedKeySecret123" style="width: 100%; padding: 8px; background: #09090b; color: #38bdf8; border: 1px solid #0284c7; border-radius: 4px; font-family: monospace; font-weight: bold;">
+                                    <label style="font-size: 13px; font-weight: bold; color: var(--color-primary-hover);">🔑 共有鍵 (Shared Secret Key):</label>
+                                    <input type="text" id="macSharedKey" value="SharedKeySecret123" style="width: 100%; padding: 8px; border-radius: 4px; font-family: monospace; font-weight: bold;">
                                     <span style="font-size: 12px; color: var(--text-secondary);">※AliceとBobのみが知る事前共有鍵です。</span>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 12px;">
                                     <label style="font-size: 12px; font-weight: bold; color: var(--text-primary);">送信メッセージ (送信者 Alice 入力):</label>
-                                    <textarea id="macMessageInput" style="width: 100%; height: 70px; padding: 8px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px; font-size: 13px;">Transfer 100,000 JPY to Charlie (Account: 12345)</textarea>
+                                    <textarea id="macMessageInput" style="width: 100%; height: 70px; padding: 8px; border-radius: 4px; font-size: 13px;">Transfer 100,000 JPY to Charlie (Account: 12345)</textarea>
                                 </div>
                             </div>
 
                             <div>
                                 <!-- Mallory Tampering Option -->
                                 <div style="background: rgba(239, 68, 68, 0.08); border: 1px dashed #ef4444; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
-                                    <label for="macTamperToggle" style="cursor: pointer; font-size: 12px; color: #fca5a5; font-weight: bold;">
+                                    <label for="macTamperToggle" style="cursor: pointer; font-size: 12px; color: var(--color-danger); font-weight: bold;">
                                         <input type="checkbox" id="macTamperToggle"> 😈 中間者 (Mallory) によるデータ改ざんを実行
                                     </label>
                                     <div class="form-group" style="margin-top: 8px; margin-bottom: 0;">
-                                        <label style="font-size: 12px; color: #f87171;">改ざん後のメッセージ (Bobが受信):</label>
-                                        <textarea id="macTamperedMessageInput" style="width: 100%; height: 55px; padding: 6px; background: #18181b; color: #ef4444; border: 1px solid #ef4444; border-radius: 4px; font-size: 12px;">Transfer 900,000 JPY to Mallory (Account: 99999)</textarea>
+                                        <label style="font-size: 12px; color: var(--color-danger);">改ざん後のメッセージ (Bobが受信):</label>
+                                        <textarea id="macTamperedMessageInput" style="width: 100%; height: 55px; padding: 6px; border-radius: 4px; font-size: 12px;">Transfer 900,000 JPY to Mallory (Account: 99999)</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -65,19 +65,19 @@ window.SecurityLabModules["mac"] = {
                         <h4 style="font-size: 13px; margin-bottom: 8px;">📡 送受信フロー ＆ 検証ログ</h4>
                         <div class="lab-grid-2" style="gap: 16px;">
                             <!-- Alice Node -->
-                            <div style="background: #18181b; border: 1px solid #0284c7; border-radius: 6px; padding: 12px;">
-                                <div style="font-weight: bold; color: #38bdf8; font-size: 13px; margin-bottom: 6px;">👩 送信者 (Alice)</div>
-                                <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
+                            <div style="background: var(--bg-panel); border: 1px solid var(--color-primary); border-radius: 6px; padding: 12px;">
+                                <div style="font-weight: bold; color: var(--color-primary-hover); font-size: 13px; margin-bottom: 6px;">👩 送信者 (Alice)</div>
+                                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
                                     計算式: <code>HMAC-SHA256(Key, Message)</code><br>
                                     生成されたMAC:<br>
-                                    <div style="font-family: monospace; font-size: 12px; color: #38bdf8; background: #09090b; padding: 6px; border-radius: 4px; margin-top: 4px; word-break: break-all;" id="outAliceMac">
+                                    <div style="font-family: monospace; font-size: 12px; color: var(--color-primary-hover); background: var(--bg-app); padding: 6px; border-radius: 4px; border: 1px solid var(--border-color); margin-top: 4px; word-break: break-all;" id="outAliceMac">
                                         (未送信)
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Bob Node -->
-                            <div style="background: #18181b; border: 1px solid #10b981; border-radius: 6px; padding: 12px;">
+                            <div style="background: var(--bg-panel); border: 1px solid var(--color-success); border-radius: 6px; padding: 12px;">
                                 <div style="font-weight: bold; color: #34d399; font-size: 13px; margin-bottom: 6px;">👨 受信者 (Bob)</div>
                                 <div style="font-size: 12px; color: #cbd5e1; line-height: 1.5;">
                                     受信用共通鍵で再計算したMAC:<br>

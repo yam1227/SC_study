@@ -253,41 +253,41 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                     </p>
 
                     <!-- Interactive Transaction Signing Simulator -->
-                    <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
-                        <h4 style="margin-top: 0; color: #60a5fa; font-size: 15px;">💸 送金手続き ＆ デバイス間トランザクション署名シミュレータ</h4>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin-top: 16px;">
+                        <h4 style="margin-top: 0; color: var(--color-primary-hover); font-size: 15px;">💸 送金手続き ＆ デバイス間トランザクション署名シミュレータ</h4>
                         
                         <div class="lab-grid-2" style="gap: 20px; margin-top: 14px;">
                             <!-- Left Device: PC Browser / Bank Screen -->
-                            <div style="background: #18181b; border: 1px solid #3b82f6; border-radius: 8px; padding: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 12px;">
-                                    <span style="font-weight: bold; color: #93c5fd; font-size: 13px;">💻 ① PCブラウザ（ネットバンキング画面）</span>
-                                    <span style="font-size: 12px; background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 6px; border-radius: 4px;">Out-of-Band 前提</span>
+                            <div style="background: var(--bg-panel); border: 1px solid var(--color-primary); border-radius: 8px; padding: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: var(--color-primary-hover); font-size: 13px;">💻 ① PCブラウザ（ネットバンキング画面）</span>
+                                    <span style="font-size: 12px; background: rgba(59, 130, 246, 0.2); color: var(--color-primary-hover); padding: 2px 6px; border-radius: 4px;">Out-of-Band 前提</span>
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 10px;">
-                                    <label style="font-size: 12px; color: #cbd5e1;">振込先口座番号 (ユーザー入力):</label>
-                                    <input type="text" id="txAccNum" value="123-4567" style="width: 100%; font-size: 13px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
+                                    <label style="font-size: 12px; color: var(--text-secondary);">振込先口座番号 (ユーザー入力):</label>
+                                    <input type="text" id="txAccNum" value="123-4567" style="width: 100%; font-size: 13px; padding: 6px; border-radius: 4px;">
                                 </div>
 
                                 <div class="form-group" style="margin-bottom: 12px;">
-                                    <label style="font-size: 12px; color: #cbd5e1;">送金額 (円):</label>
-                                    <input type="number" id="txAmount" value="500000" style="width: 100%; font-size: 13px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
+                                    <label style="font-size: 12px; color: var(--text-secondary);">送金額 (円):</label>
+                                    <input type="number" id="txAmount" value="500000" style="width: 100%; font-size: 13px; padding: 6px; border-radius: 4px;">
                                 </div>
 
                                 <!-- Attack Mode Toggle -->
                                 <div style="background: rgba(239, 68, 68, 0.1); border: 1px dashed #ef4444; border-radius: 6px; padding: 10px; margin-bottom: 12px;">
-                                    <label for="txMitbToggle" style="cursor: pointer; font-size: 12px; color: #fca5a5; font-weight: bold;">
+                                    <label for="txMitbToggle" style="cursor: pointer; font-size: 12px; color: var(--color-danger); font-weight: bold;">
                                         <input type="checkbox" id="txMitbToggle"> ⚠️ MITB攻撃 / CSRF攻撃を有効化
                                     </label>
-                                     <div style="font-size: 12px; color: #f87171; margin-top: 4px; line-height: 1.4;">
+                                     <div style="font-size: 12px; color: var(--color-danger); margin-top: 4px; line-height: 1.4;">
                                         ※チェックを入れると、送信時にブラウザ内のマルウェア/CSRFが振込先口座を『999-9999 (攻撃者の口座)』へ自動改ざんします。
                                     </div>
                                 </div>
 
                                 <!-- Auth Type Choice -->
                                 <div class="form-group" style="margin-bottom: 14px;">
-                                    <label style="font-size: 12px; color: #cbd5e1;">使用する認証方式:</label>
-                                    <select id="txAuthType" style="width: 100%; font-size: 12px; padding: 6px; background: #09090b; color: #fff; border: 1px solid #475569; border-radius: 4px;">
+                                    <label style="font-size: 12px; color: var(--text-secondary);">使用する認証方式:</label>
+                                    <select id="txAuthType" style="width: 100%; font-size: 12px; padding: 6px; border-radius: 4px;">
                                         <option value="otp">通常のOTP (ログイン時/共通ワンタイムパスワード)</option>
                                         <option value="transaction_signing" selected>トランザクション署名 (取引データ紐付け型署名)</option>
                                     </select>
@@ -299,7 +299,7 @@ window.SecurityLabModules["csrf_vs_xss"] = {
                             </div>
 
                             <!-- Right Device: Separate Hardware Token / Smartphone (Out of Band) -->
-                            <div style="background: #18181b; border: 1px solid #10b981; border-radius: 8px; padding: 16px;">
+                            <div style="background: var(--bg-panel); border: 1px solid var(--color-success); border-radius: 8px; padding: 16px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #065f46; padding-bottom: 8px; margin-bottom: 12px;">
                                     <span style="font-weight: bold; color: #a7f3d0; font-size: 13px;">📱 ② 独立端末 (ハードウェアトークン / スマホ)</span>
                                     <span style="font-size: 12px; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 2px 6px; border-radius: 4px;">Out-of-Band</span>
