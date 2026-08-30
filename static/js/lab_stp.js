@@ -336,13 +336,9 @@ window.SecurityLabModules["stp"] = {
             if (btn && content) {
                 if (t === tabId) {
                     btn.classList.add("active");
-                    btn.style.color = "var(--text-primary)";
-                    btn.style.borderColor = "var(--color-primary)";
                     content.style.display = "block";
                 } else {
                     btn.classList.remove("active");
-                    btn.style.color = "var(--text-secondary)";
-                    btn.style.borderColor = "var(--border-color)";
                     content.style.display = "none";
                 }
             }

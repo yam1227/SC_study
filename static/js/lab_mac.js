@@ -274,31 +274,14 @@ window.SecurityLabModules["mac"] = {
     `,
 
     init: function() {
-        // --- Navigation Tab Switching ---
-        const btnTabMacSim = document.getElementById("btnTabMacSim");
-        const btnTabMacVSsig = document.getElementById("btnTabMacVSsig");
-        const btnTabMacQuiz = document.getElementById("btnTabMacQuiz");
-
-        const panelMacSim = document.getElementById("panelMacSim");
-        const panelMacVSsig = document.getElementById("panelMacVSsig");
-        const panelMacQuiz = document.getElementById("panelMacQuiz");
-
-        function switchTab(activeBtn, activePanel) {
-            [btnTabMacSim, btnTabMacVSsig, btnTabMacQuiz].forEach(btn => {
-                if (btn) btn.classList.remove("active");
-            });
-            [panelMacSim, panelMacVSsig, panelMacQuiz].forEach(panel => {
-                if (panel) panel.style.display = "none";
-            });
-
-            if (activeBtn) activeBtn.classList.add("active");
-            if (activePanel) activePanel.style.display = "block";
+        // --- Navigation Tab Switching using UIComponents ---
+        if (window.UIComponents && window.UIComponents.setupSubTabs) {
+            window.UIComponents.setupSubTabs([
+                { btnId: "btnTabMacSim", panelId: "panelMacSim" },
+                { btnId: "btnTabMacVSsig", panelId: "panelMacVSsig" },
+                { btnId: "btnTabMacQuiz", panelId: "panelMacQuiz" }
+            ]);
         }
-
-        if (btnTabMacSim) btnTabMacSim.addEventListener("click", () => switchTab(btnTabMacMacSim, panelMacSim));
-        if (btnTabMacSim) btnTabMacSim.addEventListener("click", () => switchTab(btnTabMacSim, panelMacSim));
-        if (btnTabMacVSsig) btnTabMacVSsig.addEventListener("click", () => switchTab(btnTabMacVSsig, panelMacVSsig));
-        if (btnTabMacQuiz) btnTabMacQuiz.addEventListener("click", () => switchTab(btnTabMacQuiz, panelMacQuiz));
 
         // --- TAB 1: MAC Simulation Handler ---
         const btnExecuteMacSim = document.getElementById("btnExecuteMacSim");

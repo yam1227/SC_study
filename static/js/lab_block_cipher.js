@@ -279,30 +279,14 @@ window.SecurityLabModules["block_cipher"] = {
     `,
 
     init: function() {
-        // --- Navigation Tab Switching ---
-        const btnTabBcSim = document.getElementById("btnTabBcSim");
-        const btnTabBcMatrix = document.getElementById("btnTabBcMatrix");
-        const btnTabBcQuiz = document.getElementById("btnTabBcQuiz");
-
-        const panelBcSim = document.getElementById("panelBcSim");
-        const panelBcMatrix = document.getElementById("panelBcMatrix");
-        const panelBcQuiz = document.getElementById("panelBcQuiz");
-
-        function switchTab(activeBtn, activePanel) {
-            [btnTabBcSim, btnTabBcMatrix, btnTabBcQuiz].forEach(btn => {
-                if (btn) btn.classList.remove("active");
-            });
-            [panelBcSim, panelBcMatrix, panelBcQuiz].forEach(panel => {
-                if (panel) panel.style.display = "none";
-            });
-
-            if (activeBtn) activeBtn.classList.add("active");
-            if (activePanel) activePanel.style.display = "block";
+        // --- Navigation Tab Switching using UIComponents ---
+        if (window.UIComponents && window.UIComponents.setupSubTabs) {
+            window.UIComponents.setupSubTabs([
+                { btnId: "btnTabBcSim", panelId: "panelBcSim" },
+                { btnId: "btnTabBcMatrix", panelId: "panelBcMatrix" },
+                { btnId: "btnTabBcQuiz", panelId: "panelBcQuiz" }
+            ]);
         }
-
-        if (btnTabBcSim) btnTabBcSim.addEventListener("click", () => switchTab(btnTabBcSim, panelBcSim));
-        if (btnTabBcMatrix) btnTabBcMatrix.addEventListener("click", () => switchTab(btnTabBcMatrix, panelBcMatrix));
-        if (btnTabBcQuiz) btnTabBcQuiz.addEventListener("click", () => switchTab(btnTabBcQuiz, panelBcQuiz));
 
         // Update Badges on Mode Select Change
         const bcModeSelect = document.getElementById("bcModeSelect");
