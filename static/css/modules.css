@@ -1,0 +1,664 @@
+/* ==============================================================================
+   セキスペ・セキュリティ・ラボ
+   Learning Modules Specific Styles & Animations (modules.css)
+   ============================================================================== */
+
+/* Module Overview Banner */
+.module-overview-card {
+    background: rgba(99, 102, 241, 0.05);
+    border-left: 4px solid var(--color-primary) !important;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.module-overview-card h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.module-overview-card p {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 8px 0 0 0;
+}
+
+.overview-keywords-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.keyword-badge {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-primary-hover);
+    background-color: var(--color-primary-glow);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+    transition: var(--transition-fast);
+}
+
+.keyword-badge:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 6px var(--color-primary-glow);
+}
+
+/* 1. Hashing & Cracking Animation */
+.attack-status-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    background-color: var(--bg-app);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+}
+
+.attack-progress-bar {
+    height: 6px;
+    background-color: var(--bg-card);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.attack-progress-fill {
+    width: 0%;
+    height: 100%;
+    background-color: var(--color-primary);
+    transition: width 0.1s linear;
+}
+
+.attack-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* 2. JWT Sandbox Decoder */
+.jwt-debugger {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+    background-color: var(--bg-app);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.jwt-col {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.jwt-col:first-child {
+    border-right: 1px solid var(--border-color);
+    background-color: rgba(9, 9, 11, 0.4);
+}
+
+.jwt-part {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.jwt-part h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.jwt-part.header h4 { color: #fb7185; }
+.jwt-part.payload h4 { color: #38bdf8; }
+.jwt-part.signature h4 { color: #4ade80; }
+
+.jwt-editor {
+    width: 100%;
+    background-color: rgba(24, 24, 27, 0.6);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    color: #e4e4e7;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    resize: none;
+    outline: none;
+}
+
+.jwt-editor:focus {
+    border-color: var(--color-primary);
+}
+
+/* 3. TOTP Code QR / Indicator */
+.mfa-setup-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background-color: var(--bg-app);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.qr-code-img {
+    width: 160px;
+    height: 160px;
+    background-color: white;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.totp-sim-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.totp-digits {
+    font-family: var(--font-mono);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-primary-hover);
+    letter-spacing: 4px;
+}
+
+.totp-progress {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 4. Interactive OAuth SVG */
+.oauth-flow-diagram {
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto;
+}
+
+.oauth-svg {
+    width: 100%;
+    max-width: 680px;
+    height: auto;
+}
+
+.svg-actor {
+    fill: var(--bg-panel);
+    stroke: var(--border-color);
+    stroke-width: 1.5px;
+    transition: var(--transition-fast);
+}
+
+.svg-actor-active {
+    stroke: var(--color-primary);
+    fill: var(--bg-card-hover);
+    filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.3));
+}
+
+.svg-text {
+    fill: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    text-anchor: middle;
+}
+
+.svg-text-sub {
+    fill: var(--text-secondary);
+    font-size: 12px;
+}
+
+.svg-arrow {
+    fill: none;
+    stroke: var(--border-color);
+    stroke-width: 1.2px;
+    stroke-dasharray: 4;
+    transition: var(--transition-fast);
+}
+
+.svg-arrow-active {
+    stroke: var(--color-primary-hover);
+    stroke-dasharray: 0;
+    animation: dash-flow 1.5s infinite linear;
+}
+
+@keyframes dash-flow {
+    to { stroke-dashoffset: -20; }
+}
+
+/* 5. IPsec SA Simulator */
+.sa-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.sa-table th, .sa-table td {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.sa-table th {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.sa-diagram-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 14px;
+}
+
+.sa-box {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+}
+
+.sa-box.ike {
+    background-color: rgba(59, 130, 246, 0.08);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+}
+
+.sa-box.ipsec-out {
+    background-color: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+}
+
+.sa-box.ipsec-in {
+    background-color: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #d97706;
+}
+
+/* 6. OSI Model Simulator */
+.osi-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.osi-layer-card {
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.osi-layer-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary-glow);
+}
+
+.osi-layer-card.active {
+    border-color: var(--color-primary);
+    background: rgba(99, 102, 241, 0.08);
+}
+
+.osi-layer-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-primary-hover);
+    background-color: var(--color-primary-glow);
+    padding: 2px 6px;
+    border-radius: 4px;
+    min-width: 48px;
+    text-align: center;
+}
+
+.osi-layer-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+    margin-left: 14px;
+}
+
+.osi-pdu-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.osi-layer-card.active .osi-pdu-badge {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+.osi-packet-preview-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-primary);
+    min-height: 120px;
+    position: relative;
+}
+
+.osi-packet-block {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.osi-packet-segment {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+
+.osi-segment-eth { background-color: #3b82f6; }
+.osi-segment-ip { background-color: #10b981; }
+.osi-segment-tcp { background-color: #f59e0b; }
+.osi-segment-tls { background-color: #a78bfa; }
+.osi-segment-data { background-color: #ec4899; }
+.osi-segment-fcs { background-color: #6b7280; }
+
+.osi-decoder-container {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 20px;
+}
+
+.osi-decoder-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.osi-decoder-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.osi-decoder-table th, .osi-decoder-table td {
+    padding: 8px 10px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+}
+
+.osi-decoder-table th {
+    background-color: rgba(255, 255, 255, 0.02);
+    color: var(--text-secondary);
+    font-weight: 600;
+    width: 25%;
+}
+
+.osi-decoder-table td.field-name {
+    font-family: var(--font-mono);
+    color: var(--color-primary-hover);
+    font-weight: 600;
+    width: 30%;
+}
+
+.osi-decoder-table td.field-value {
+    font-family: var(--font-mono);
+    color: var(--color-primary-hover);
+}
+
+.osi-decoder-table tr.highlight {
+    background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+.osi-decoder-table tr.highlight td {
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+.osi-decoder-table tr.decapsulated {
+    opacity: 0.35;
+    text-decoration: line-through;
+    background-color: rgba(239, 68, 68, 0.04) !important;
+}
+
+.osi-decoder-table tr.decapsulated td.field-value {
+    color: var(--text-secondary) !important;
+}
+
+/* 7. Email Security Simulator */
+.email-flow-visual {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.flow-dot {
+    z-index: 10;
+    box-shadow: 0 0 8px var(--color-primary);
+}
+
+/* 8. Glossary & Quick Reference Styles */
+.glossary-search-card {
+    border-color: rgba(99, 102, 241, 0.2);
+    background: linear-gradient(135deg, var(--bg-panel) 0%, rgba(24, 24, 35, 0.4) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: var(--transition-normal);
+}
+
+.glossary-search-card:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+}
+
+.glossary-results {
+    max-height: 320px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+}
+
+.glossary-item {
+    padding: 14px;
+    background-color: var(--bg-app);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    animation: fade-in 0.2s ease-out;
+}
+
+.glossary-term {
+    font-weight: 600;
+    color: var(--color-primary-hover);
+    font-size: 14px;
+}
+
+.glossary-definition {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.glossary-exam-tip {
+    font-size: 12px;
+    color: #e9d5ff;
+    background-color: rgba(168, 85, 247, 0.15);
+    border-left: 3px solid #a855f7;
+    padding: 8px 12px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin-top: 4px;
+}
+
+.glossary-no-results {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    padding: 12px 0;
+}
+
+/* Quick Reference Accordion */
+.reference-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+details.ref-card {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+details.ref-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+details.ref-card[open] {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 16px var(--color-primary-glow);
+}
+
+summary.ref-summary {
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+summary.ref-summary::-webkit-details-marker {
+    display: none;
+}
+
+summary.ref-summary:hover {
+    background-color: var(--bg-card-hover);
+    color: var(--color-primary-hover);
+}
+
+summary.ref-summary::after {
+    content: "→";
+    font-family: var(--font-mono);
+    font-size: 16px;
+    color: var(--text-secondary);
+    transition: transform var(--transition-normal), color var(--transition-fast);
+}
+
+details.ref-card[open] summary::after {
+    transform: rotate(90deg);
+    color: var(--color-primary);
+}
+
+.ref-content {
+    padding: 0 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    animation: slide-down 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 13px;
+    line-height: 1.6;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 16px;
+}
+
+.ref-attack {
+    color: var(--text-secondary);
+}
+
+.ref-attack b {
+    color: var(--text-primary);
+}
+
+.ref-defense {
+    background-color: rgba(16, 185, 129, 0.06);
+    border-left: 3px solid var(--color-success);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    color: #a7f3d0;
+}
+
+.ref-defense b {
+    color: var(--color-success);
+}
+
+.ref-exam-focus {
+    background-color: rgba(245, 158, 11, 0.08);
+    border-left: 3px solid #d97706;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+}
+
+.ref-exam-focus b {
+    color: var(--color-warning);
+}
