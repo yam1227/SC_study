@@ -11,18 +11,19 @@ window.SecurityLabModules["jwt"] = {
                 
                 <div class="jwt-intro-grid" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px;">
                     <!-- Left: Base Tech & Auth comparison -->
+                    <!-- Left: Base Tech & Auth comparison -->
                     <div>
-                        <h4 style="color: var(--color-primary-hover); margin-bottom: 10px; font-size: 14px; font-weight: 600;">🔑 JWT (JSON Web Token) とは？</h4>
-                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 16px;">
+                        <h4 class="text-md text-primary-color" style="margin-bottom: 10px; font-weight: 600;">🔑 JWT (JSON Web Token) とは？</h4>
+                        <p class="text-base text-muted" style="line-height: 1.6; margin-bottom: 16px;">
                             JWTは、クライアントとサーバー間でユーザー情報や権限（クレーム）を<b>JSON形式のトークン</b>として安全に送受信するためのオープン標準（RFC 7519）です。トークン自身に必要なデータが含まれているため、データベースへのセッション問い合わせをせずに信頼性を担保できるのが特徴です。主にWeb APIの認可やシングルサインオン（SSO）で実装されます。
                         </p>
                         
-                        <h4 style="color: var(--color-primary-hover); margin-bottom: 10px; font-size: 14px; font-weight: 600;">⚔️ セッションベース認証 vs トークンベース認証（JWT）</h4>
-                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px;">
+                        <h4 class="text-md text-primary-color" style="margin-bottom: 10px; font-weight: 600;">⚔️ セッションベース認証 vs トークンベース認証（JWT）</h4>
+                        <p class="text-base text-muted" style="line-height: 1.6; margin-bottom: 12px;">
                             JWTは<b>トークンベース認証</b>に分類されます。それぞれの認証方式には、以下のような目的と役割の違いがあります。
                         </p>
                         
-                        <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-top: 8px; margin-bottom: 16px;">
+                        <table class="text-sm" style="width: 100%; border-collapse: collapse; margin-top: 8px; margin-bottom: 16px;">
                             <thead>
                                 <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); text-align: left;">
                                     <th style="padding: 8px 4px; font-weight: 600; width: 25%;">特徴</th>
@@ -49,11 +50,11 @@ window.SecurityLabModules["jwt"] = {
                             </tbody>
                         </table>
 
-                        <h4 style="color: var(--color-primary-hover); margin-top: 16px; margin-bottom: 8px; font-size: 14px; font-weight: 600;">🔒 JWS (JSON Web Signature) と JWE (JSON Web Encryption) の違い</h4>
-                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 8px;">
+                        <h4 class="text-md text-primary-color" style="margin-top: 16px; margin-bottom: 8px; font-weight: 600;">🔒 JWS (JSON Web Signature) と JWE (JSON Web Encryption) の違い</h4>
+                        <p class="text-base text-muted" style="line-height: 1.6; margin-bottom: 8px;">
                             セキスペ試験対策において非常に重要なJWTの2大規格です。
                         </p>
-                        <ul style="font-size: 12.5px; line-height: 1.6; color: var(--text-secondary); margin-left: 20px; margin-bottom: 12px; padding-left: 0;">
+                        <ul class="text-sm text-muted" style="line-height: 1.6; margin-left: 20px; margin-bottom: 12px; padding-left: 0;">
                             <li style="margin-bottom: 4px;">
                                 <b>JWS (署名付きJWT):</b> 本ページで扱う標準的なJWTです。データは署名で改ざん防止（<b>完全性</b>）されていますが暗号化はされておらず、Base64URLデコードすれば誰でも中身を閲覧できます。
                             </li>
@@ -65,14 +66,14 @@ window.SecurityLabModules["jwt"] = {
                     
                     <!-- Right: alg none vulnerability -->
                     <div style="border-left: 1px solid var(--border-color); padding-left: 32px;">
-                        <h4 style="color: var(--color-danger); margin-bottom: 10px; font-size: 14px; font-weight: 600;">⚠️ alg: none 脆弱性とは？</h4>
-                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px;">
+                        <h4 class="text-md text-danger-color" style="margin-bottom: 10px; font-weight: 600;">⚠️ alg: none 脆弱性とは？</h4>
+                        <p class="text-base text-muted" style="line-height: 1.6; margin-bottom: 12px;">
                             JWTのヘッダー部分には、署名検証に使用したアルゴリズムを示す <code>"alg"</code> フィールドが存在します（例: <code>"HS256"</code>, <code>"RS256"</code>）。
                         </p>
-                        <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 12px;">
+                        <p class="text-base text-muted" style="line-height: 1.6; margin-bottom: 12px;">
                             <code>"none"</code> アルゴリズムは、「署名検証をスキップする」ための開発・テスト用の指定です。しかし、本番サーバーの検証ロジックが <code>alg: "none"</code> トークンを正当なものとして受け入れてしまう場合、<b>改ざん検知の仕組みが完全にバイパス</b>されます。
                         </p>
-                        <div style="background-color: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); padding: 12px; border-radius: var(--radius-sm); font-size: 12.5px; color: #fecdd3; line-height: 1.5;">
+                        <div class="callout-box callout-danger text-sm" style="color: #fecdd3; line-height: 1.5;">
                             <b>攻撃のシナリオ:</b><br>
                             攻撃者はトークンのヘッダーを <code>"alg": "none"</code> に書き換えた上で、ペイロードを <code>"role": "admin"</code> に改ざんし、末尾の署名部分を削除してサーバーに送信します。脆弱なサーバーは署名検証を行わないため、改ざんされた管理者権限をそのまま信用し、アクセスを許可してしまいます。
                         </div>
@@ -129,8 +130,8 @@ window.SecurityLabModules["jwt"] = {
                         <div class="jwt-col">
                             <div class="jwt-part">
                                 <label for="sandboxJwtToken">検証するJWTトークン（直接編集可能）:</label>
-                                <textarea id="sandboxJwtToken" class="jwt-editor" style="height: 120px;" placeholder="ここにJWTを貼り付けます"></textarea>
-                                <button class="btn btn-secondary" id="btnTamperNone" style="border-color: var(--color-danger); color: var(--color-danger); margin-top: 8px; padding: 8px 12px; font-size: 12px; display: inline-flex; align-items: center; gap: 6px;">
+                                <textarea id="sandboxJwtToken" class="jwt-editor text-sm" style="height: 120px;" placeholder="ここにJWTを貼り付けます"></textarea>
+                                <button class="btn btn-secondary text-sm" id="btnTamperNone" style="border-color: var(--color-danger); color: var(--color-danger); margin-top: 8px; padding: 8px 12px; display: inline-flex; align-items: center; gap: 6px;">
                                     ⚠️ トークンを「alg: none」に改ざんする
                                 </button>
                             </div>
@@ -154,15 +155,15 @@ window.SecurityLabModules["jwt"] = {
                         <div class="jwt-col">
                             <div class="jwt-part header">
                                 <h4>Header (ヘッダー)</h4>
-                                <pre id="jwtDecodedHeader" style="font-family: var(--font-mono); font-size: 12px; color: #fb7185; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">{}</pre>
+                                <pre id="jwtDecodedHeader" class="code-log-box" style="color: #fb7185; padding: 8px;">{}</pre>
                             </div>
                             <div class="jwt-part payload">
                                 <h4>Payload (ペイロード)</h4>
-                                <pre id="jwtDecodedPayload" style="font-family: var(--font-mono); font-size: 12px; color: #38bdf8; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">{}</pre>
+                                <pre id="jwtDecodedPayload" class="code-log-box" style="color: #38bdf8; padding: 8px;">{}</pre>
                             </div>
                             <div class="jwt-part signature">
                                 <h4>Signature (署名部分)</h4>
-                                <span id="jwtDecodedSignature" style="font-family: var(--font-mono); font-size: 12px; color: #4ade80; overflow-wrap: anywhere;">[署名データ]</span>
+                                <span id="jwtDecodedSignature" class="text-sm text-mono" style="color: #4ade80; overflow-wrap: anywhere;">[署名データ]</span>
                             </div>
                         </div>
                     </div>
@@ -179,7 +180,7 @@ window.SecurityLabModules["jwt"] = {
             <!-- Learning Info -->
             <div class="card">
                 <h3>💡 情報処理安全確保支援士試験ポイント: JWTと鍵管理</h3>
-                <div style="font-size: 14px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 14px;">
+                <div class="text-md text-muted" style="line-height: 1.6; display: flex; flex-direction: column; gap: 14px;">
                     <p>
                         <b>1. 改ざん検知の仕組み（完全性の確保）</b><br>
                         JWTはBase64URLで符号化されているため、通信路上での盗聴により中身を解読することが容易です（暗号化されていません）。しかし、ヘッダーとペイロードをもとにサーバーの秘密鍵で生成した「署名（Signature）」を末尾に付加しているため、攻撃者が値を1文字でも改ざんすればサーバーでの署名検証が失敗し、不正トークンとして破棄されます。
@@ -208,17 +209,17 @@ window.SecurityLabModules["jwt"] = {
             </div>
 
             <!-- Call to Action: Next steps to OIDC -->
-            <div class="card" style="border: 1px solid rgba(99, 102, 241, 0.3); background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.05)); display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 20px; gap: 20px; margin-top: 16px;">
+            <div class="callout-box callout-primary" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 20px; gap: 20px; margin-top: 16px;">
                 <div style="flex: 1;">
-                    <h4 style="color: var(--color-primary-hover); margin-bottom: 6px; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                    <h4 class="text-md text-primary-color" style="margin-bottom: 6px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
                         🔗 JWTを実際の認証フローで使ってみましょう！
                     </h4>
-                    <p style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); margin: 0;">
+                    <p class="text-base text-muted" style="line-height: 1.5; margin: 0;">
                         JWTのデータ構造やセキュリティ（alg: none）を理解したら、次はこれが実際にどのように利用されるかを学びましょう。<br>
                         現代のWebシステムでは、<b>OAuth 2.0</b> や <b>OpenID Connect (OIDC)</b> のフローにおいて、認証情報やクレームを格納した「IDトークン」としてJWTがやり取りされます。
                     </p>
                 </div>
-                <button class="btn btn-primary" id="btnGoToOAuth" style="flex-shrink: 0; padding: 12px 20px; font-size: 13px; border-radius: var(--radius-sm); white-space: nowrap;">
+                <button class="btn btn-primary text-base" id="btnGoToOAuth" style="flex-shrink: 0; padding: 12px 20px; border-radius: var(--radius-sm); white-space: nowrap;">
                     🤝 OAuth / OIDC フロー学習に進む ➔
                 </button>
             </div>

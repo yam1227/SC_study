@@ -14,13 +14,18 @@ TEST_PORT = 18005
 TEST_URL = f"http://127.0.0.1:{TEST_PORT}"
 
 def is_port_in_use(port: int) -> bool:
+    import socket
     import urllib.request
     try:
         req = urllib.request.Request(f"http://127.0.0.1:{port}/api/modules", headers={"User-Agent": "pytest"})
         with urllib.request.urlopen(req, timeout=1.0) as res:
             return res.status == 200
     except Exception:
-        return False
+        try:
+            with socket.create_connection(("127.0.0.1", port), timeout=0.5):
+                return True
+        except Exception:
+            return False
 
 @pytest.fixture(scope="session", autouse=True)
 def run_server():
@@ -33,8 +38,9 @@ def run_server():
         server_process = subprocess.Popen(
             [venv_python, "-m", "uvicorn", "main:app", "--host", "127.0.0.1", "--port", str(TEST_PORT)]
         )
-        for _ in range(30):
+        for _ in range(60):
             if is_port_in_use(TEST_PORT):
+                time.sleep(0.5)
                 break
             time.sleep(0.2)
         else:

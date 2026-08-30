@@ -6,12 +6,12 @@ window.SecurityLabModules["stp"] = {
     html: `
         <div class="lab-container">
             <!-- Header Banner -->
-            <div class="card" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(30, 27, 75, 0.6), rgba(15, 23, 42, 0.8)); border-left: 4px solid #6366f1;">
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--color-primary);">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                     <div>
                         <h2 style="font-size: 1.3rem; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
                             <span>🌲</span> スパニングツリープロトコル (STP / IEEE 802.1D)
-                            <span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.4);">令和5年春 AM2 問19 出題題材</span>
+                            <span class="badge badge-subtle-primary">令和5年春 AM2 問19 出題題材</span>
                         </h2>
                         <p style="color: var(--text-secondary); font-size: 0.85rem;">
                             スイッチドネットワークにおけるL2ループ（ブロードキャストストーム）を防ぐ構造、ルートブリッジ選出、ポート役割（RP, DP, BP）決定アルゴリズムをインタラクティブにマスターします。
@@ -22,16 +22,16 @@ window.SecurityLabModules["stp"] = {
 
             <!-- Main Tab Navigation -->
             <div class="card-tabs" style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; overflow-x: auto;">
-                <button id="stpTabBtn-topo" class="btn-tab active" onclick="window.stpLab.switchTab('topo')" style="padding: 9px 16px; font-size: 13px; font-weight: 600;">
+                <button id="stpTabBtn-topo" class="btn-tab active text-base" onclick="window.stpLab.switchTab('topo')" style="padding: 9px 16px; font-weight: 600;">
                     🌐 1. トポロジ & STP選出シミュレータ
                 </button>
-                <button id="stpTabBtn-storm" class="btn-tab" onclick="window.stpLab.switchTab('storm')" style="padding: 9px 16px; font-size: 13px; font-weight: 600;">
+                <button id="stpTabBtn-storm" class="btn-tab text-base" onclick="window.stpLab.switchTab('storm')" style="padding: 9px 16px; font-weight: 600;">
                     ⚡ 2. パケットループ & ストーム検証
                 </button>
-                <button id="stpTabBtn-bpdu" class="btn-tab" onclick="window.stpLab.switchTab('bpdu')" style="padding: 9px 16px; font-size: 13px; font-weight: 600;">
+                <button id="stpTabBtn-bpdu" class="btn-tab text-base" onclick="window.stpLab.switchTab('bpdu')" style="padding: 9px 16px; font-weight: 600;">
                     📦 3. BPDU構造 & STP vs RSTP
                 </button>
-                <button id="stpTabBtn-exam" class="btn-tab" onclick="window.stpLab.switchTab('exam')" style="padding: 9px 16px; font-size: 13px; font-weight: 600;">
+                <button id="stpTabBtn-exam" class="btn-tab text-base" onclick="window.stpLab.switchTab('exam')" style="padding: 9px 16px; font-weight: 600;">
                     📝 4. 過去問演習 (令和5年春 AM2 問19)
                 </button>
             </div>
@@ -59,7 +59,7 @@ window.SecurityLabModules["stp"] = {
                             </svg>
 
                             <!-- Legend Overlay -->
-                            <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(0, 0, 0, 0.75); padding: 8px 12px; border-radius: 6px; font-size: 0.75rem; border: 1px solid #2d2d35; display: flex; gap: 12px; flex-wrap: wrap;">
+                            <div style="position: absolute; bottom: 10px; left: 10px; background: var(--bg-terminal); padding: 8px 12px; border-radius: 6px; font-size: 0.75rem; border: 1px solid var(--border-color); display: flex; gap: 12px; flex-wrap: wrap;">
                                 <div><span style="display: inline-block; width: 10px; height: 10px; background: #10b981; border-radius: 50%; margin-right: 4px;"></span> Forwarding (転送可能)</div>
                                 <div><span style="display: inline-block; width: 10px; height: 10px; background: #ef4444; border-radius: 50%; margin-right: 4px;"></span> Blocking (遮断)</div>
                                 <div><span style="display: inline-block; width: 8px; height: 8px; background: #fbbf24; border-radius: 50%; margin-right: 4px;"></span> Root Bridge (頂点)</div>
@@ -128,7 +128,7 @@ window.SecurityLabModules["stp"] = {
                         </div>
 
                         <!-- Status Alert Box -->
-                        <div id="stpStormStatusBox" style="padding: 12px; border-radius: 6px; font-size: 0.85rem; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #34d399;">
+                        <div id="stpStormStatusBox" class="callout-box callout-success text-sm">
                             STP有効: ループ経路のポートが遮断されているため、ブロードキャストストームは発生しません。
                         </div>
                     </div>
@@ -171,11 +171,11 @@ window.SecurityLabModules["stp"] = {
                                         <td style="color: var(--text-secondary); padding: 4px;">BPDU Type</td>
                                         <td style="color: #a1a1aa;">0x00 (Configuration) / 0x80 (TCN)</td>
                                     </tr>
-                                    <tr style="border-bottom: 1px solid #18181b; background: rgba(99, 102, 241, 0.1);">
+                                    <tr class="table-row-primary" style="border-bottom: 1px solid #18181b;">
                                         <td style="color: #d97706; font-weight: 600; padding: 4px;">Root ID (Root BID)</td>
                                         <td style="color: #d97706;">Priority (4096) + Root MAC (00:11:22...)</td>
                                     </tr>
-                                    <tr style="border-bottom: 1px solid #18181b; background: rgba(16, 185, 129, 0.1);">
+                                    <tr class="table-row-success" style="border-bottom: 1px solid #18181b;">
                                         <td style="color: #34d399; font-weight: 600; padding: 4px;">Root Path Cost</td>
                                         <td style="color: #34d399;">送信元SWからルートまでの合計コスト</td>
                                     </tr>
@@ -233,7 +233,7 @@ window.SecurityLabModules["stp"] = {
             <div id="stpTab-exam" class="tab-content" style="display: none;">
                 <div class="card">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                        <span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">過去問題</span>
+                        <span class="badge badge-subtle-primary">過去問題</span>
                         <h3 style="font-size: 1.1rem;">情報処理安全確保支援士 令和5年春期 午前II 問19</h3>
                     </div>
 
@@ -299,14 +299,12 @@ window.SecurityLabModules["stp"] = {
                 this.stpEnabled = enabled;
                 const statusBox = document.getElementById("stpStormStatusBox");
                 if (enabled) {
-                    statusBox.style.background = "rgba(16, 185, 129, 0.1)";
-                    statusBox.style.border = "1px solid #10b981";
-                    statusBox.style.color = "#34d399";
+                    statusBox.className = "callout-box callout-success text-sm";
+                    statusBox.style.color = "var(--color-success)";
                     statusBox.innerHTML = "✅ STP有効: ループ経路のポートが遮断されているため、ブロードキャストストームは発生しません。";
                 } else {
-                    statusBox.style.background = "rgba(239, 68, 68, 0.1)";
-                    statusBox.style.border = "1px solid #ef4444";
-                    statusBox.style.color = "#f87171";
+                    statusBox.className = "callout-box callout-danger text-sm";
+                    statusBox.style.color = "var(--color-danger)";
                     statusBox.innerHTML = "❌ STP無効: リンクがすべて転送状態となり、ブロードキャストが無限ループしてネットワークを麻痺させます。";
                 }
             },
@@ -565,13 +563,12 @@ window.SecurityLabModules["stp"] = {
 
         if (isCorrect) {
             if (selectedBtn) {
-                selectedBtn.style.border = "2px solid #10b981";
-                selectedBtn.style.background = "rgba(16, 185, 129, 0.15)";
+                selectedBtn.style.borderColor = "var(--color-success)";
+                selectedBtn.style.background = "var(--bg-badge-success)";
             }
             resultBox.style.display = "block";
-            resultBox.style.background = "rgba(16, 185, 129, 0.1)";
-            resultBox.style.border = "1px solid #10b981";
-            resultBox.style.color = "#34d399";
+            resultBox.className = "callout-box callout-success";
+            resultBox.style.color = "var(--color-success)";
             resultBox.innerHTML = `
                 <div style="font-weight: bold; font-size: 1.05rem; margin-bottom: 8px;">🎉 正解です！ 【イ. 代表ポート (Designated Port)】</div>
                 <p style="color: var(--text-primary); margin-bottom: 8px;">
@@ -587,13 +584,12 @@ window.SecurityLabModules["stp"] = {
             `;
         } else {
             if (selectedBtn) {
-                selectedBtn.style.border = "2px solid #ef4444";
-                selectedBtn.style.background = "rgba(239, 68, 68, 0.15)";
+                selectedBtn.style.borderColor = "var(--color-danger)";
+                selectedBtn.style.background = "var(--bg-badge-danger)";
             }
             resultBox.style.display = "block";
-            resultBox.style.background = "rgba(239, 68, 68, 0.1)";
-            resultBox.style.border = "1px solid #ef4444";
-            resultBox.style.color = "#f87171";
+            resultBox.className = "callout-box callout-danger";
+            resultBox.style.color = "var(--color-danger)";
             resultBox.innerHTML = `
                 <div style="font-weight: bold; font-size: 1.05rem; margin-bottom: 8px;">❌ 不正解です。もう一度考えてみましょう！</div>
                 <p style="color: var(--text-primary);">

@@ -10,18 +10,18 @@ window.SecurityLabModules["osi_model"] = {
                 
                 <div class="lab-grid-3" style="grid-template-columns: 1.2fr 1fr 1.2fr; gap: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
                     <div class="form-group">
-                        <label for="osiPayloadInput" style="font-size: 13px;">送信メッセージ (HTTP data):</label>
-                        <input type="text" id="osiPayloadInput" value="POST /login HTTP/1.1\\r\\nHost: internal.portal" style="width: 100%; font-size: 13px; padding: 6px;">
+                        <label for="osiPayloadInput" class="text-base">送信メッセージ (HTTP data):</label>
+                        <input type="text" id="osiPayloadInput" class="text-base" value="POST /login HTTP/1.1\\r\\nHost: internal.portal" style="width: 100%; padding: 6px;">
                     </div>
                     <div class="form-group" style="display: flex; flex-direction: column; justify-content: flex-end;">
-                        <label style="font-weight: bold; color: var(--text-primary); font-size: 13px;">🚀 シミュレーション制御:</label>
+                        <label class="text-base" style="font-weight: bold; color: var(--text-primary);">🚀 シミュレーション制御:</label>
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-primary" id="btnStartOsiSend" style="flex: 1; font-size: 13px; padding: 6px;">1. 送信 (カプセル化)</button>
-                            <button class="btn btn-secondary" id="btnStartOsiRecv" style="flex: 1; font-size: 13px; padding: 6px;" disabled>2. 受信 (非カプセル化)</button>
+                            <button class="btn btn-primary text-base" id="btnStartOsiSend" style="flex: 1; padding: 6px;">1. 送信 (カプセル化)</button>
+                            <button class="btn btn-secondary text-base" id="btnStartOsiRecv" style="flex: 1; padding: 6px;" disabled>2. 受信 (非カプセル化)</button>
                         </div>
                     </div>
                     <div style="display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px;">
-                        <button class="btn btn-lime-outline" id="btnResetOsi" style="width: 100px; font-size: 13px; padding: 6px;">リセット</button>
+                        <button class="btn btn-lime-outline text-base" id="btnResetOsi" style="width: 100px; padding: 6px;">リセット</button>
                     </div>
                 </div>
 
@@ -39,12 +39,12 @@ window.SecurityLabModules["osi_model"] = {
                         <div>
                             <label style="font-weight: bold; color: var(--text-primary);">📦 カプセル化パケット (PDU)</label>
                             <div class="osi-packet-preview-container">
-                                <span style="font-weight: bold; color: var(--text-secondary); display: block; margin-bottom: 6px;">現在のパケット配置:</span>
-                                <div id="osiPacketTypeLabel" style="font-size: 12px; color: var(--color-primary-hover); font-weight: bold; margin-bottom: 8px;">PDU: N/A</div>
+                                <span class="text-muted" style="font-weight: bold; display: block; margin-bottom: 6px;">現在のパケット配置:</span>
+                                <div id="osiPacketTypeLabel" class="text-sm text-primary-color" style="font-weight: bold; margin-bottom: 8px;">PDU: N/A</div>
                                 <div class="osi-packet-block" id="osiPacketSegmentsBlock">
                                     <div class="osi-packet-segment osi-segment-data" id="osiSegData">HTTP DATA</div>
                                 </div>
-                                <div id="osiPhysicalBits" style="font-size: 12px; color: #10b981; font-family: monospace; word-break: break-all; margin-top: 10px; display: none;"></div>
+                                <div id="osiPhysicalBits" class="text-sm text-mono" style="color: #10b981; word-break: break-all; margin-top: 10px; display: none;"></div>
                             </div>
                         </div>
 
@@ -57,15 +57,15 @@ window.SecurityLabModules["osi_model"] = {
                                 <div class="osi-flow-packet" id="osiFlowPacket"></div>
                                 <span class="osi-flow-node" title="宛先 Webサーバー">🛢️</span>
                             </div>
-                            <div style="text-align: center; font-size: 12px; color: var(--text-secondary); margin-top: 6px;" id="osiFlowLabel">通信待機中</div>
+                            <div class="text-sm text-muted" style="text-align: center; margin-top: 6px;" id="osiFlowLabel">通信待機中</div>
                         </div>
                     </div>
 
                     <!-- Right: console logs & details -->
                     <div style="display: flex; flex-direction: column; gap: 14px;">
                         <!-- Dynamic details box -->
-                        <div id="osiDetailBox" style="background: rgba(99,102,241,0.03); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; min-height: 180px; font-size: 12px; line-height: 1.5; color: var(--text-secondary);">
-                            <span style="font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: block; margin-bottom: 8px;" id="osiDetailTitle">💡 階層をクリックして解説を表示</span>
+                        <div id="osiDetailBox" class="callout-box callout-primary text-sm text-muted" style="min-height: 180px; line-height: 1.5;">
+                            <span class="text-base" style="font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 4px; display: block; margin-bottom: 8px;" id="osiDetailTitle">💡 階層をクリックして解説を表示</span>
                             <div id="osiDetailContent">
                                 左のOSI階層スタックのいずれかの層をクリックすると、その階層のプロトコル動作やカプセル化ヘッダーの内容、セキスペ頻出の知識がここに表示されます。
                             </div>
@@ -74,7 +74,7 @@ window.SecurityLabModules["osi_model"] = {
                         <div class="form-group" style="margin: 0; flex: 1; display: flex; flex-direction: column;">
                             <label>カプセル化通信ログ:</label>
                             <div class="response-box" style="flex: 1; min-height: 130px; max-height: 180px; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3);">
-                                <code id="osiSimLogText" style="font-size: 12px; color: #38bdf8; white-space: pre-wrap;">「1. 送信 (カプセル化)」ボタンを押すと、各階層でのヘッダー付加プロセスが開始されます。</code>
+                                <code id="osiSimLogText" class="text-sm" style="color: #38bdf8; white-space: pre-wrap;">「1. 送信 (カプセル化)」ボタンを押すと、各階層でのヘッダー付加プロセスが開始されます。</code>
                             </div>
                         </div>
                     </div>
@@ -147,7 +147,7 @@ window.SecurityLabModules["osi_model"] = {
                     <b>■ 役割:</b> ユーザーが利用するWebブラウザやサーバーアプリケーションのインターフェース。<br>
                     <b>■ 今回の動作:</b> 入力されたHTTPデータ <code>POST /login HTTP/1.1</code> にHTTPヘッダーが付与されます。<br>
                     <b>■ 主なプロトコル:</b> HTTP, HTTPS, DNS, SMTP, DHCP, FTP, SNMP<br>
-                    <div style="background-color:rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
+                    <div style="background-color: var(--bg-subtle-neutral); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
                         <b>💡 セキスペ出題の鍵:</b><br>
                         DNSプロトコルの動作（再帰的な問い合わせやポート53）や、アプリケーション層を検査・遮断する <b>WAF (Web Application Firewall)</b> の動作はこの第7層に属します。
                     </div>
@@ -159,7 +159,7 @@ window.SecurityLabModules["osi_model"] = {
                     <b>■ 役割:</b> データの表現形式（文字コード、暗号化、データ圧縮など）を定義。<br>
                     <b>■ 今回の動作:</b> Webサーバーとの安全な通信のために、HTTPメッセージが <b>TLSによって暗号化</b> されます。<br>
                     <b>■ 代表的な技術:</b> SSL/TLS (暗号), ASCII, Unicode (UTF-8), JPEG, MPEG, ZIP<br>
-                    <div style="background-color:rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
+                    <div style="background-color: var(--bg-subtle-neutral); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
                         <b>💡 セキスペ出題の鍵:</b><br>
                         「文字化け」や、SSL/TLSによる「共通鍵暗号/公開鍵暗号の適用」による暗号処理の定義はこのレイヤーに位置します。
                     </div>
@@ -171,7 +171,7 @@ window.SecurityLabModules["osi_model"] = {
                     <b>■ 役割:</b> データを送信するプログラム間の「セッション」の開始、維持、終了の同期を行う。<br>
                     <b>■ 今回の動作:</b> TLSのネゴシエーションが成功し、安全なセッションが確立された通信の論理的関係を管理します。<br>
                     <b>■ 主なプロトコル:</b> TLSセッション管理, NetBIOS, RPC<br>
-                    <div style="background-color:rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
+                    <div style="background-color: var(--bg-subtle-neutral); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
                         <b>💡 セキスペ出題の鍵:</b><br>
                         トランスポート層がTCP接続といった「回線の道」を作るのに対し、セッション層は「会話の手順やログイン状態の管理」といった論理接続を行います。
                     </div>
@@ -183,7 +183,7 @@ window.SecurityLabModules["osi_model"] = {
                     <b>■ 役割:</b> 2つの端末プログラム間の、信頼性のある（または高速な）データ転送の保証。<br>
                     <b>■ 今回の動作:</b> 暗号化されたデータに対して、送信元ポート番号（例: <code>54321</code>）と宛先ポート番号（HTTPS: <code>443</code>）を含む <b>TCPヘッダー</b> を付与し、<b>「TCPセグメント」</b> に分割します。<br>
                     <b>■ 主なプロトコル:</b> TCP, UDP<br>
-                    <div style="background-color:rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
+                    <div style="background-color: var(--bg-subtle-neutral); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
                         <b>💡 セキスペ出題の鍵:</b><br>
                         信頼性を重視する <b>TCP (スリーウェイハンドシェイク、ウィンドウ制御)</b> と、速度重視の <b>UDP</b> の比較、およびポート番号（L4）のみをチェックして遮断するパケットフィルタリング型ファイアウォールの動作が重要です。
                     </div>
@@ -195,7 +195,7 @@ window.SecurityLabModules["osi_model"] = {
                     <b>■ 役割:</b> 異なるネットワーク間のルーティング（経路決定）と、宛先へのパケット配送。<br>
                     <b>■ 今回の動作:</b> TCPセグメントに対して、送信元IP（例: <code>192.168.1.50</code>）と宛先IP（例: <code>10.0.0.100</code>）を含む <b>IPヘッダー</b> を付与し、<b>「IPパケット」</b> とします。<br>
                     <b>■ 主なプロトコル:</b> IP, ICMP, ARP, IPsec, OSPF<br>
-                    <div style="background-color:rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
+                    <div style="background-color: var(--bg-subtle-neutral); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
                         <b>💡 セキスペ出題の鍵:</b><br>
                         IPアドレスに基づいて最適経路を決定する <b>ルーター</b> や <b>L3スイッチ</b> の動作層です。IPアドレスをMACアドレスに変換する <b>ARP</b> の動作もこの層を跨ぎます。
                     </div>
@@ -207,7 +207,7 @@ window.SecurityLabModules["osi_model"] = {
                     <b>■ 役割:</b> 同一ネットワーク（リンク）内の隣接機器間での信頼性の高いデータ通信。<br>
                     <b>■ 今回の動作:</b> IPパケットに対して、送信元MACとネクストホップのMACを含む <b>イーサネットヘッダー</b> と、エラー検出用トレーラである <b>FCS (Frame Check Sequence)</b> を付与し、<b>「イーサネットフレーム」</b> を構成します。<br>
                     <b>■ 代表的な技術:</b> イーサネット (IEEE 802.3), PPP, MACアドレス, VLAN (802.1Q)<br>
-                    <div style="background-color:rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
+                    <div style="background-color: var(--bg-subtle-neutral); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
                         <b>💡 セキスペ出題の鍵:</b><br>
                         MACアドレステーブルを学習し、パケットを適切なポートに中継する <b>レイヤー2スイッチ（L2スイッチ） / ブリッジ</b> や、セグメント分離を行う <b>VLAN</b> がこの層に属します。
                     </div>
@@ -219,7 +219,7 @@ window.SecurityLabModules["osi_model"] = {
                     <b>■ 役割:</b> データを電気信号や光信号、電波などの物理的な信号に変換し、物理媒体で伝送する。<br>
                     <b>■ 今回の動作:</b> イーサネットフレームを <b>0と1のビット列</b> にシリアル変換し、電気パルスや光パルスとして物理メディア（UTPケーブルや光ファイバー）に送り出します。<br>
                     <b>■ 代表的な技術:</b> UTP/LANケーブル, 光ファイバー, コネクタ形状(RJ-45), 電気的仕様(電圧など)<br>
-                    <div style="background-color:rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
+                    <div style="background-color: var(--bg-subtle-neutral); border: 1px solid var(--border-color); padding: 8px; margin-top: 8px; border-radius: 4px;">
                         <b>💡 セキスペ出題の鍵:</b><br>
                         物理的な回線接続や、単に受信信号を増幅して全ポートに垂れ流すだけの <b>リピータハブ（シェアードハブ）</b> はこの物理層で動作するため、盗聴のリスクが生じる性質が出題されます。
                     </div>
@@ -384,7 +384,7 @@ window.SecurityLabModules["osi_model"] = {
                         <td style="font-weight: bold; color: var(--text-primary);">L${num} ${layerName}</td>
                         <td class="field-name">${f.name}</td>
                         <td class="field-value">${f.val}</td>
-                        <td style="color: var(--text-secondary); font-size: 12px;">${f.desc}</td>
+                        <td class="text-sm text-muted">${f.desc}</td>
                     </tr>
                 `;
             }).join("");

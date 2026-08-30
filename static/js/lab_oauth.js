@@ -118,7 +118,7 @@ window.SecurityLabModules["oauth"] = {
                     
                     <div class="form-group">
                         <label>現在地:</label>
-                        <div style="font-size: 14px; font-weight: bold; color: var(--color-primary-hover);" id="oauthStepTitle">
+                        <div class="text-md text-primary-color" style="font-weight: bold;" id="oauthStepTitle">
                             開始ボタンを押してください
                         </div>
                     </div>
@@ -126,13 +126,13 @@ window.SecurityLabModules["oauth"] = {
                     <div class="form-group">
                         <label>HTTPメッセージ詳細:</label>
                         <div class="response-box" style="background-color: #0c0a09; height: 180px; overflow-y: auto;">
-                            <code id="oauthPacketCode" style="color: #60a5fa;">シーケンスを開始するとパケットデータが表示されます。</code>
+                            <code id="oauthPacketCode" class="text-sm" style="color: #60a5fa;">シーケンスを開始するとパケットデータが表示されます。</code>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label>セキュリティ解説:</label>
-                        <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary);" id="oauthStepExplanation">
+                        <div class="text-base text-muted" style="line-height: 1.5;" id="oauthStepExplanation">
                             認可コードフローは、ブラウザ（フロントチャネル）を介して認可コードを渡し、そのコードをもとにクライアントがサーバー間通信（バックチャネル）で安全にトークンを取得する仕組みです。
                         </div>
                     </div>
@@ -142,7 +142,7 @@ window.SecurityLabModules["oauth"] = {
             <!-- Learning Content: CSRF Attack scenario explanation -->
             <div class="card">
                 <h3>💡 セキスペ試験対策：OAuth 2.0 / OIDC に潜む脅威と対策</h3>
-                <div style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="text-base text-muted" style="line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div>
                         <h4 style="color: var(--text-primary); margin-bottom: 8px;">1. CSRF (クロスサイトリクエストフォージェリ) 攻撃と state</h4>
                         <p>

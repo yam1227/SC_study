@@ -30,7 +30,7 @@ window.SecurityLabModules["ipsec"] = {
                     </div>
                 </div>
                 
-                <h4 style="font-size: 13px; color: var(--text-secondary); margin-top: 14px;">📦 構築されたパケットの配置レイアウト (クリックで各ヘッダーの説明を表示)</h4>
+                <h4 class="text-base text-muted" style="margin-top: 14px;">📦 構築されたパケットの配置レイアウト (クリックで各ヘッダーの説明を表示)</h4>
                 
                 <!-- Dynamic Packet layout rendering area -->
                 <div id="ipsecPacketLayoutContainer" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; padding: 14px; background-color: var(--bg-app); border: 1px solid var(--border-color); border-radius: var(--radius-md); min-height: 80px;">
@@ -65,23 +65,23 @@ window.SecurityLabModules["ipsec"] = {
                     <!-- Node Info Row -->
                     <div style="display: flex; justify-content: space-between; width: 100%; z-index: 10;">
                         <!-- Client -->
-                        <div id="ikeNodeClient" style="text-align: center; width: 140px; padding: 12px; background: rgba(99, 102, 241, 0.1); border: 2px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); transition: all 0.3s ease;">
-                            <div style="font-size: 28px;">💻</div>
-                            <div style="font-weight: bold; font-size: 13px; margin-top: 4px; color: var(--text-primary);">Initiator (Client)</div>
-                            <div id="ikeStateClient" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
+                        <div id="ikeNodeClient" style="text-align: center; width: 140px; padding: 12px; background: var(--bg-subtle-primary); border: 2px solid var(--border-subtle-primary); border-radius: var(--radius-md); transition: all 0.3s ease;">
+                            <div class="node-icon-lg">💻</div>
+                            <div class="text-base" style="font-weight: bold; margin-top: 4px; color: var(--text-primary);">Initiator (Client)</div>
+                            <div id="ikeStateClient" class="text-xs text-muted" style="margin-top: 4px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
                         </div>
                         
                         <!-- Mid details -->
                         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; padding: 0 10px;">
-                            <span id="ikePhaseLabel" style="background: rgba(245, 158, 11, 0.12); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; transition: all 0.3s ease;">準備完了</span>
-                            <div id="ikeStatusText" style="color: var(--text-secondary); font-size: 12px; margin-top: 8px; text-align: center; max-width: 280px; min-height: 32px;">ボタンを押してシミュレーションを開始してください</div>
+                            <span id="ikePhaseLabel" class="text-sm badge-subtle-warning" style="padding: 2px 10px; border-radius: 20px; font-weight: bold; letter-spacing: 0.5px; transition: all 0.3s ease;">準備完了</span>
+                            <div id="ikeStatusText" class="text-sm text-muted" style="margin-top: 8px; text-align: center; max-width: 280px; min-height: 32px;">ボタンを押してシミュレーションを開始してください</div>
                         </div>
                         
                         <!-- Gateway -->
-                        <div id="ikeNodeGateway" style="text-align: center; width: 140px; padding: 12px; background: rgba(16, 185, 129, 0.1); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); transition: all 0.3s ease;">
-                            <div style="font-size: 28px;">🛡️</div>
-                            <div style="font-weight: bold; font-size: 13px; margin-top: 4px; color: var(--text-primary);">Responder (GW)</div>
-                            <div id="ikeStateGateway" style="font-size: 12px; color: var(--text-secondary); margin-top: 4px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
+                        <div id="ikeNodeGateway" style="text-align: center; width: 140px; padding: 12px; background: var(--bg-subtle-success); border: 2px solid var(--border-subtle-success); border-radius: var(--radius-md); transition: all 0.3s ease;">
+                            <div class="node-icon-lg">🛡️</div>
+                            <div class="text-base" style="font-weight: bold; margin-top: 4px; color: var(--text-primary);">Responder (GW)</div>
+                            <div id="ikeStateGateway" class="text-xs text-muted" style="margin-top: 4px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 2px 4px; border-radius: 4px;">OFFLINE</div>
                         </div>
                     </div>
                     
@@ -103,22 +103,22 @@ window.SecurityLabModules["ipsec"] = {
                     <div>
                         <label>IKE シーケンスログ:</label>
                         <div class="response-box" style="height: 240px; overflow-y: auto;">
-                            <code id="ikeSeqLog" style="font-size: 12px; color: #38bdf8;">「鍵交換シーケンス実行」を押すと通信ログが表示されます。</code>
+                            <code id="ikeSeqLog" class="text-sm" style="color: #38bdf8;">「鍵交換シーケンス実行」を押すと通信ログが表示されます。</code>
                         </div>
                     </div>
                     
                     <div id="ikeExplanationCard" class="exam-key-card" style="display: flex; flex-direction: column; gap: 10px;">
                         <span style="display: block; padding-bottom: 6px;">💡 IKE (Internet Key Exchange) 試験攻略知識</span>
                         <p>
-                            IPsecでは、通信を行う2者間でセキュリティ属性の合意（暗号方式や鍵など）である **SA (Security Association)** を結びます。この SA を動的に確立するためのプロトコルが **IKE** です。
+                            IPsecでは、通信を行う2者間でセキュリティ属性の合意（暗号方式や鍵など）である <strong>SA (Security Association)</strong> を結びます。この SA を動的に確立するためのプロトコルが <strong>IKE</strong> です。
                         </p>
                         <p>
                             <b>・IKE Phase 1</b>: 鍵交換に必要な安全な通信路自体を確立します。
-                            <br>&nbsp;&nbsp;- *メインモード*: **6パケット**で交渉。対話が多く時間がかかりますが、接続元のID情報を暗号化して送信するため安全です。
-                            <br>&nbsp;&nbsp;- *アグレッシブモード*: **3パケット**で交渉。パケット数が少なく高速ですが、ID情報を暗号化せず（平文で）送るため盗聴されるリスクがあります。
+                            <br>&nbsp;&nbsp;- <em>メインモード</em>: <strong>6パケット</strong>で交渉。対話が多く時間がかかりますが、接続元のID情報を暗号化して送信するため安全です。
+                            <br>&nbsp;&nbsp;- <em>アグレッシブモード</em>: <strong>3パケット</strong>で交渉。パケット数が少なく高速ですが、ID情報を暗号化せず（平文で）送るため盗聴されるリスクがあります。
                         </p>
                         <p>
-                            <b>・IKE Phase 2 (クイックモード)</b>: Phase 1で構築した安全な通信路の中で、実際のIPsec通信（データ送受用）に用いる SA を交渉します（**3パケット**）。
+                            <b>・IKE Phase 2 (クイックモード)</b>: Phase 1で構築した安全な通信路の中で、実際のIPsec通信（データ送受用）に用いる SA を交渉します（<strong>3パケット</strong>）。
                         </p>
                     </div>
                 </div>
@@ -149,13 +149,13 @@ window.SecurityLabModules["ipsec"] = {
             }
             .ike-node-active-client {
                 animation: ikePulse 1.2s infinite;
-                border-color: rgba(99, 102, 241, 1) !important;
-                background: rgba(99, 102, 241, 0.25) !important;
+                border-color: var(--color-primary) !important;
+                background: var(--bg-badge-primary) !important;
             }
             .ike-node-active-gw {
                 animation: ikePulseGw 1.2s infinite;
-                border-color: rgba(16, 185, 129, 1) !important;
-                background: rgba(16, 185, 129, 0.25) !important;
+                border-color: var(--color-success) !important;
+                background: var(--bg-badge-success) !important;
             }
             .ike-packet-dot {
                 position: absolute;
@@ -165,7 +165,7 @@ window.SecurityLabModules["ipsec"] = {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 13px;
+                font-size: var(--font-size-base);
                 color: #fff;
                 z-index: 10;
                 margin-left: -12px; /* Center dot on lifeline */
@@ -185,7 +185,7 @@ window.SecurityLabModules["ipsec"] = {
                 background: var(--bg-card);
                 border: 1px solid #d97706;
                 border-radius: var(--radius-sm);
-                font-size: 12px;
+                font-size: var(--font-size-sm);
                 font-weight: bold;
                 color: #d97706;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -237,29 +237,29 @@ window.SecurityLabModules["ipsec"] = {
                     let prefix = "";
 
                     if (segment.state.includes("ENCRYPTED")) {
-                        bg = "rgba(239, 68, 68, 0.15)";
-                        border = "rgba(239, 68, 68, 0.5)";
-                        color = "#f87171";
+                        bg = "var(--bg-badge-danger)";
+                        border = "var(--border-subtle-danger)";
+                        color = "var(--color-danger)";
                         prefix = "🔒 [暗号化] ";
                     } else if (segment.state.includes("AUTHENTICATED")) {
-                        bg = "rgba(16, 185, 129, 0.15)";
-                        border = "rgba(16, 185, 129, 0.5)";
-                        color = "#34d399";
+                        bg = "var(--bg-badge-success)";
+                        border = "var(--border-subtle-success)";
+                        color = "var(--color-success)";
                         prefix = "🛡️ [認証保証] ";
                     } else { // Cleartext
-                        bg = "rgba(99, 102, 241, 0.15)";
-                        border = "rgba(99, 102, 241, 0.5)";
-                        color = "#818cf8";
+                        bg = "var(--bg-badge-primary)";
+                        border = "var(--border-subtle-primary)";
+                        color = "var(--color-primary-hover)";
                         prefix = "📖 [平文] ";
                     }
 
+                    block.className = "text-sm";
                     block.style.backgroundColor = bg;
                     block.style.border = `1px solid ${border}`;
                     block.style.color = color;
                     block.style.padding = "10px 14px";
                     block.style.borderRadius = "var(--radius-sm)";
                     block.style.cursor = "pointer";
-                    block.style.fontSize = "12px";
                     block.style.fontWeight = "bold";
                     block.style.flex = "1";
                     block.style.textAlign = "center";
@@ -268,7 +268,7 @@ window.SecurityLabModules["ipsec"] = {
 
                     block.innerHTML = `
                         <div>${segment.name}</div>
-                        <div style="font-size: 12px; font-weight: normal; margin-top: 4px; opacity: 0.9;">${segment.size}</div>
+                        <div class="text-xs" style="font-weight: normal; margin-top: 4px; opacity: 0.9;">${segment.size}</div>
                     `;
 
                     block.addEventListener("click", () => {
@@ -328,9 +328,9 @@ window.SecurityLabModules["ipsec"] = {
             const ikeStatusText = document.getElementById("ikeStatusText");
 
             ikePhaseLabel.innerText = "Phase 1 開始";
-            ikePhaseLabel.style.background = "rgba(245, 158, 11, 0.15)";
+            ikePhaseLabel.style.background = "var(--bg-badge-warning)";
             ikePhaseLabel.style.color = "var(--color-warning)";
-            ikePhaseLabel.style.borderColor = "rgba(245, 158, 11, 0.4)";
+            ikePhaseLabel.style.borderColor = "var(--border-subtle-warning)";
             ikeStatusText.innerText = "IKEネゴシエーションが開始されました...";
 
             let steps = [];
@@ -585,9 +585,9 @@ window.SecurityLabModules["ipsec"] = {
 
                     // Update header final style
                     ikePhaseLabel.innerText = "接続完了 (IPsec SA確立)";
-                    ikePhaseLabel.style.background = "rgba(16, 185, 129, 0.15)";
+                    ikePhaseLabel.style.background = "var(--bg-badge-success)";
                     ikePhaseLabel.style.color = "var(--color-success)";
-                    ikePhaseLabel.style.borderColor = "rgba(16, 185, 129, 0.4)";
+                    ikePhaseLabel.style.borderColor = "var(--border-subtle-success)";
 
                     // Mark states as green
                     document.getElementById("ikeStateClient").style.color = "var(--color-success)";
@@ -602,18 +602,18 @@ window.SecurityLabModules["ipsec"] = {
                     if (step.phase) {
                         ikePhaseLabel.innerText = step.phase;
                         if (step.phase.includes("Phase 1")) {
-                            ikePhaseLabel.style.background = "rgba(245, 158, 11, 0.15)";
+                            ikePhaseLabel.style.background = "var(--bg-badge-warning)";
                             ikePhaseLabel.style.color = "var(--color-warning)";
-                            ikePhaseLabel.style.borderColor = "rgba(245, 158, 11, 0.4)";
+                            ikePhaseLabel.style.borderColor = "var(--border-subtle-warning)";
                         } else if (step.phase.includes("Phase 2")) {
-                            ikePhaseLabel.style.background = "rgba(99, 102, 241, 0.15)";
+                            ikePhaseLabel.style.background = "var(--bg-badge-primary)";
                             ikePhaseLabel.style.color = "var(--color-primary-hover)";
-                            ikePhaseLabel.style.borderColor = "rgba(99, 102, 241, 0.4)";
+                            ikePhaseLabel.style.borderColor = "var(--border-subtle-primary)";
                         } else {
                             // Warning
-                            ikePhaseLabel.style.background = "rgba(239, 68, 68, 0.15)";
+                            ikePhaseLabel.style.background = "var(--bg-badge-danger)";
                             ikePhaseLabel.style.color = "var(--color-danger)";
-                            ikePhaseLabel.style.borderColor = "rgba(239, 68, 68, 0.4)";
+                            ikePhaseLabel.style.borderColor = "var(--border-subtle-danger)";
                         }
                     }
 

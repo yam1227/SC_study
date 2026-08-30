@@ -88,7 +88,7 @@ window.SecurityLabModules["vuln"] = {
             <!-- Secure Programming Explanations -->
             <div class="card">
                 <h3>💡 セキスペ試験対策：SQLi と XSS の防衛コード設計</h3>
-                <div style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="text-base text-muted" style="line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div>
                         <h4 style="color: var(--text-primary); margin-bottom: 6px;">1. SQLインジェクションの根本対策</h4>
                         <p>

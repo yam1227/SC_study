@@ -22,10 +22,10 @@ window.SecurityLabModules["mfa"] = {
                         <div class="form-group" style="width: 100%;">
                             <label>共有鍵 (Base32 Secret Key):</label>
                             <div class="response-box" style="padding: 10px;">
-                                <code id="mfaSecretText" style="font-weight: bold; color: var(--color-primary-hover);">未生成</code>
+                                <code id="mfaSecretText" class="text-primary-color" style="font-weight: bold;">未生成</code>
                             </div>
                         </div>
-                        <p style="font-size: 12px; color: var(--text-secondary); text-align: center;">
+                        <p class="text-sm text-muted" style="text-align: center;">
                             💡 スマートフォンの認証アプリ（Google Authenticator等）でこのQRコードをスキャンすると、実際のワンタイムパスワードが生成されます。
                         </p>
                     </div>
@@ -37,25 +37,25 @@ window.SecurityLabModules["mfa"] = {
                     <p class="card-subtitle">認証アプリに表示された6桁のコードを入力して、サーバーで検証します。</p>
                     
                     <div class="totp-sim-card" id="totpSimCard" style="display: none;">
-                        <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">⏰ ローカル認証アプリシミュレーター</span>
+                        <span class="text-sm text-muted" style="font-weight: 600;">⏰ ローカル認証アプリシミュレーター</span>
                         <div class="totp-digits" id="totpSimDigits">------</div>
                         
                         <div class="totp-progress">
-                            <span style="font-size: 12px; color: var(--text-secondary); min-width: 50px;">次の更新まで:</span>
+                            <span class="text-sm text-muted" style="min-width: 50px;">次の更新まで:</span>
                             <div class="attack-progress-bar" style="flex: 1; height: 8px;">
                                 <div class="attack-progress-fill" id="totpProgressFill" style="background-color: var(--color-success); width: 100%;"></div>
                             </div>
-                            <span id="totpTimerSec" style="font-family: var(--font-mono); font-size: 12px; font-weight: bold;">30s</span>
+                            <span id="totpTimerSec" class="text-sm text-mono" style="font-weight: bold;">30s</span>
                         </div>
                         
-                        <button class="btn btn-secondary" id="btnSyncMockCode" style="font-size: 12px; padding: 6px 12px;">
+                        <button class="btn btn-secondary text-sm" id="btnSyncMockCode">
                             コードを検証フォームにコピー
                         </button>
                     </div>
                     
                     <div class="form-group">
                         <label for="mfaToken">6桁のワンタイムパスワード:</label>
-                        <input type="text" id="mfaToken" max-length="6" placeholder="例: 123456" style="font-size: 24px; text-align: center; letter-spacing: 4px; font-family: var(--font-mono);">
+                        <input type="text" id="mfaToken" max-length="6" placeholder="例: 123456" class="text-2xl text-mono" style="text-align: center; letter-spacing: 4px;">
                     </div>
                     
                     <button class="btn btn-primary" id="btnVerifyMFA" style="background-color: var(--color-success); border-color: var(--color-success);">コードを検証</button>
@@ -72,11 +72,11 @@ window.SecurityLabModules["mfa"] = {
             <!-- Technical Flow Breakdown -->
             <div class="card">
                 <h3>🛠️ TOTP (Time-based One-Time Password) の数式・計算ステップ</h3>
-                <div style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 12px;">
+                <div class="text-base text-muted" style="line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
                     <p>
                         TOTPは、<b>RFC 6238</b>で標準化されているアルゴリズムで、共通鍵と現在の時刻のみからワンタイムパスワードを計算します。ネットワーク通信を必要とせず、クライアントとサーバーの時計が合っていれば認証が成立します。
                     </p>
-                    <div style="background-color: var(--bg-app); padding: 14px; border-radius: 6px; font-family: var(--font-mono); border: 1px solid var(--border-color);">
+                    <div class="code-log-box" style="color: var(--text-primary);">
                         1. タイムステップカウンター (Counter) の算出:<br>
                         &nbsp;&nbsp;&nbsp;&nbsp;<b>Counter = floor(現在のUnix時刻 / 30)</b><br><br>
                         
@@ -218,8 +218,8 @@ window.SecurityLabModules["mfa"] = {
 
                 let logsHtml = "";
                 if (res.server_info && res.server_info.verification_logs) {
-                    logsHtml = `<div style="margin-top: 12px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 4px; font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); line-height: 1.4; overflow-x: auto; max-height: 250px; text-align: left;">
-                        <span style="color: var(--color-primary-hover); font-weight: 600;">💻 サーバー側の詳細検証ログ:</span><br>
+                    logsHtml = `<div class="code-log-box" style="margin-top: 12px; max-height: 250px; text-align: left;">
+                        <span class="text-primary-color" style="font-weight: 600;">💻 サーバー側の詳細検証ログ:</span><br>
                         ${res.server_info.verification_logs.map(log => {
                         let escaped = app.escapeHtml(log);
                         escaped = escaped.replace(/ /g, "&nbsp;");

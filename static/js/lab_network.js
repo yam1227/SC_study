@@ -44,7 +44,7 @@ window.SecurityLabModules["network"] = {
                     
                     <!-- Visual Network Topology Diagram -->
                     <div style="background-color: var(--bg-app); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; position: relative; margin-top: 10px;">
-                        <div style="font-size: 12px; color: var(--text-secondary); text-align: center; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                        <div class="text-sm text-muted" style="text-align: center; width: 100%; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
                             🔗 ネットワーク防衛インフラ（OSI基本参照モデルの対応レイヤー）
                         </div>
                         
@@ -52,8 +52,8 @@ window.SecurityLabModules["network"] = {
                             
                             <!-- Client -->
                             <div id="node-client" style="text-align: center; z-index: 2;">
-                                <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">💻</div>
-                                <span style="font-size: 12px; font-weight: 500;">送信元</span>
+                                <div class="node-circle-avatar">💻</div>
+                                <span class="text-sm" style="font-weight: 500;">送信元</span>
                             </div>
                             
                             <!-- Line 1 -->
@@ -63,9 +63,9 @@ window.SecurityLabModules["network"] = {
                             
                             <!-- Firewall -->
                             <div id="node-firewall" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
-                                <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: var(--radius-sm); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">🧱</div>
-                                <span style="font-size: 13px; font-weight: bold; color: #fb7185;">FW</span><br>
-                                <span style="font-size: 12px; color: var(--text-secondary);">L3/L4</span>
+                                <div class="node-box-avatar">🧱</div>
+                                <span class="text-base text-danger-color" style="font-weight: bold;">FW</span><br>
+                                <span class="text-xs text-muted">L3/L4</span>
                             </div>
                             
                             <!-- Line 2 -->
@@ -75,9 +75,9 @@ window.SecurityLabModules["network"] = {
                             
                             <!-- IDS/IPS -->
                             <div id="node-idsips" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
-                                <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: var(--radius-sm); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">👁️</div>
-                                <span style="font-size: 13px; font-weight: bold; color: #d97706;">IDS/IPS</span><br>
-                                <span style="font-size: 12px; color: var(--text-secondary);">L4〜L7</span>
+                                <div class="node-box-avatar">👁️</div>
+                                <span class="text-base text-warning-color" style="font-weight: bold;">IDS/IPS</span><br>
+                                <span class="text-xs text-muted">L4〜L7</span>
                             </div>
                             
                             <!-- Line 3 -->
@@ -87,9 +87,9 @@ window.SecurityLabModules["network"] = {
                             
                             <!-- WAF -->
                             <div id="node-waf" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
-                                <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: var(--radius-sm); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">🛡️</div>
-                                <span style="font-size: 13px; font-weight: bold; color: #38bdf8;">WAF</span><br>
-                                <span style="font-size: 12px; color: var(--text-secondary);">L7</span>
+                                <div class="node-box-avatar">🛡️</div>
+                                <span class="text-base text-primary-color" style="font-weight: bold;">WAF</span><br>
+                                <span class="text-xs text-muted">L7</span>
                             </div>
                             
                             <!-- Line 4 -->
@@ -99,8 +99,8 @@ window.SecurityLabModules["network"] = {
                             
                             <!-- Web Server -->
                             <div id="node-server" style="text-align: center; z-index: 2; transition: var(--transition-normal);">
-                                <div style="font-size: 24px; background: var(--bg-panel); border: 2px solid var(--text-secondary); border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px;">🖥️</div>
-                                <span style="font-size: 12px; font-weight: 500;">サーバー</span>
+                                <div class="node-circle-avatar">🖥️</div>
+                                <span class="text-sm" style="font-weight: 500;">サーバー</span>
                             </div>
                             
                         </div>
@@ -121,7 +121,7 @@ window.SecurityLabModules["network"] = {
                     
                     <div class="form-group">
                         <label>セキスペ知識解説:</label>
-                        <div id="netExplanation" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary);">
+                        <div id="netExplanation" class="text-base text-muted" style="line-height: 1.6;">
                             <b>・ファイアウォール</b>: 主にIPアドレス（L3）やポート番号（L4）といったヘッダー情報に基づいて通信を制御します。データ部（L7）の中身までは検査しません。<br><br>
                             <b>・IDS/IPS</b>: L4からL7のデータをスキャンし、あらかじめ登録された悪意あるパターン（シグネチャ）と一致するパケットを検知（IDS）・遮断（IPS）します。OSの脆弱性攻撃やワーム等に効果的です。<br><br>
                             <b>・WAF</b>: L7（アプリケーション層）のHTTPプロトコルに特化し、SQLiやXSS、Cookie改ざんなどWeb特有の攻撃を高精度に検知・防御します。

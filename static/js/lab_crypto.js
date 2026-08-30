@@ -42,9 +42,9 @@ window.SecurityLabModules["crypto"] = {
                     </div>
                 </div>
                 
-                <div class="info-note" style="margin-top: 14px; border-left: 3px solid var(--color-primary-hover); background: rgba(255,255,255,0.02); padding: 12px; border-radius: 4px; font-size: 12px; line-height: 1.5;">
-                    <span style="color: var(--color-primary-hover); font-weight: 600;">💡 認証タグ（Tag / MAC）とは？</span><br>
-                    <span style="color: var(--text-secondary);">
+                <div class="info-note text-sm text-muted" style="margin-top: 14px; border-left: 3px solid var(--color-primary-hover); background: var(--bg-subtle-neutral); padding: 12px; border-radius: 4px; line-height: 1.5;">
+                    <span class="text-primary-color" style="font-weight: 600;">💡 認証タグ（Tag / MAC）とは？</span><br>
+                    <span>
                         GCM（Galois/Counter Mode）などの<b>認証付き暗号 (AEAD)</b>において、暗号化と同時に生成されるチェックサム（通常16バイト）です。
                         このタグは、平文・暗号文・鍵・Nonceから数学的に算出され、復号時にサーバーで再計算して一致するか確認されます。
                         <b>暗号文やNonce、あるいはタグ自身が1文字でも改ざんされると、タグの検証で失敗し、復号エラー（改ざん検知）となります。</b>
@@ -71,11 +71,11 @@ window.SecurityLabModules["crypto"] = {
                     <div id="rsaKeysArea" style="display: none; flex-direction: column; gap: 10px;">
                         <div class="form-group" style="margin-top: 14px;">
                             <label>生成された公開鍵 (RSA Public Key PEM):</label>
-                            <textarea id="outRsaPublicKey" class="jwt-editor" style="height: 100px; font-size: 12px;" readonly></textarea>
+                            <textarea id="outRsaPublicKey" class="jwt-editor text-sm" style="height: 100px;" readonly></textarea>
                         </div>
                         <div class="form-group" style="margin-top: 14px;">
                             <label>生成された秘密鍵 (RSA Private Key PEM):</label>
-                            <textarea id="outRsaPrivateKey" class="jwt-editor" style="height: 100px; font-size: 12px;" readonly></textarea>
+                            <textarea id="outRsaPrivateKey" class="jwt-editor text-sm" style="height: 100px;" readonly></textarea>
                         </div>
                     </div>
                     

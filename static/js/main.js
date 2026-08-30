@@ -584,9 +584,17 @@ class SecurityLab {
     // Render loaded module html and run init
     renderModule(mod) {
         const modObj = window.SecurityLabModules[mod.id];
-        if (!modObj) return;
+        if (!modObj) {
+            this.labContainer.innerHTML = `
+                <div class="callout-box callout-danger text-base" style="padding: 20px; text-align: center;">
+                    <h3>モジュール定義が見つかりません</h3>
+                    <p>window.SecurityLabModules["${mod.id}"] が正しく定義されているか確認してください。</p>
+                </div>
+            `;
+            return;
+        }
         
-        // Define learning overview banner HTML
+        // 1. Overview Banner (モジュール概要 & キーワード)
         let overviewHtml = "";
         if (mod.overview) {
             const keywordsHtml = mod.keywords && mod.keywords.length > 0
@@ -598,7 +606,7 @@ class SecurityLab {
             overviewHtml = `
                 <div class="module-overview-card">
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 16px;">💡</span>
+                        <span class="text-lg">💡</span>
                         <h4>このモジュールで学習できる概要</h4>
                     </div>
                     <p>${mod.overview}</p>
@@ -607,15 +615,15 @@ class SecurityLab {
             `;
         }
         
-        // Define Glossary Search Box HTML
+        // 2. Glossary Search (セキュリティ用語集検索バー)
         const glossaryHtml = `
             <div class="card glossary-search-card" style="margin-bottom: 24px;">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 18px;">📖</span>
-                        <h3 style="border-bottom: none; padding-bottom: 0; font-size: 14px; font-weight: 600; margin: 0; color: var(--text-primary);">セキスペ試験対策・用語検索</h3>
+                        <span class="text-xl">📖</span>
+                        <h3 class="text-md" style="border-bottom: none; padding-bottom: 0; font-weight: 600; margin: 0; color: var(--text-primary);">セキスペ試験対策・用語検索</h3>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-secondary); background-color: var(--bg-card); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">全 ${window.SecurityGlossary ? window.SecurityGlossary.length : 0} 単語</span>
+                    <span class="text-xs text-muted" style="background-color: var(--bg-card); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">全 ${window.SecurityGlossary ? window.SecurityGlossary.length : 0} 単語</span>
                 </div>
                 <div class="inline-group" style="margin-top: 12px;">
                     <input type="text" class="glossary-search-input" placeholder="意味を調べたいセキュリティ用語を入力（例: JWT, ソルト, PKCE, デジタル署名...）" style="width: 100%;">
@@ -624,23 +632,55 @@ class SecurityLab {
             </div>
         `;
         
-        // Automatically generate references card from module references metadata if defined
+        // 3. Exam Key Card (試験攻略ポイント: modObj.examTips から自動生成)
+        const examKeyHtml = (window.UIComponents && modObj.examTips)
+            ? UIComponents.generateExamKeyCard(modObj.examTips)
+            : '';
+
+        // 4. Simulator Content Body (modObj.tabs による自動タブ生成 or modObj.html 固有UI)
+        let simulatorHtml = "";
+        if (window.UIComponents && modObj.tabs && Array.isArray(modObj.tabs) && modObj.tabs.length > 0) {
+            simulatorHtml = UIComponents.renderTabs(modObj.tabs);
+        } else if (modObj.html) {
+            simulatorHtml = modObj.html;
+        }
+
+        // 5. Quiz Section (過去問演習: modObj.quiz から自動生成)
+        const quizHtml = (window.UIComponents && modObj.quiz && Array.isArray(modObj.quiz) && modObj.quiz.length > 0)
+            ? UIComponents.generateQuizHtml(modObj.quiz)
+            : '';
+
+        // 6. References Card (公式参照・RFC: modObj.references から自動生成)
         const referencesHtml = (window.UIComponents && modObj.references && Array.isArray(modObj.references) && modObj.references.length > 0)
             ? UIComponents.generateReferencesHtml(modObj.references)
             : '';
         
-        // Insert module html template with Overview and Glossary prepended, References appended
-        this.labContainer.innerHTML = overviewHtml + glossaryHtml + modObj.html + referencesHtml;
+        // パイプライン結合: Overview -> Glossary -> ExamKey -> Simulator -> Quiz -> References
+        this.labContainer.innerHTML = overviewHtml + glossaryHtml + examKeyHtml + simulatorHtml + quizHtml + referencesHtml;
         
-        // Initialize glossary search handlers
+        // --- ライフサイクル初期化 & イベント自動バインド ---
+        
+        // 用語集インクリメンタル検索の初期化
         this.initGlossarySearch();
+
+        // 自動タブが生成されている場合のタブ切り替えイベントバインド
+        if (window.UIComponents && modObj.tabs) {
+            UIComponents.setupTabs(this.labContainer, modObj.onTabChange);
+        }
+
+        // クイズイベントリスナーの自動バインド
+        if (window.UIComponents && modObj.quiz) {
+            UIComponents.initQuizEvents(this.labContainer, modObj.quiz);
+        }
         
-        // Run module initialization logic
-        try {
-            modObj.init(this);
-            this.log('system', `実験環境「${mod.title}」を初期化しました。`);
-        } catch (e) {
-            this.log('error', `モジュールの初期化中にエラーが発生しました: ${e.message}`, e);
+        // モジュール固有ロジック (init) の実行
+        if (typeof modObj.init === 'function') {
+            try {
+                modObj.init(this);
+                this.log('system', `実験環境「${mod.title}」を初期化しました。`);
+            } catch (e) {
+                this.log('error', `モジュールの初期化中にエラーが発生しました: ${e.message}`, e);
+            }
         }
     }
 
@@ -681,7 +721,7 @@ class SecurityLab {
                 // Highlight match in term name if possible
                 let termHtml = item.term;
                 const reg = new RegExp(`(${query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
-                termHtml = termHtml.replace(reg, `<mark style="background-color: rgba(99, 102, 241, 0.4); color: white; border-radius: 2px; padding: 0 2px;">$1</mark>`);
+                termHtml = termHtml.replace(reg, `<mark style="background-color: var(--color-primary); color: white; border-radius: 2px; padding: 0 2px;">$1</mark>`);
                 
                 div.innerHTML = `
                     <div class="glossary-term">📖 ${termHtml}</div>

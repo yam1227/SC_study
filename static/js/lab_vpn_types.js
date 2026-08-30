@@ -13,8 +13,8 @@ window.SecurityLabModules["vpn_types"] = {
                     <div style="display: flex; flex-direction: column; gap: 10px; justify-content: flex-end;">
                         <label style="font-weight: bold; color: var(--text-primary);">🔌 VPNトンネル構築ステップ:</label>
                         <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-primary" id="btnIkePhase1" style="flex: 1; font-size: 12px; padding: 8px;">1. IKE Phase 1 (IKE SA)</button>
-                            <button class="btn btn-primary" id="btnIkePhase2" style="flex: 1; font-size: 12px; padding: 8px;" disabled>2. IKE Phase 2 (IPsec SA)</button>
+                            <button class="btn btn-primary text-sm" id="btnIkePhase1" style="flex: 1; padding: 8px;">1. IKE Phase 1 (IKE SA)</button>
+                            <button class="btn btn-primary text-sm" id="btnIkePhase2" style="flex: 1; padding: 8px;" disabled>2. IKE Phase 2 (IPsec SA)</button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -31,7 +31,7 @@ window.SecurityLabModules["vpn_types"] = {
                     <div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <label style="font-weight: bold; color: var(--text-primary);">📊 確立された SA テーブル</label>
-                            <button class="btn" id="btnClearSa" style="font-size: 12px; padding: 4px 10px; background: transparent; border: 1px solid var(--border-color);">SAのクリア</button>
+                            <button class="btn text-sm" id="btnClearSa" style="padding: 4px 10px; background: transparent; border: 1px solid var(--border-color);">SAのクリア</button>
                         </div>
                         <table class="sa-table">
                             <thead>
@@ -65,7 +65,7 @@ window.SecurityLabModules["vpn_types"] = {
                         </table>
 
                         <div class="sa-diagram-container">
-                            <span style="font-weight: bold; font-size: 12px; color: var(--text-secondary);">🌐 拠点A・B間の SA トンネル構成図</span>
+                            <span class="text-sm text-muted" style="font-weight: bold;">🌐 拠点A・B間の SA トンネル構成図</span>
                             <div class="sa-box" id="ikeSaBox" style="opacity: 0.3;">
                                 <span>IKE SA (制御用チャネル)</span>
                                 <span id="ikeSaBoxLabel">未確立</span>
@@ -83,8 +83,8 @@ window.SecurityLabModules["vpn_types"] = {
 
                     <!-- Right: Theoretical points & Console -->
                     <div style="display: flex; flex-direction: column; gap: 14px;">
-                        <div style="background: rgba(99,102,241,0.03); border: 1px dashed rgba(99,102,241,0.25); padding: 14px; border-radius: var(--radius-md); font-size: 12px; line-height: 1.5; color: var(--text-secondary);">
-                            <span style="font-weight: bold; color: var(--color-primary-hover); font-size: 13px; display: block; margin-bottom: 6px;">💡 セキスペ試験対策知識 (SAの性質)</span>
+                        <div class="callout-box callout-primary text-sm text-muted">
+                            <span class="text-base text-primary-color" style="font-weight: bold; display: block; margin-bottom: 6px;">💡 セキスペ試験対策知識 (SAの性質)</span>
                             <ul style="margin: 0; padding-left: 16px;">
                                 <li><b>IKE SA</b>: 鍵交換など制御用の安全な通り道。<b>双方向で1本</b>確立されます。</li>
                                 <li><b>IPsec SA</b>: 実際のデータを暗号化して通す道。<b>片方向で1本</b>（送信用・受信用で独立）となるため、双方向でデータを送受信するには<b>最低2本</b>必要です。</li>
@@ -94,8 +94,8 @@ window.SecurityLabModules["vpn_types"] = {
 
                         <div class="form-group" style="margin: 0; flex: 1; display: flex; flex-direction: column;">
                             <label>SA 制御・転送プロセスログ:</label>
-                            <div class="response-box" style="flex: 1; min-height: 160px; max-height: 220px; overflow-y: auto; background-color: #0c0a09; border-color: rgba(99,102,241,0.3);">
-                                <code id="saSimLogText" style="font-size: 12px; color: #38bdf8; white-space: pre-wrap;">「IKE Phase 1」ボタンを押して、SAの確立シーケンスを開始してください。</code>
+                            <div class="response-box" style="flex: 1; min-height: 160px; max-height: 220px; overflow-y: auto; background-color: var(--bg-terminal); border-color: var(--border-subtle-primary);">
+                                <code id="saSimLogText" class="text-sm" style="color: #38bdf8; white-space: pre-wrap;">「IKE Phase 1」ボタンを押して、SAの確立シーケンスを開始してください。</code>
                             </div>
                         </div>
                     </div>
@@ -118,9 +118,9 @@ window.SecurityLabModules["vpn_types"] = {
                     <div style="display: flex; justify-content: space-between; align-items: center; max-width: 600px; margin: 0 auto; z-index: 2; position: relative;">
                         <!-- Tokyo Office -->
                         <div style="text-align: center; width: 100px;">
-                            <div style="font-size: 32px;">🏢</div>
-                            <div style="font-size: 13px; font-weight: bold; margin-top: 4px; color: var(--text-primary);">東京本社</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">192.168.1.0/24</div>
+                            <div class="node-icon-lg">🏢</div>
+                            <div class="text-base" style="font-weight: bold; margin-top: 4px; color: var(--text-primary);">東京本社</div>
+                            <div class="text-sm text-muted">192.168.1.0/24</div>
                         </div>
                         
                         <!-- Connecting Network Cloud -->
@@ -128,18 +128,18 @@ window.SecurityLabModules["vpn_types"] = {
                             <!-- Connection Line -->
                             <div style="position: absolute; top: 50%; left: 0; right: 0; height: 3px; background-color: var(--border-color); z-index: -1;" id="vpnDiagramLine"></div>
                             <!-- Encapsulated Packet Indicator -->
-                            <div style="position: absolute; top: 38%; left: 20%; font-size: 12px; padding: 3px 8px; border-radius: 20px; background-color: var(--primary-color); color: white; display: none;" id="vpnPacketIndicator">IPsec ESP Packet</div>
+                            <div class="text-sm" style="position: absolute; top: 38%; left: 20%; padding: 3px 8px; border-radius: 20px; background-color: var(--color-primary); color: white; display: none;" id="vpnPacketIndicator">IPsec ESP Packet</div>
                             
                             <!-- Network Cloud Graphic -->
-                            <div style="font-size: 40px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" id="vpnCloudIcon">🌐</div>
-                            <div style="font-size: 12px; font-weight: bold; margin-top: 4px; color: var(--primary-light);" id="vpnCloudLabel">公衆インターネット</div>
+                            <div class="node-icon-lg" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" id="vpnCloudIcon">🌐</div>
+                            <div class="text-sm text-primary-color" style="font-weight: bold; margin-top: 4px;" id="vpnCloudLabel">公衆インターネット</div>
                         </div>
                         
                         <!-- Osaka Branch -->
                         <div style="text-align: center; width: 100px;">
-                            <div style="font-size: 32px;">🏬</div>
-                            <div style="font-size: 13px; font-weight: bold; margin-top: 4px; color: var(--text-primary);">大阪支店</div>
-                            <div style="font-size: 12px; color: var(--text-secondary);">192.168.2.0/24</div>
+                            <div class="node-icon-lg">🏬</div>
+                            <div class="text-base" style="font-weight: bold; margin-top: 4px; color: var(--text-primary);">大阪支店</div>
+                            <div class="text-sm text-muted">192.168.2.0/24</div>
                         </div>
                     </div>
                 </div>
@@ -147,8 +147,8 @@ window.SecurityLabModules["vpn_types"] = {
                 <!-- Detailed Table / Features -->
                 <div class="lab-grid-2" style="gap: 20px;">
                     <div>
-                        <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--text-primary);">📊 技術的仕様・比較結果</h4>
-                        <table class="lab-table" style="width: 100%; font-size: 12px; border-collapse: collapse; text-align: left;">
+                        <h4 class="text-md" style="margin-bottom: 8px; color: var(--text-primary);">📊 技術的仕様・比較結果</h4>
+                        <table class="lab-table text-sm" style="width: 100%; border-collapse: collapse; text-align: left;">
                             <tbody>
                                 <tr style="border-bottom: 1px solid var(--border-color);">
                                     <th style="padding: 8px 0; color: var(--text-secondary); width: 35%;">使用回線・網</th>
@@ -185,6 +185,12 @@ window.SecurityLabModules["vpn_types"] = {
             </div>
         </div>
     `,
+
+    examTips: [
+        "<strong>IPsec SA (Security Association)</strong>: 単方向（片方向）の論理コネクションであるため、双方向通信には最低2本のSAが必要。識別には32ビットの <strong>SPI (Security Parameter Index)</strong> を使用。",
+        "<strong>IP-VPN (L3接続)</strong>: 通信事業者のMPLS網を利用。IP以外のプロトコルは転送不可。キャリア閉域網のため暗号化は通常不要。",
+        "<strong>広域イーサネット (L2接続)</strong>: データリンク層で直結。Non-IPプロトコルやトランクVLAN（802.1Qタグ）もそのまま透過伝送可能。"
+    ],
 
     references: [
         { source: "IPA 独立行政法人 情報処理推進機構", title: "情報処理安全確保支援士 シラバス（VPN技術・MPLS・広域イーサネット）", url: "https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" },
@@ -407,9 +413,9 @@ window.SecurityLabModules["vpn_types"] = {
                 packetColor: "#ef4444",
                 explain: `
                     <b>📌 インターネットVPN の試験重要ポイント:</b><br>
-                    - 一般の公衆インターネット上に **IPsecやSSL/TLS** で暗号トンネルを掘って通信する方式です。<br>
+                    - 一般の公衆インターネット上に <strong>IPsecやSSL/TLS</strong> で暗号トンネルを掘って通信する方式です。<br>
                     - 利用コストが圧倒的に安い反面、帯域（通信速度）の保証はありません。<br>
-                    - インターネットを通過するため、盗聴・改ざんの危険が常にあります。そのため、**パケット全体の暗号化（IPsec ESPなど）が必須**となります。<br>
+                    - インターネットを通過するため、盗聴・改ざんの危険が常にあります。そのため、<strong>パケット全体の暗号化（IPsec ESPなど）が必須</strong>となります。<br>
                     - 送信端末やVPNゲートウェイが暗号化・復号の処理（オーバーヘッド）を行うため、ルーターのCPU負荷が高くなります。
                 `
             },
@@ -426,8 +432,8 @@ window.SecurityLabModules["vpn_types"] = {
                 packetColor: "#3b82f6",
                 explain: `
                     <b>📌 IP-VPN (MPLS) の試験重要ポイント:</b><br>
-                    - 電気通信事業者が独自に提供する **閉域IPネットワーク（MPLS網）** を利用したVPNです。<br>
-                    - 一般のインターネットからは完全に分離されている閉域網のため、途中でデータが盗まれる心配がありません。したがって、**拠点間での暗号化処理は通常「不要」**です。<br>
+                    - 電気通信事業者が独自に提供する <strong>閉域IPネットワーク（MPLS網）</strong> を利用したVPNです。<br>
+                    - 一般のインターネットからは完全に分離されている閉域網のため、途中でデータが盗まれる心配がありません。したがって、<strong>拠点間での暗号化処理は通常「不要」</strong>です。<br>
                     - ルーターで暗号化・復号を行わないため、インターネットVPNと比べて転送遅延が小さく、高速な通信が可能です。<br>
                     - L3（ネットワーク層）での通信となるため、IPプロトコル以外の通信はカプセル化・転送できません。
                 `
@@ -446,8 +452,8 @@ window.SecurityLabModules["vpn_types"] = {
                 explain: `
                     <b>📌 広域イーサネット の試験重要ポイント:</b><br>
                     - 拠点を直結する技術です。拠点間は1つの巨大なL2スイッチ（ハブ）に繋がっている状態になります。<br>
-                    - IP-VPNと同様にインターネットから分離された閉域網のため、**暗号化は不要**です。<br>
-                    - **L2接続のため、IPプロトコル以外の様々なプロトコル（Non-IP）をそのまま流すことができます。**<br>
+                    - IP-VPNと同様にインターネットから分離された閉域網のため、<strong>暗号化は不要</strong>です。<br>
+                    - <strong>L2接続のため、IPプロトコル以外の様々なプロトコル（Non-IP）をそのまま流すことができます。</strong><br>
                     - また、OSPFやRIPなどのルーティング設定、VLANトランクの設定を企業側で自由に設計できる高いカスタマイズ性が特徴です。
                 `
             }

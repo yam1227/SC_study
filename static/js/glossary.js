@@ -321,7 +321,7 @@ window.SecurityGlossary = [
         term: "DNSキャッシュポイズニング",
         keywords: ["dns", "ポイズニング", "キャッシュ", "偽レコード", "カミンスキー"],
         definition: "DNSキャッシュサーバーに偽のドメイン対応情報（DNSレコード）を注入し、利用者が本物のサイトにアクセスしようとした際に、偽のフィッシングサイト等へ誘導する攻撃手法。",
-        exam_tip: "ソースポートのランダム化（ポートサビリティ）や、DNS応答の電子署名による検証技術である **DNSSEC (DNS Security Extensions)** の導入が対策になります。"
+        exam_tip: "ソースポートのランダム化（ポートサビリティ）や、DNS応答の電子署名による検証技術である <b>DNSSEC (DNS Security Extensions)</b> の導入が対策になります。"
     },
     {
         term: "CVE / CVSS / CWE / JVN",

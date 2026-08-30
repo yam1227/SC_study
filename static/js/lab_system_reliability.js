@@ -6,12 +6,12 @@ window.SecurityLabModules["system_reliability"] = {
     html: `
         <div class="lab-container">
             <!-- Header Banner -->
-            <div class="card" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(20, 83, 45, 0.6), rgba(15, 23, 42, 0.8)); border-left: 4px solid #10b981;">
+            <div class="card" style="margin-bottom: 20px; border-left: 4px solid var(--color-success);">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                     <div>
                         <h2 style="font-size: 1.3rem; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
                             <span>🛡️</span> システム信頼性・方式設計 (フェールセーフ / フールプルーフ等)
-                            <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">試験頻出・重要概念</span>
+                            <span class="badge badge-subtle-success">試験頻出・重要概念</span>
                         </h2>
                         <p style="color: var(--text-secondary); font-size: 0.85rem;">
                             「人（誤操作）」と「物（機器故障）」の対策の違い、および障害発生時の振る舞い（安全停止 vs 縮退運転 vs 無停止二重化継続）の定義と使い分けを完全マスターします。
@@ -21,16 +21,9 @@ window.SecurityLabModules["system_reliability"] = {
             </div>
 
             <!-- Tab Navigation -->
-            <div class="card-tabs" style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; overflow-x: auto;">
-                <button id="srTabBtn-matrix" class="tab-btn active" onclick="window.srLab.switchTab('matrix')" style="padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.85rem;">
-                    📊 1. 概念比較マトリクス
-                </button>
-                <button id="srTabBtn-sim" class="tab-btn" onclick="window.srLab.switchTab('sim')" style="padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-secondary); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.85rem;">
-                    ⚡ 2. 障害発生 & システム挙動シミュレータ
-                </button>
-                <button id="srTabBtn-quiz" class="tab-btn" onclick="window.srLab.switchTab('quiz')" style="padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-secondary); border-radius: var(--radius-sm); cursor: pointer; font-size: 0.85rem;">
-                    📝 3. 識別・理解度チェック演習
-                </button>
+            <div class="tab-container">
+                <button id="srTabBtn-matrix" class="btn-tab active">📊 1. 概念比較マトリクス</button>
+                <button id="srTabBtn-sim" class="btn-tab">⚡ 2. 障害発生 & システム挙動シミュレータ</button>
             </div>
 
             <!-- TAB 1: Comparison Matrix -->
@@ -41,7 +34,7 @@ window.SecurityLabModules["system_reliability"] = {
                     <div style="overflow-x: auto;">
                         <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
                             <thead>
-                                <tr style="background: rgba(255, 255, 255, 0.05); border-bottom: 2px solid var(--border-color);">
+                                <tr class="table-row-header">
                                     <th style="padding: 10px; color: #818cf8; width: 18%;">設計方式</th>
                                     <th style="padding: 10px; color: #34d399; width: 18%;">対象（何を防ぐか）</th>
                                     <th style="padding: 10px; color: #d97706; width: 34%;">障害・ミス発生時の動作方針</th>
@@ -49,33 +42,33 @@ window.SecurityLabModules["system_reliability"] = {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(99, 102, 241, 0.05);">
+                                <tr class="table-row-primary" style="border-bottom: 1px solid var(--border-color);">
                                     <td style="padding: 10px; font-weight: bold; color: #818cf8;">フールプルーフ<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Foolproof)</span></td>
-                                    <td style="padding: 10px;"><span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc;">人間 (ヒューマンエラー)</span></td>
+                                    <td style="padding: 10px;"><span class="badge badge-subtle-primary">人間 (ヒューマンエラー)</span></td>
                                     <td style="padding: 10px;">操作誤りや誤入力を行っても、不整合や危険が発生しないよう構造的に遮断・保護する。</td>
                                     <td style="padding: 10px; color: var(--text-secondary);">・ドアを閉めないと回らない洗濯機<br>・入力フォーマットチェック<br>・削除確認ダイアログ</td>
                                 </tr>
-                                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(239, 68, 68, 0.05);">
+                                <tr class="table-row-danger" style="border-bottom: 1px solid var(--border-color);">
                                     <td style="padding: 10px; font-weight: bold; color: #f87171;">フェールセーフ<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Fail-safe)</span></td>
-                                    <td style="padding: 10px;"><span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">物・ソフト (機器故障)</span></td>
+                                    <td style="padding: 10px;"><span class="badge badge-subtle-danger">物・ソフト (機器故障)</span></td>
                                     <td style="padding: 10px;">故障発生時、二次被害やデータ破壊を防ぐため、<strong>必ず安全な状態へ移行（停止・遮断）</strong>させる。</td>
                                     <td style="padding: 10px; color: var(--text-secondary);">・全方向赤信号になる故障信号機<br>・Fail-closed型ファイアウォール<br>・圧力安全弁</td>
                                 </tr>
-                                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(245, 158, 11, 0.05);">
+                                <tr class="table-row-warning" style="border-bottom: 1px solid var(--border-color);">
                                     <td style="padding: 10px; font-weight: bold; color: #d97706;">フェールソフト<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Fail-soft)</span></td>
-                                    <td style="padding: 10px;"><span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #d97706;">物・ソフト (機器故障)</span></td>
+                                    <td style="padding: 10px;"><span class="badge badge-subtle-warning">物・ソフト (機器故障)</span></td>
                                     <td style="padding: 10px;">全停止せず、一部機能を制限・切り離して重要機能のみで運用を継続する（<strong>縮退運転</strong>）。</td>
                                     <td style="padding: 10px; color: var(--text-secondary);">・DBダウン時にキャッシュ閲覧のみ継続<br>・帯域低下時に低画質配信切り替え<br>・1台マルチサーバー障害時の性能低下継続</td>
                                 </tr>
-                                <tr style="border-bottom: 1px solid var(--border-color); background: rgba(16, 185, 129, 0.05);">
+                                <tr class="table-row-success" style="border-bottom: 1px solid var(--border-color);">
                                     <td style="padding: 10px; font-weight: bold; color: #34d399;">フォールトトレラント<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Fault-tolerant)</span></td>
-                                    <td style="padding: 10px;"><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7;">物・ソフト (機器故障)</span></td>
+                                    <td style="padding: 10px;"><span class="badge badge-subtle-success">物・ソフト (機器故障)</span></td>
                                     <td style="padding: 10px;">二重化（冗長化）により、構成要素が故障しても<strong>ダウンタイムも機能低下もなく完全無停止継続</strong>する。</td>
                                     <td style="padding: 10px; color: var(--text-secondary);">・RAID 1 / 5 / 6 ディスクミラーリング<br>・二重化電源 (Redundant Power)<br>・アクティブ/アクティブ クラスタ</td>
                                 </tr>
-                                <tr style="background: rgba(161, 161, 170, 0.05);">
+                                <tr class="table-row-neutral">
                                     <td style="padding: 10px; font-weight: bold; color: #a1a1aa;">フォールトアボイダンス<br><span style="font-size: 0.75rem; font-weight: normal; color: var(--text-muted);">(Fault Avoidance)</span></td>
-                                    <td style="padding: 10px;"><span class="badge" style="background: rgba(161, 161, 170, 0.2); color: #e4e4e7;">物・ソフト (故障予防)</span></td>
+                                    <td style="padding: 10px;"><span class="badge badge-subtle-neutral">物・ソフト (故障予防)</span></td>
                                     <td style="padding: 10px;">高品質部品の採用や厳密なテスト、予防保守により、<strong>故障そのものを発生させない</strong>設計。</td>
                                     <td style="padding: 10px; color: var(--text-secondary);">・高品質半導体・高耐久パーツの使用<br>・事前動作テスト・予防交換</td>
                                 </tr>
@@ -157,60 +150,56 @@ window.SecurityLabModules["system_reliability"] = {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- TAB 3: Quiz & Exam Practice -->
-            <div id="srTab-quiz" class="tab-content" style="display: none;">
-                <div class="card">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 16px;">📝 信頼性設計用語の識別クイズ (IPA過去問形式)</h3>
-                    
-                    <div id="srQuizContainer" style="display: flex; flex-direction: column; gap: 20px;">
-                        <!-- Question 1 -->
-                        <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-primary);">
-                                【問1】 Webアプリケーションで利用者が不慣れなために誤った形式のデータを入力した場合でも、システムに異常やデータ破損を発生させないよう、入力チェック機能を強化して安全に保護する設計思想はどれか。
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                                <button onclick="window.srLab.checkQuiz(1, 'foolproof')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">ア. フールプルーフ</button>
-                                <button onclick="window.srLab.checkQuiz(1, 'failsafe')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">イ. フェールセーフ</button>
-                                <button onclick="window.srLab.checkQuiz(1, 'failsoft')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">ウ. フェールソフト</button>
-                                <button onclick="window.srLab.checkQuiz(1, 'fault_tolerant')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">エ. フォールトトレラント</button>
-                            </div>
-                            <div id="srQuizResult-1" style="display: none; padding: 10px; border-radius: 6px; font-size: 0.85rem; line-height: 1.5;"></div>
-                        </div>
-
-                        <!-- Question 2 -->
-                        <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-primary);">
-                                【問2】 データベースサーバーの構成機器に障害が発生した際、データベースへのデータ書き込み処理は停止させるが、キャッシュサーバーを利用してWebサイトでの情報閲覧サービスのみを縮退運用で維持する設計思想はどれか。
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                                <button onclick="window.srLab.checkQuiz(2, 'foolproof')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">ア. フールプルーフ</button>
-                                <button onclick="window.srLab.checkQuiz(2, 'failsafe')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">イ. フェールセーフ</button>
-                                <button onclick="window.srLab.checkQuiz(2, 'failsoft')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">ウ. フェールソフト</button>
-                                <button onclick="window.srLab.checkQuiz(2, 'fault_tolerant')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">エ. フォールトトレラント</button>
-                            </div>
-                            <div id="srQuizResult-2" style="display: none; padding: 10px; border-radius: 6px; font-size: 0.85rem; line-height: 1.5;"></div>
-                        </div>
-
-                        <!-- Question 3 -->
-                        <div style="background: var(--bg-app); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
-                            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; color: var(--text-primary);">
-                                【問3】 踏切の遮断機システムにおいて、装置の電気回路や制御系が故障した際、自重によって遮断桿（バー）が自動的に下降し、通行人の進入を防いで事故を回避する構造はどの設計思想に該当するか。
-                            </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
-                                <button onclick="window.srLab.checkQuiz(3, 'foolproof')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">ア. フールプルーフ</button>
-                                <button onclick="window.srLab.checkQuiz(3, 'failsafe')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">イ. フェールセーフ</button>
-                                <button onclick="window.srLab.checkQuiz(3, 'failsoft')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">ウ. フェールソフト</button>
-                                <button onclick="window.srLab.checkQuiz(3, 'fault_tolerant')" class="btn" style="background: var(--bg-card); border: 1px solid var(--border-color); text-align: left; color: var(--text-primary); font-size: 0.85rem;">エ. フォールトトレラント</button>
-                            </div>
-                            <div id="srQuizResult-3" style="display: none; padding: 10px; border-radius: 6px; font-size: 0.85rem; line-height: 1.5;"></div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     `,
+
+    quiz: [
+        {
+            id: "srQuiz_1",
+            year: "IPA共通シラバス / 基本・応用・支援士 午前Ⅱ",
+            question: "Webアプリケーションで利用者が不慣れなために誤った形式のデータを入力した場合でも、システムに異常やデータ破損を発生させないよう、入力チェック機能を強化して安全に保護する設計思想はどれか。",
+            options: [
+                { key: "foolproof", label: "ア", text: "フールプルーフ" },
+                { key: "failsafe", label: "イ", text: "フェールセーフ" },
+                { key: "failsoft", label: "ウ", text: "フェールソフト" },
+                { key: "fault_tolerant", label: "エ", text: "フォールトトレラント" }
+            ],
+            answer: "foolproof",
+            explanation: "「利用者の不慣れ・誤入力（ヒューマンエラー）」を対象として安全保護する設計思想は<strong>フールプルーフ (Foolproof)</strong> です。",
+            point: "「人のミスを防ぐ」＝フールプルーフ。「機器の故障時に安全側へ倒す」＝フェールセーフ。この対比が頻出です。"
+        },
+        {
+            id: "srQuiz_2",
+            year: "IPA共通シラバス / 基本・応用・支援士 午前Ⅱ",
+            question: "データベースサーバーの構成機器に障害が発生した際、データベースへのデータ書き込み処理は停止させるが、キャッシュサーバーを利用してWebサイトでの情報閲覧サービスのみを縮退運用で維持する設計思想はどれか。",
+            options: [
+                { key: "foolproof", label: "ア", text: "フールプルーフ" },
+                { key: "failsafe", label: "イ", text: "フェールセーフ" },
+                { key: "failsoft", label: "ウ", text: "フェールソフト" },
+                { key: "fault_tolerant", label: "エ", text: "フォールトトレラント" }
+            ],
+            answer: "failsoft",
+            explanation: "障害発生時に全停止せず、書き込み等の機能を一部制限して「縮退運転（Degraded Operation）」で閲覧サービスを維持する設計思想は<strong>フェールソフト (Fail-soft)</strong> です。",
+            point: "フェールソフトは「縮退運転 (Degraded)」というキーワードと常にセットで出題されます。"
+        },
+        {
+            id: "srQuiz_3",
+            year: "IPA共通シラバス / 基本・応用・支援士 午前Ⅱ",
+            question: "踏切の遮断機システムにおいて、装置の電気回路や制御系が故障した際、自重によって遮断桿（バー）が自動的に下降し、通行人の進入を防いで事故を回避する構造はどの設計思想に該当するか。",
+            options: [
+                { key: "foolproof", label: "ア", text: "フールプルーフ" },
+                { key: "failsafe", label: "イ", text: "フェールセーフ" },
+                { key: "failsoft", label: "ウ", text: "フェールソフト" },
+                { key: "fault_tolerant", label: "エ", text: "フォールトトレラント" }
+            ],
+            answer: "failsafe",
+            explanation: "機器の故障時に、人身事故を防ぐため「必ず安全な状態（遮断降下状態）」へ移行・停止させる設計思想は<strong>フェールセーフ (Fail-safe)</strong> です。",
+            point: "踏切の遮断機、石油ストーブの対震自動消火装置、信号機の赤点滅などはすべてフェールセーフの代表例です。"
+        }
+    ],
 
     references: [
         { source: "IPA 独立行政法人 情報処理推進機構", title: "ITパスポート・基本情報・応用情報・高度試験 シラバス（システム信頼性設計）", url: "https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" },
@@ -220,44 +209,27 @@ window.SecurityLabModules["system_reliability"] = {
 
     init: function () {
         const self = this;
-        window.srLab = {
-            activeTab: "matrix",
-            
-            switchTab: function (tabId) {
-                self.switchTab(tabId);
-            },
-            onEventChange: function (eventVal) {
-                self.onEventChange(eventVal);
-            },
-            runSimulation: function () {
-                self.runSimulation();
-            },
-            checkQuiz: function (qNum, answerVal) {
-                self.checkQuiz(qNum, answerVal);
-            }
-        };
-    },
 
-    switchTab: function (tabId) {
-        window.srLab.activeTab = tabId;
-        const tabs = ["matrix", "sim", "quiz"];
-        tabs.forEach(t => {
-            const btn = document.getElementById(`srTabBtn-${t}`);
-            const content = document.getElementById(`srTab-${t}`);
-            if (btn && content) {
-                if (t === tabId) {
-                    btn.classList.add("active");
-                    btn.style.color = "var(--text-primary)";
-                    btn.style.borderColor = "var(--color-primary)";
-                    content.style.display = "block";
-                } else {
-                    btn.classList.remove("active");
-                    btn.style.color = "var(--text-secondary)";
-                    btn.style.borderColor = "var(--border-color)";
-                    content.style.display = "none";
-                }
-            }
-        });
+        if (window.UIComponents && window.UIComponents.setupSubTabs) {
+            window.UIComponents.setupSubTabs([
+                { btnId: "srTabBtn-matrix", panelId: "srTab-matrix" },
+                { btnId: "srTabBtn-sim", panelId: "srTab-sim" }
+            ]);
+        }
+
+        const eventSelect = document.getElementById("srEventTypeSelect");
+        if (eventSelect) {
+            eventSelect.addEventListener("change", (e) => {
+                self.onEventChange(e.target.value);
+            });
+        }
+
+        const runBtn = document.getElementById("srBtnRunSim");
+        if (runBtn) {
+            runBtn.addEventListener("click", () => {
+                self.runSimulation();
+            });
+        }
     },
 
     onEventChange: function (eventVal) {
@@ -301,13 +273,11 @@ window.SecurityLabModules["system_reliability"] = {
 
             if (statusBox) {
                 if (data.success) {
-                    statusBox.style.background = "rgba(16, 185, 129, 0.1)";
-                    statusBox.style.border = "1px solid #10b981";
-                    statusBox.style.color = "#34d399";
+                    statusBox.style.borderColor = "var(--color-success)";
+                    statusBox.style.color = "var(--color-success)";
                 } else {
-                    statusBox.style.background = "rgba(239, 68, 68, 0.1)";
-                    statusBox.style.border = "1px solid #ef4444";
-                    statusBox.style.color = "#f87171";
+                    statusBox.style.borderColor = "var(--color-danger)";
+                    statusBox.style.color = "var(--color-danger)";
                 }
                 statusBox.innerHTML = `
                     <div style="font-weight: bold; font-size: 0.95rem; margin-bottom: 4px;">${data.status_label}</div>
@@ -316,51 +286,6 @@ window.SecurityLabModules["system_reliability"] = {
             }
         } catch (err) {
             if (logBox) logBox.innerHTML = `❌ シミュレーションエラー: ${err.message}`;
-        }
-    },
-
-    checkQuiz: function (qNum, answerVal) {
-        const resBox = document.getElementById(`srQuizResult-${qNum}`);
-        if (!resBox) return;
-
-        resBox.style.display = "block";
-
-        if (qNum === 1) {
-            if (answerVal === "foolproof") {
-                resBox.style.background = "rgba(16, 185, 129, 0.15)";
-                resBox.style.border = "1px solid #10b981";
-                resBox.style.color = "#34d399";
-                resBox.innerHTML = "🎉 正解です！ 【ア. フールプルーフ】<br>「利用者の不慣れ・誤入力（ヒューマンエラー）」を対象として安全保護する設計思想はフールプルーフです。";
-            } else {
-                resBox.style.background = "rgba(239, 68, 68, 0.15)";
-                resBox.style.border = "1px solid #ef4444";
-                resBox.style.color = "#f87171";
-                resBox.innerHTML = "❌ 不正解です。<br>ヒント: 「機器の故障」ではなく「人間の誤操作・不慣れなデータ入力」を防ぐ設計思想を選びましょう。";
-            }
-        } else if (qNum === 2) {
-            if (answerVal === "failsoft") {
-                resBox.style.background = "rgba(16, 185, 129, 0.15)";
-                resBox.style.border = "1px solid #10b981";
-                resBox.style.color = "#34d399";
-                resBox.innerHTML = "🎉 正解です！ 【ウ. フェールソフト】<br>障害発生時に全停止せず、書き込み等の機能を一部制限して「縮退運転（Degraded Operation）」で閲覧サービスを維持する設計思想はフェールソフトです。";
-            } else {
-                resBox.style.background = "rgba(239, 68, 68, 0.15)";
-                resBox.style.border = "1px solid #ef4444";
-                resBox.style.color = "#f87171";
-                resBox.innerHTML = "❌ 不正解です。<br>ヒント: 全停止するのではなく、機能を一部制限（縮退運転）して継続する思想です。";
-            }
-        } else if (qNum === 3) {
-            if (answerVal === "failsafe") {
-                resBox.style.background = "rgba(16, 185, 129, 0.15)";
-                resBox.style.border = "1px solid #10b981";
-                resBox.style.color = "#34d399";
-                resBox.innerHTML = "🎉 正解です！ 【イ. フェールセーフ】<br>機器の故障時に、人身事故を防ぐため「必ず安全な状態（遮断降下状態）」へ移行・停止させる設計思想はフェールセーフです。";
-            } else {
-                resBox.style.background = "rgba(239, 68, 68, 0.15)";
-                resBox.style.border = "1px solid #ef4444";
-                resBox.style.color = "#f87171";
-                resBox.innerHTML = "❌ 不正解です。<br>ヒント: 故障が発生した際に、二次被害（事故）を防ぐため安全側に動作・遮断させる設計思想を選びましょう。";
-            }
         }
     }
 };

@@ -24,8 +24,41 @@
     --color-warning: #f59e0b;      /* Amber 500 */
     --color-danger: #ef4444;       /* Red 500 */
 
+    /* Semantic Background Tokens (Dark Theme) */
+    --bg-subtle-primary: rgba(99, 102, 241, 0.06);
+    --bg-subtle-success: rgba(16, 185, 129, 0.06);
+    --bg-subtle-warning: rgba(245, 158, 11, 0.06);
+    --bg-subtle-danger:  rgba(239, 68, 68, 0.06);
+    --bg-subtle-neutral: rgba(255, 255, 255, 0.03);
+
+    --bg-badge-primary: rgba(99, 102, 241, 0.18);
+    --bg-badge-success: rgba(16, 185, 129, 0.18);
+    --bg-badge-warning: rgba(245, 158, 11, 0.18);
+    --bg-badge-danger:  rgba(239, 68, 68, 0.18);
+    --bg-badge-neutral: rgba(161, 161, 170, 0.15);
+
+    --bg-code-block: rgba(0, 0, 0, 0.35);
+    --bg-terminal:   #090d16;
+
+    /* Semantic Border Tokens (Dark Theme) */
+    --border-subtle-primary: rgba(99, 102, 241, 0.25);
+    --border-subtle-success: rgba(16, 185, 129, 0.25);
+    --border-subtle-warning: rgba(245, 158, 11, 0.25);
+    --border-subtle-danger:  rgba(239, 68, 68, 0.25);
+    --border-subtle-neutral: rgba(255, 255, 255, 0.08);
+
     --font-sans: 'Inter', 'Outfit', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+    /* Typography Scale */
+    --font-size-xs: 11px;
+    --font-size-sm: 12px;
+    --font-size-base: 13px;
+    --font-size-md: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 22px;
+    --font-size-3xl: 28px;
 
     --sidebar-width: 280px;
     --console-height: 240px;
@@ -58,6 +91,29 @@
     --color-success: #059669;      /* Emerald 600 */
     --color-warning: #d97706;      /* Amber 600 (Darker for readability) */
     --color-danger: #dc2626;       /* Red 600 */
+
+    /* Semantic Background Tokens (Light Theme) */
+    --bg-subtle-primary: rgba(79, 70, 229, 0.05);
+    --bg-subtle-success: rgba(5, 150, 105, 0.06);
+    --bg-subtle-warning: rgba(217, 119, 6, 0.06);
+    --bg-subtle-danger:  rgba(220, 38, 38, 0.06);
+    --bg-subtle-neutral: rgba(0, 0, 0, 0.02);
+
+    --bg-badge-primary: rgba(79, 70, 229, 0.12);
+    --bg-badge-success: rgba(5, 150, 105, 0.12);
+    --bg-badge-warning: rgba(217, 119, 6, 0.12);
+    --bg-badge-danger:  rgba(220, 38, 38, 0.12);
+    --bg-badge-neutral: rgba(100, 116, 139, 0.12);
+
+    --bg-code-block: #f8fafc;
+    --bg-terminal:   #0f172a;
+
+    /* Semantic Border Tokens (Light Theme) */
+    --border-subtle-primary: rgba(79, 70, 229, 0.2);
+    --border-subtle-success: rgba(5, 150, 105, 0.2);
+    --border-subtle-warning: rgba(217, 119, 6, 0.2);
+    --border-subtle-danger:  rgba(220, 38, 38, 0.2);
+    --border-subtle-neutral: rgba(0, 0, 0, 0.08);
 }
 
 * {

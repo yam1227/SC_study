@@ -7,7 +7,137 @@
 
 window.UIComponents = {
     /**
-     * サブタブの切り替えイベントを設定
+     * タブナビゲーション＆パネルのHTML自動生成
+     * @param {Array<{id: string, label: string, icon?: string, content?: string, active?: boolean}>} tabs 
+     * @returns {string} HTML文字列
+     */
+    renderTabs: function(tabs) {
+        if (!tabs || !Array.isArray(tabs) || tabs.length === 0) return '';
+
+        let tabButtonsHtml = '';
+        let tabPanelsHtml = '';
+
+        tabs.forEach((tab, index) => {
+            const isActive = tab.active !== undefined ? tab.active : (index === 0);
+            const activeClass = isActive ? 'active' : '';
+            const displayStyle = isActive ? 'block' : 'none';
+            const iconHtml = tab.icon ? `<span style="margin-right: 6px;">${tab.icon}</span>` : '';
+
+            tabButtonsHtml += `
+                <button class="btn-tab ${activeClass}" data-tab-target="${tab.id}">
+                    ${iconHtml}${tab.label}
+                </button>
+            `;
+
+            tabPanelsHtml += `
+                <div class="tab-panel ${activeClass}" id="${tab.id}" style="display: ${displayStyle};">
+                    ${tab.content || ''}
+                </div>
+            `;
+        });
+
+        return `
+            <div class="card-tabs" style="margin-bottom: 20px;">
+                ${tabButtonsHtml}
+            </div>
+            <div class="tab-panels-container">
+                ${tabPanelsHtml}
+            </div>
+        `;
+    },
+
+    /**
+     * コンテナ内の全タブ切り替えイベントを自動設定
+     * @param {HTMLElement|Document} rootContainer 
+     * @param {Function} [onTabChange] 切り替え時のコールバック (tabId, targetPanel)
+     */
+    setupTabs: function(rootContainer, onTabChange) {
+        if (!rootContainer) return;
+        const buttons = rootContainer.querySelectorAll('.card-tabs .btn-tab[data-tab-target]');
+        if (buttons.length === 0) return;
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.dataset.tabTarget;
+                const parentTabs = btn.closest('.card-tabs');
+                if (parentTabs) {
+                    parentTabs.querySelectorAll('.btn-tab').forEach(b => b.classList.remove('active'));
+                }
+                btn.classList.add('active');
+
+                // Toggle panels
+                const container = rootContainer.querySelector('.tab-panels-container') || rootContainer;
+                const panels = container.querySelectorAll('.tab-panel');
+                panels.forEach(p => {
+                    if (p.id === targetId) {
+                        p.classList.add('active');
+                        p.style.display = 'block';
+                    } else if (p.closest('.tab-panels-container') === container || !p.closest('.tab-panels-container')) {
+                        p.classList.remove('active');
+                        p.style.display = 'none';
+                    }
+                });
+
+                if (typeof onTabChange === 'function') {
+                    const activePanel = document.getElementById(targetId);
+                    onTabChange(targetId, activePanel);
+                }
+            });
+        });
+    },
+
+    /**
+     * 共通非同期API呼び出しラッパー（ローディング・ボタン制御・エラー処理）
+     * @param {HTMLElement|string} btn ボタン要素またはセレクタ
+     * @param {HTMLElement|string} resultBox 結果表示要素またはセレクタ
+     * @param {Function} apiPromiseFn 非同期API実行関数
+     * @param {Object} [options] オプション (loadingText, successCallback, errorCallback)
+     */
+    handleApiAction: async function(btn, resultBox, apiPromiseFn, options = {}) {
+        const btnEl = typeof btn === 'string' ? document.querySelector(btn) : btn;
+        const resultEl = typeof resultBox === 'string' ? document.querySelector(resultBox) : resultBox;
+        
+        const originalBtnText = btnEl ? btnEl.innerHTML : '';
+        const loadingText = options.loadingText || '処理中...';
+
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.innerHTML = `<span class="spinner" style="display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; margin-right: 6px; vertical-align: middle;"></span>${loadingText}`;
+        }
+
+        try {
+            const data = await apiPromiseFn();
+            if (options.successCallback) {
+                options.successCallback(data, resultEl);
+            } else if (resultEl && data) {
+                resultEl.style.display = 'block';
+                if (typeof data === 'string') {
+                    resultEl.innerHTML = data;
+                } else if (data.message) {
+                    resultEl.innerHTML = data.message;
+                }
+            }
+            return data;
+        } catch (error) {
+            window.logToConsole('error', 'API通信エラー:', error.message || error);
+            if (options.errorCallback) {
+                options.errorCallback(error, resultEl);
+            } else if (resultEl) {
+                resultEl.style.display = 'block';
+                resultEl.className = 'callout-box callout-danger text-sm';
+                resultEl.innerHTML = `<strong>⚠️ 通信エラーが発生しました:</strong> ${error.message || 'サーバーとの通信に失敗しました。'}`;
+            }
+            throw error;
+        } finally {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalBtnText;
+            }
+        }
+    },
+
+    /**
+     * サブタブの切り替えイベントを設定 (レガシー互換用)
      * @param {Array<{btnId: string, panelId: string}>} tabMappings 
      * @param {Function} [onTabChange] 切り替え時のコールバック
      */
@@ -37,95 +167,135 @@ window.UIComponents = {
     },
 
     /**
-     * 過去問クイズウィジェットのHTML生成とイベントハンドリング
-     * @param {string} containerId クイズを描画するDOMのID
-     * @param {Object} quizData クイズの定義
-     * @param {string} quizData.title 過去問の出典タイトル（例: "平成30年秋期 午前Ⅱ 問12"）
-     * @param {string} quizData.question 問題文
-     * @param {Array<{label: string, text: string, isCorrect: boolean}>} quizData.choices 選択肢
-     * @param {string} quizData.explanation 正解の解説文
-     * @param {string} [quizData.point] 支援士試験の重要ポイント
+     * 試験攻略ポイント（試験で狙われる鍵）カードのHTML生成
+     * @param {string|Array<string>} examTips 攻略ポイント文字列またはリスト
+     * @param {string} [title="💡 試験攻略の鍵（セキスペ出題ポイント）"]
+     * @returns {string} HTML文字列
      */
-    renderQuiz: function(containerId, quizData) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
+    generateExamKeyCard: function(examTips, title = "💡 試験攻略の鍵（セキスペ出題ポイント）") {
+        if (!examTips) return '';
+        
+        let contentHtml = '';
+        if (Array.isArray(examTips)) {
+            contentHtml = `<ul style="margin: 0; padding-left: 20px; line-height: 1.7;">` + 
+                examTips.map(tip => `<li>${tip}</li>`).join('') + 
+                `</ul>`;
+        } else {
+            contentHtml = `<div style="line-height: 1.6;">${examTips}</div>`;
+        }
 
-        const quizId = 'quiz_' + Math.random().toString(36).substring(2, 9);
+        return `
+            <div class="exam-key-card" style="margin-top: 20px; margin-bottom: 20px;">
+                <span class="text-base" style="display: block; margin-bottom: 8px; font-weight: 700;">${title}</span>
+                <div class="text-base">
+                    ${contentHtml}
+                </div>
+            </div>
+        `;
+    },
 
-        let choicesHtml = '';
-        quizData.choices.forEach((choice, idx) => {
-            choicesHtml += `
-                <button class="btn btn-secondary quiz-choice-btn" 
-                        data-choice-idx="${idx}"
-                        style="width: 100%; text-align: left; padding: 12px 16px; margin-bottom: 8px; font-size: 13px; line-height: 1.5; border-radius: 6px; transition: all 0.2s ease;">
-                    <strong style="margin-right: 8px; color: var(--color-primary-hover);">${choice.label}.</strong>
-                    <span>${choice.text}</span>
-                </button>
+    /**
+     * 過去問クイズリストのHTML生成
+     * @param {Array<Object>} quizList クイズ定義配列
+     * @returns {string} HTML文字列
+     */
+    generateQuizHtml: function(quizList) {
+        if (!quizList || !Array.isArray(quizList) || quizList.length === 0) return '';
+
+        let quizzesHtml = '';
+        quizList.forEach((q, qIdx) => {
+            const qId = q.id || `quiz_${qIdx}_${Math.random().toString(36).substring(2, 7)}`;
+            
+            let optionsHtml = '';
+            q.options.forEach(opt => {
+                optionsHtml += `
+                    <button class="quiz-option-btn" data-qid="${qId}" data-ans="${opt.key}">
+                        <strong>${opt.label || opt.key}.</strong> ${opt.text}
+                    </button>
+                `;
+            });
+
+            quizzesHtml += `
+                <div class="quiz-card" id="${qId}_card" data-correct="${q.answer}">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                        <span class="quiz-badge">${q.year || 'セキスペ過去問'}</span>
+                    </div>
+                    <div class="quiz-question-text">${q.question}</div>
+                    <div class="quiz-options-grid">
+                        ${optionsHtml}
+                    </div>
+                    <div class="quiz-feedback-box" id="${qId}_feedback"></div>
+                </div>
             `;
         });
 
-        container.innerHTML = `
-            <div class="card quiz-card" style="margin-bottom: 16px; border: 1px solid var(--border-color); background: var(--bg-card); padding: 18px; border-radius: var(--radius-md);">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                    <span style="font-size: 12px; font-weight: bold; color: var(--color-primary-hover); background: rgba(59, 130, 246, 0.1); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.3);">
-                        📝 ${quizData.title}
-                    </span>
-                    <span style="font-size: 11px; color: var(--text-secondary);">過去問チャレンジ</span>
+        return `
+            <div class="card" style="margin-top: 24px;">
+                <h3>📝 セキスペ過去問 演習＆理解度チェック</h3>
+                <p class="card-subtitle">本モジュールで学習した知識が、実際の情報処理安全確保支援士試験でどのように問われるかを演習します。</p>
+                <div class="quiz-section">
+                    ${quizzesHtml}
                 </div>
-                <h4 style="margin: 0 0 14px 0; font-size: 14px; line-height: 1.6; color: var(--text-primary);">
-                    ${quizData.question}
-                </h4>
-                <div class="quiz-choices-group" id="${quizId}_choices">
-                    ${choicesHtml}
-                </div>
-                <div class="quiz-feedback-box" id="${quizId}_feedback" style="display: none; margin-top: 14px; padding: 14px; border-radius: 6px; font-size: 13px; line-height: 1.6;"></div>
             </div>
         `;
+    },
 
-        const choiceBtns = container.querySelectorAll('.quiz-choice-btn');
-        const feedbackBox = document.getElementById(`${quizId}_feedback`);
+    /**
+     * クイズカードのクリックイベントを一括バインド
+     * @param {HTMLElement|Document} rootContainer 
+     * @param {Array<Object>} quizList 
+     */
+    initQuizEvents: function(rootContainer, quizList) {
+        if (!quizList || !Array.isArray(quizList)) return;
 
-        choiceBtns.forEach(btn => {
+        const quizMap = {};
+        quizList.forEach(q => {
+            const qId = q.id || q.qid;
+            if (qId) quizMap[qId] = q;
+        });
+
+        const btns = rootContainer.querySelectorAll('.quiz-option-btn');
+        btns.forEach(btn => {
             btn.addEventListener('click', () => {
-                const choiceIdx = parseInt(btn.dataset.choiceIdx, 10);
-                const selectedChoice = quizData.choices[choiceIdx];
+                const qId = btn.dataset.qid;
+                const selectedAns = btn.dataset.ans;
+                const card = document.getElementById(`${qId}_card`) || btn.closest('.quiz-card');
+                const feedbackBox = document.getElementById(`${qId}_feedback`) || (card ? card.querySelector('.quiz-feedback-box') : null);
+                
+                if (!card || !feedbackBox) return;
 
-                choiceBtns.forEach(b => {
+                const correctAns = card.dataset.correct;
+                const qData = quizMap[qId] || quizList.find(q => (q.id === qId || q.qid === qId));
+
+                // Disable all buttons for this quiz
+                const siblingBtns = card.querySelectorAll('.quiz-option-btn');
+                siblingBtns.forEach(b => {
                     b.disabled = true;
                     b.style.cursor = 'default';
                 });
 
-                if (selectedChoice.isCorrect) {
-                    btn.style.background = 'rgba(16, 185, 129, 0.15)';
-                    btn.style.borderColor = 'var(--color-success)';
-                    btn.style.color = 'var(--color-success)';
-                    feedbackBox.style.display = 'block';
-                    feedbackBox.style.background = 'rgba(16, 185, 129, 0.1)';
-                    feedbackBox.style.border = '1px solid var(--color-success)';
-                    feedbackBox.style.color = 'var(--text-primary)';
+                const isCorrect = (selectedAns === correctAns);
+                feedbackBox.style.display = 'block';
+
+                if (isCorrect) {
+                    btn.classList.add('correct');
+                    feedbackBox.className = 'quiz-feedback-box correct';
                     feedbackBox.innerHTML = `
-                        <div style="font-weight: bold; color: var(--color-success); font-size: 14px; margin-bottom: 6px;">
-                            🎉 正解です！ (${selectedChoice.label})
-                        </div>
-                        <div>${quizData.explanation}</div>
-                        ${quizData.point ? `<div style="margin-top: 8px; font-size: 12px; color: var(--text-secondary); border-top: 1px dashed var(--border-color); padding-top: 6px;"><strong>💡 試験対策ポイント:</strong> ${quizData.point}</div>` : ''}
+                        <div class="text-md" style="font-weight: bold; margin-bottom: 6px;">🎉 正解です！ (${selectedAns})</div>
+                        <div>${qData ? qData.explanation : '正解です。'}</div>
+                        ${qData && qData.point ? `<div class="text-xs" style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 6px;"><strong>💡 試験対策ポイント:</strong> ${qData.point}</div>` : ''}
                     `;
                 } else {
-                    btn.style.background = 'rgba(239, 68, 68, 0.15)';
-                    btn.style.borderColor = 'var(--color-danger)';
-                    btn.style.color = 'var(--color-danger)';
-                    
-                    const correctChoice = quizData.choices.find(c => c.isCorrect);
-                    feedbackBox.style.display = 'block';
-                    feedbackBox.style.background = 'rgba(239, 68, 68, 0.1)';
-                    feedbackBox.style.border = '1px solid var(--color-danger)';
-                    feedbackBox.style.color = 'var(--text-primary)';
+                    btn.classList.add('wrong');
+                    // Highlight correct button
+                    siblingBtns.forEach(b => {
+                        if (b.dataset.ans === correctAns) b.classList.add('correct');
+                    });
+                    feedbackBox.className = 'quiz-feedback-box wrong';
                     feedbackBox.innerHTML = `
-                        <div style="font-weight: bold; color: var(--color-danger); font-size: 14px; margin-bottom: 6px;">
-                            ❌ 不正解です（正解: ${correctChoice ? correctChoice.label : 'なし'}）
-                        </div>
-                        <div>${quizData.explanation}</div>
-                        ${quizData.point ? `<div style="margin-top: 8px; font-size: 12px; color: var(--text-secondary); border-top: 1px dashed var(--border-color); padding-top: 6px;"><strong>💡 試験対策ポイント:</strong> ${quizData.point}</div>` : ''}
+                        <div class="text-md" style="font-weight: bold; margin-bottom: 6px;">❌ 不正解です（正解: ${correctAns}）</div>
+                        <div>${qData ? qData.explanation : 'もう一度復習してみましょう。'}</div>
+                        ${qData && qData.point ? `<div class="text-xs" style="margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 6px;"><strong>💡 試験対策ポイント:</strong> ${qData.point}</div>` : ''}
                     `;
                 }
             });
@@ -200,12 +370,23 @@ window.UIComponents = {
         return `
             <div class="code-block-container" style="position: relative; margin: 10px 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-card);">
                 ${title ? `
-                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 6px 12px; font-size: 11px; color: var(--text-secondary); border-bottom: 1px solid var(--border-color);">
+                <div class="text-xs text-muted" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-code-block); padding: 6px 12px; border-bottom: 1px solid var(--border-color);">
                     <span>${title}</span>
-                    <button class="btn btn-sm btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('${blockId}').innerText); this.textContent='コピー済!'; setTimeout(()=>this.textContent='コピー', 1500);" style="padding: 2px 8px; font-size: 10px;">コピー</button>
+                    <button class="btn btn-sm btn-secondary text-xs" onclick="navigator.clipboard.writeText(document.getElementById('${blockId}').innerText); this.textContent='コピー済!'; setTimeout(()=>this.textContent='コピー', 1500);" style="padding: 2px 8px;">コピー</button>
                 </div>` : ''}
-                <pre id="${blockId}" style="margin: 0; padding: 12px; font-family: var(--font-mono, monospace); font-size: 12px; overflow-x: auto; color: var(--text-primary);">${code}</pre>
+                <pre id="${blockId}" class="text-sm text-mono" style="margin: 0; padding: 12px; overflow-x: auto; color: var(--text-primary);">${code}</pre>
             </div>
         `;
+    },
+
+    // 命名互換エイリアス
+    renderExamKeyCard: function(examTips, title) {
+        return this.generateExamKeyCard(examTips, title);
+    },
+    renderQuiz: function(quizList) {
+        return this.generateQuizHtml(quizList);
+    },
+    renderReferences: function(references) {
+        return this.generateReferencesHtml(references);
     }
 };

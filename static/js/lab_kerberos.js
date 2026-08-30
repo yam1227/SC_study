@@ -33,24 +33,24 @@ window.SecurityLabModules["kerberos"] = {
                     <!-- Visual Actor Statuses -->
                     <div style="background-color: var(--bg-app); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-top: 20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center;">
                         <div id="krb-node-client" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 28px;">💻</div>
-                            <span style="font-size: 13px; font-weight: bold;">クライアント</span><br>
-                            <span id="status-client" style="font-size: 12px; color: var(--text-secondary);">チケットなし</span>
+                            <div class="node-icon-lg">💻</div>
+                            <span class="text-base" style="font-weight: bold;">クライアント</span><br>
+                            <span id="status-client" class="text-xs text-muted">チケットなし</span>
                         </div>
                         <div id="krb-node-as" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 28px;">🏢</div>
-                            <span style="font-size: 13px; font-weight: bold; color: #fb7185;">KDC: AS</span><br>
-                            <span style="font-size: 12px; color: var(--text-secondary);">認証サービス</span>
+                            <div class="node-icon-lg">🏢</div>
+                            <span class="text-base" style="font-weight: bold; color: #fb7185;">KDC: AS</span><br>
+                            <span class="text-xs text-muted">認証サービス</span>
                         </div>
                         <div id="krb-node-tgs" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 28px;">🎟️</div>
-                            <span style="font-size: 13px; font-weight: bold; color: #d97706;">KDC: TGS</span><br>
-                            <span style="font-size: 12px; color: var(--text-secondary);">チケット交付</span>
+                            <div class="node-icon-lg">🎟️</div>
+                            <span class="text-base" style="font-weight: bold; color: #d97706;">KDC: TGS</span><br>
+                            <span class="text-xs text-muted">チケット交付</span>
                         </div>
                         <div id="krb-node-ap" style="border: 1px solid var(--border-color); padding: 8px; border-radius: 4px;">
-                            <div style="font-size: 28px;">🖥️</div>
-                            <span style="font-size: 13px; font-weight: bold; color: #38bdf8;">APサーバー</span><br>
-                            <span id="status-ap" style="font-size: 12px; color: var(--text-secondary);">未認証</span>
+                            <div class="node-icon-lg">🖥️</div>
+                            <span class="text-base" style="font-weight: bold; color: #38bdf8;">APサーバー</span><br>
+                            <span id="status-ap" class="text-xs text-muted">未認証</span>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ window.SecurityLabModules["kerberos"] = {
                     
                     <div class="form-group">
                         <label>現在のアクティビティ:</label>
-                        <div style="font-size: 14px; font-weight: bold; color: var(--color-primary-hover);" id="krbStepTitle">
+                        <div class="text-md text-primary-color" style="font-weight: bold;" id="krbStepTitle">
                             ステップ1を実行してください
                         </div>
                     </div>
@@ -70,7 +70,7 @@ window.SecurityLabModules["kerberos"] = {
                     <div class="form-group">
                         <label>パケットログ・データ詳細:</label>
                         <div class="response-box" style="background-color: #0c0a09; height: 260px; overflow-y: auto;">
-                            <code id="krbLogCode" style="color: #60a5fa; font-size: 12px;">リクエストを実行するとログが表示されます。</code>
+                            <code id="krbLogCode" class="text-sm" style="color: #60a5fa;">リクエストを実行するとログが表示されます。</code>
                         </div>
                     </div>
                 </div>
@@ -79,23 +79,23 @@ window.SecurityLabModules["kerberos"] = {
             <!-- Kerberos Study Guide -->
             <div class="card">
                 <h3>💡 情報処理安全確保支援士試験ポイント: Kerberos認証の流れと脅威</h3>
-                <div style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="text-base text-muted" style="line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div>
                         <h4 style="color: var(--text-primary); margin-bottom: 6px;">1. Kerberosの3段階フェーズ</h4>
                         <p>
                             Kerberosは、以下の3段階の往復でSSOを実現します。<br>
-                            - **第一段階 (AS)**: パスワードをネットワークに流さず、本人のパスワードから作成した暗号鍵を用いて、共通の入場パスとなる **「TGT（チケット送信チケット）」** を取得します。<br>
-                            - **第二段階 (TGS)**: 取得した TGT を提示して、目的の個別サービスを利用するための **「サービス利用チケット」** を交付してもらいます。<br>
-                            - **第三段階 (AP)**: サービスチケットを提示して、対象サーバー（ファイルサーバー等）にログインします。
+                            - <strong>第一段階 (AS)</strong>: パスワードをネットワークに流さず、本人のパスワードから作成した暗号鍵を用いて、共通の入場パスとなる <strong>「TGT（チケット送信チケット）」</strong> を取得します。<br>
+                            - <strong>第二段階 (TGS)</strong>: 取得した TGT を提示して、目的の個別サービスを利用するための <strong>「サービス利用チケット」</strong> を交付してもらいます。<br>
+                            - <strong>第三段階 (AP)</strong>: サービスチケットを提示して、対象サーバー（ファイルサーバー等）にログインします。
                         </p>
                     </div>
                     <div>
                         <h4 style="color: var(--text-primary); margin-bottom: 6px;">2. チケット情報の暗号化と検証者</h4>
                         <p>
                             チケットシステムにおいて、「誰がどの鍵で暗号化したか、誰が復号して検証するか」が頻出します。<br>
-                            - **TGT (Ticket Granting Ticket)**: <b style="color: #fb7185;">TGSの秘密鍵</b>で暗号化されています。そのため、クライアント（ユーザー）は中身を改ざんできず、そのままTGSに送信します。TGS自身のみが復号して検証できます。<br>
-                            - **サービス利用チケット**: <b style="color: #38bdf8;">目的のサービスサーバーの秘密鍵</b>で暗号化されています。クライアントは中身を読めず、そのままサービスサーバーに送信します。サービスサーバー自身のみが復号できます。<br><br>
-                            ※パスワードの平文通信がないため、盗聴によるパスワード漏洩を防げますが、**KDC（キー配布センター）**が単一障害点（SPOF）となる弱点があります。
+                            - <strong>TGT (Ticket Granting Ticket)</strong>: <b style="color: #fb7185;">TGSの秘密鍵</b>で暗号化されています。そのため、クライアント（ユーザー）は中身を改ざんできず、そのままTGSに送信します。TGS自身のみが復号して検証できます。<br>
+                            - <strong>サービス利用チケット</strong>: <b style="color: #38bdf8;">目的のサービスサーバーの秘密鍵</b>で暗号化されています。クライアントは中身を読めず、そのままサービスサーバーに送信します。サービスサーバー自身のみが復号できます。<br><br>
+                            ※パスワードの平文通信がないため、盗聴によるパスワード漏洩を防げますが、<strong>KDC（キー配布センター）</strong>が単一障害点（SPOF）となる弱点があります。
                         </p>
                     </div>
                 </div>

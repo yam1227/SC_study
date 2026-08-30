@@ -10,7 +10,7 @@ window.SecurityLabModules["saml"] = {
                     <h3>📡 SAML 2.0 / 学認 (GakuNin) SSO フローシミュレーター</h3>
                     <p class="card-subtitle">大学と外部サービス（学術検索DBなど）を連携するシングルサインオン規格であるSAMLのシーケンスと、SPによる厳密なアサーション検証プロセスを学びます。</p>
                     
-                    <div class="flow-scenario-badge" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 6px; padding: 12px; margin-bottom: 16px; font-size: 13px; line-height: 1.4;">
+                    <div class="callout-box callout-primary text-base" style="margin-bottom: 16px; line-height: 1.4;">
                         <strong>🏫 実証シナリオ (学認の例)</strong><br>
                         ・<strong>ユーザー (ブラウザ)</strong>: 〇〇大学の教員・学生 (ID: <code>yamada</code>)<br>
                         ・<strong>SP (サービスプロバイダ)</strong>: 学術検索DB (EntityID: <code>https://sp.sciencesearch.jp/saml2</code>)<br>
@@ -91,7 +91,7 @@ window.SecurityLabModules["saml"] = {
 
                     <div class="form-group">
                         <label>現在の状態:</label>
-                        <div style="font-size: 14px; font-weight: bold; color: var(--color-primary-hover);" id="samlStepTitle">
+                        <div class="text-md text-primary-color" style="font-weight: bold;" id="samlStepTitle">
                             開始ボタンを押してください
                         </div>
                     </div>
@@ -101,26 +101,26 @@ window.SecurityLabModules["saml"] = {
                         <label id="samlPacketLabel">通信メッセージ詳細 (SAML XML):</label>
                         
                         <!-- XML viewer and editor -->
-                        <div id="samlNormalXmlContainer" class="response-box" style="background-color: #0c0a09; height: 260px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.4;">
+                        <div id="samlNormalXmlContainer" class="response-box text-sm text-mono" style="background-color: #0c0a09; height: 260px; overflow-y: auto; line-height: 1.4;">
                             <code id="samlPacketCode" style="color: #60a5fa; white-space: pre;">フローを開始するとここにSAML Request/ResponseのXMLデータが表示されます。</code>
                         </div>
                         
                         <div id="samlTamperContainer" style="display: none; margin-top: 10px;">
-                            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
+                            <p class="text-sm text-muted" style="margin-bottom: 8px;">
                                 ⚠️ <strong>改ざんテスト</strong>: XMLデータを自由に編集できます。以下のボタンでプリセットを試すことも可能です。
                             </p>
-                            <textarea id="samlResponseTextarea" class="response-box" style="width: 100%; height: 200px; background-color: #0c0a09; color: #a7f3d0; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.4; border: 1px solid #34d399; resize: vertical; padding: 10px;"></textarea>
+                            <textarea id="samlResponseTextarea" class="response-box text-sm text-mono" style="width: 100%; height: 200px; background-color: #0c0a09; color: #a7f3d0; line-height: 1.4; border: 1px solid #34d399; resize: vertical; padding: 10px;"></textarea>
                             
                             <!-- Preset Buttons for Tampering -->
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
-                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperSignature">❌ 署名値を改ざんする</button>
-                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperExpiry">❌ 有効期限を過去にする</button>
-                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperAudience">❌ 宛先SP(Audience)を書き換える</button>
-                                <button class="btn btn-secondary" style="font-size: 12px; padding: 6px;" id="btnTamperRole">❌ 所属(属性)を教員に昇格</button>
+                                <button class="btn btn-secondary text-sm" style="padding: 6px;" id="btnTamperSignature">❌ 署名値を改ざんする</button>
+                                <button class="btn btn-secondary text-sm" style="padding: 6px;" id="btnTamperExpiry">❌ 有効期限を過去にする</button>
+                                <button class="btn btn-secondary text-sm" style="padding: 6px;" id="btnTamperAudience">❌ 宛先SP(Audience)を書き換える</button>
+                                <button class="btn btn-secondary text-sm" style="padding: 6px;" id="btnTamperRole">❌ 所属(属性)を教員に昇格</button>
                             </div>
                             <div style="display: flex; justify-content: space-between; margin-top: 10px; gap: 10px;">
-                                <button class="btn btn-secondary" style="font-size: 12px; width: 45%;" id="btnTamperRestore">🔄 正常なXMLに戻す</button>
-                                <button class="btn btn-primary" style="font-size: 12px; width: 50%; color: #34d399; border-color: #34d399;" id="btnExecuteVerify">🛡️ SPへ送信して検証実行</button>
+                                <button class="btn btn-secondary text-sm" style="width: 45%;" id="btnTamperRestore">🔄 正常なXMLに戻す</button>
+                                <button class="btn btn-primary text-sm" style="width: 50%; color: #34d399; border-color: #34d399;" id="btnExecuteVerify">🛡️ SPへ送信して検証実行</button>
                             </div>
                         </div>
                     </div>
@@ -128,7 +128,7 @@ window.SecurityLabModules["saml"] = {
                     <!-- Step-based security explanation -->
                     <div class="form-group">
                         <label>セキュリティ解説 / 検証結果:</label>
-                        <div style="font-size: 13px; line-height: 1.5; color: var(--text-secondary); max-height: 200px; overflow-y: auto;" id="samlStepExplanation">
+                        <div class="text-base text-muted" style="line-height: 1.5; max-height: 200px; overflow-y: auto;" id="samlStepExplanation">
                             SAML (Security Assertion Markup Language) は、異なるドメイン（組織）の間でユーザー認証情報や属性（認可情報）を安全に受け渡すためのXMLベースの規格です。学認 (GakuNin) はSAMLの国際的フェデレーションであり、所属大学の認証で様々なオンラインジャーナル等にアクセスできます。
                         </div>
                     </div>
@@ -144,61 +144,61 @@ window.SecurityLabModules["saml"] = {
                     <!-- Check 1 -->
                     <div class="check-box-card" id="chk-signature" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                            <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">1. デジタル署名の検証</h4>
-                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-signature">待機中</span>
+                            <h4 class="text-md" style="margin: 0; color: var(--text-primary);">1. デジタル署名の検証</h4>
+                            <span class="status-badge subtab-badge" id="badge-signature">待機中</span>
                         </div>
-                        <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                        <p class="text-xs text-muted" style="margin: 0; line-height: 1.4;">
                             あらかじめメタデータで共有されたIdPの公開鍵を用いて、SAMLアサーション内の署名が有効であることを確認します。これにより、<strong>アサーション内容の改ざんやなりすましを防止</strong>します。
                         </p>
-                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-signature"></div>
+                        <div class="text-xs text-primary-color text-mono" style="margin-top: 8px;" id="detail-signature"></div>
                     </div>
 
                     <!-- Check 2 -->
                     <div class="check-box-card" id="chk-conditions" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                            <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">2. 有効期限の検証</h4>
-                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-conditions">待機中</span>
+                            <h4 class="text-md" style="margin: 0; color: var(--text-primary);">2. 有効期限の検証</h4>
+                            <span class="status-badge subtab-badge" id="badge-conditions">待機中</span>
                         </div>
-                        <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                        <p class="text-xs text-muted" style="margin: 0; line-height: 1.4;">
                             <code>&lt;saml:Conditions&gt;</code> の <code>NotBefore</code> (この時間以降有効) と <code>NotOnOrAfter</code> (この時間未満有効) を確認し、現在時刻が範囲内にあるかを検証します。
                         </p>
-                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-conditions"></div>
+                        <div class="text-xs text-primary-color text-mono" style="margin-top: 8px;" id="detail-conditions"></div>
                     </div>
 
                     <!-- Check 3 -->
                     <div class="check-box-card" id="chk-audience" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                            <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">3. 宛先 (Audience) の検証</h4>
-                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-audience">待機中</span>
+                            <h4 class="text-md" style="margin: 0; color: var(--text-primary);">3. 宛先 (Audience) の検証</h4>
+                            <span class="status-badge subtab-badge" id="badge-audience">待機中</span>
                         </div>
-                        <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                        <p class="text-xs text-muted" style="margin: 0; line-height: 1.4;">
                             <code>&lt;saml:Audience&gt;</code> に記録されたEntityIDが、自SPのEntityID (<code>https://sp.sciencesearch.jp/saml2</code>) と完全一致するか検証します。他SP向けのアサーションを使い回す<strong>アサーション差し替え攻撃を防ぎます</strong>。
                         </p>
-                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-audience"></div>
+                        <div class="text-xs text-primary-color text-mono" style="margin-top: 8px;" id="detail-audience"></div>
                     </div>
 
                     <!-- Check 4 -->
                     <div class="check-box-card" id="chk-in-response-to" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                            <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">4. リプレイ攻撃の検証</h4>
-                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-in-response-to">待機中</span>
+                            <h4 class="text-md" style="margin: 0; color: var(--text-primary);">4. リプレイ攻撃の検証</h4>
+                            <span class="status-badge subtab-badge" id="badge-in-response-to">待機中</span>
                         </div>
-                        <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                        <p class="text-xs text-muted" style="margin: 0; line-height: 1.4;">
                             <code>&lt;saml:SubjectConfirmationData&gt;</code> の <code>InResponseTo</code> が、SPがステップ1で送信した <code>SAMLRequest (ID)</code> と一致するか検証します。また、アサーションのIDをキャッシュし、使い回されていないか検証して<strong>リプレイ攻撃を防ぎます</strong>。
                         </p>
-                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-in-response-to"></div>
+                        <div class="text-xs text-primary-color text-mono" style="margin-top: 8px;" id="detail-in-response-to"></div>
                     </div>
 
                     <!-- Check 5 -->
                     <div class="check-box-card" id="chk-recipient" style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; background: var(--bg-card);">
                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                            <h4 style="margin: 0; font-size: 14px; color: var(--text-primary);">5. 受信エンドポイント (Recipient)</h4>
-                            <span class="status-badge" style="font-size: 12px; padding: 2px 6px; border-radius: 4px;" id="badge-recipient">待機中</span>
+                            <h4 class="text-md" style="margin: 0; color: var(--text-primary);">5. 受信エンドポイント (Recipient)</h4>
+                            <span class="status-badge subtab-badge" id="badge-recipient">待機中</span>
                         </div>
-                        <p style="font-size: 12px; color: var(--text-secondary); margin: 0; line-height: 1.4;">
+                        <p class="text-xs text-muted" style="margin: 0; line-height: 1.4;">
                             <code>Recipient</code> 属性値が、自SPのACS URL（SAML応答受け取り窓口: <code>https://sp.sciencesearch.jp/saml2/acs</code>）と完全一致するか検証します。
                         </p>
-                        <div style="font-size: 12px; color: var(--color-primary-hover); margin-top: 8px; font-family: monospace;" id="detail-recipient"></div>
+                        <div class="text-xs text-primary-color text-mono" style="margin-top: 8px;" id="detail-recipient"></div>
                     </div>
                 </div>
 
@@ -211,7 +211,7 @@ window.SecurityLabModules["saml"] = {
             <!-- Learning Content Card -->
             <div class="card" style="margin-top: 20px;">
                 <h3>💡 セキスペ試験対策：SAML認証と「学認（GakuNin）」のポイント</h3>
-                <div style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                <div class="text-base text-muted" style="line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div>
                         <h4 style="color: var(--text-primary); margin-bottom: 8px;">1. SP-initiated SSO と IdP-initiated SSO</h4>
                         <p>
@@ -488,9 +488,8 @@ window.SecurityLabModules["saml"] = {
                 
                 samlVerificationResultBox.style.display = "block";
                 if (data.success) {
-                    samlVerificationResultBox.style.background = "rgba(16, 185, 129, 0.1)";
-                    samlVerificationResultBox.style.border = "1px solid rgba(16, 185, 129, 0.3)";
-                    samlVerificationResultBox.style.color = "#34d399";
+                    samlVerificationResultBox.className = "callout-box callout-success";
+                    samlVerificationResultBox.style.color = "var(--color-success)";
                     samlVerificationResultBox.innerHTML = `
                         <strong>🎉 検証合格: ユーザー認証成功！</strong><br>
                         SPはアサーションが完全に信頼できると判断しました。ログインを許可します。<br>
@@ -501,14 +500,13 @@ window.SecurityLabModules["saml"] = {
                     
                     btnSamlNext.disabled = false;
                     samlStepExplanation.innerHTML = `
-                        <span style="color: #34d399;">🟢 <strong>アサーションは検証をパスしました！</strong></span><br>
+                        <span style="color: var(--color-success);">🟢 <strong>アサーションは検証をパスしました！</strong></span><br>
                         改ざんされずにSPのACSへ届いたため、5つの検証基準（署名・有効期限・Audience・InResponseTo・Recipient）をすべて満たしました。<br>
                         左の「次のステップへ進む」を押してフローを完了させてください。
                     `;
                 } else {
-                    samlVerificationResultBox.style.background = "rgba(239, 68, 68, 0.1)";
-                    samlVerificationResultBox.style.border = "1px solid rgba(239, 68, 68, 0.3)";
-                    samlVerificationResultBox.style.color = "#f87171";
+                    samlVerificationResultBox.className = "callout-box callout-danger";
+                    samlVerificationResultBox.style.color = "var(--color-danger)";
                     
                     let errorCause = "";
                     if (data.overall_status === "XML_PARSE_ERROR") {
@@ -535,7 +533,7 @@ window.SecurityLabModules["saml"] = {
                     
                     btnSamlNext.disabled = true;
                     samlStepExplanation.innerHTML = `
-                        <span style="color: #f87171;">🔴 <strong>SPによってアサーションが不正であると検知されました。</strong></span><br>
+                        <span style="color: var(--color-danger);">🔴 <strong>SPによってアサーションが不正であると検知されました。</strong></span><br>
                         SPは不正なアサーションを決して信頼しません。右下の個別検証項目から、どの条件が失敗したかを確認し、XMLの内容を修正して「検証実行」を再試行するか、「正常なXMLに戻す」を押してください。
                     `;
                 }
@@ -556,23 +554,24 @@ window.SecurityLabModules["saml"] = {
                 if (check) {
                     if (check.status === "SUCCESS") {
                         badge.innerText = "合格 (OK)";
-                        badge.style.background = "rgba(16, 185, 129, 0.2)";
-                        badge.style.color = "#34d399";
-                        badge.style.border = "1px solid rgba(16, 185, 129, 0.4)";
+                        badge.className = "badge-subtle-success";
+                        badge.style.padding = "2px 8px";
+                        badge.style.borderRadius = "4px";
                         detail.innerText = "✔️ " + check.msg;
                         detail.style.color = "#a7f3d0";
                     } else {
                         badge.innerText = "不合格 (NG)";
-                        badge.style.background = "rgba(239, 68, 68, 0.2)";
-                        badge.style.color = "#f87171";
-                        badge.style.border = "1px solid rgba(239, 68, 68, 0.4)";
+                        badge.className = "badge-subtle-danger";
+                        badge.style.padding = "2px 8px";
+                        badge.style.borderRadius = "4px";
                         detail.innerText = "❌ " + check.msg;
                         detail.style.color = "#fca5a5";
                     }
                 } else {
                     badge.innerText = "未実施";
-                    badge.style.background = "#374151";
-                    badge.style.color = "#d1d5db";
+                    badge.className = "badge-subtle-neutral";
+                    badge.style.padding = "2px 8px";
+                    badge.style.borderRadius = "4px";
                     detail.innerText = "";
                 }
             });
