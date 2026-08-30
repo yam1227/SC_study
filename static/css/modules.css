@@ -598,6 +598,21 @@ details.ref-card[open] {
     box-shadow: 0 0 16px var(--color-primary-glow);
 }
 
+[data-theme="light"] details.ref-card {
+    background-color: #ffffff;
+    border-color: var(--border-color);
+}
+
+[data-theme="light"] details.ref-card:hover {
+    border-color: var(--color-primary-hover);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] details.ref-card[open] {
+    border-color: #6366f1;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.12);
+}
+
 summary.ref-summary {
     padding: 16px 20px;
     font-size: 15px;
@@ -619,6 +634,11 @@ summary.ref-summary::-webkit-details-marker {
 summary.ref-summary:hover {
     background-color: var(--bg-card-hover);
     color: var(--color-primary-hover);
+}
+
+[data-theme="light"] summary.ref-summary:hover {
+    background-color: #f8fafc;
+    color: var(--color-primary);
 }
 
 summary.ref-summary::after {
@@ -654,8 +674,17 @@ details.ref-card[open] summary::after {
     color: var(--text-primary);
 }
 
+[data-theme="light"] .ref-attack {
+    color: #475569;
+}
+
+[data-theme="light"] .ref-attack b {
+    color: #0f172a;
+}
+
 .ref-defense {
-    background-color: rgba(16, 185, 129, 0.08);
+    background-color: var(--bg-subtle-success);
+    border: 1px solid var(--border-subtle-success);
     border-left: 4px solid var(--color-success);
     padding: 12px 16px;
     border-radius: var(--radius-sm);
@@ -675,29 +704,6 @@ details.ref-card[open] summary::after {
 
 [data-theme="light"] .ref-defense b {
     color: #047857;
-}
-
-.ref-exam-focus {
-    background-color: rgba(249, 115, 22, 0.08);
-    border-left: 4px solid #f97316;
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-}
-
-.ref-exam-focus b {
-    color: #f97316;
-}
-
-[data-theme="light"] .ref-exam-focus {
-    background-color: #fff7ed;
-    border: 1px solid #fed7aa;
-    border-left: 4px solid #ea580c;
-    color: #431407;
-}
-
-[data-theme="light"] .ref-exam-focus b {
-    color: #9a3412;
 }
 
 .ref-footer {
@@ -722,6 +728,18 @@ details.ref-card[open] summary::after {
 }
 
 .ref-btn:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #ffffff;
+}
+
+[data-theme="light"] .ref-btn {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+[data-theme="light"] .ref-btn:hover {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
     color: #ffffff;

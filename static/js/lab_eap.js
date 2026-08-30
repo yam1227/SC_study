@@ -158,14 +158,14 @@ window.SecurityLabModules["eap_auth"] = {
                                         <td style="padding: 10px; border: 1px solid var(--border-color); color: #60a5fa; font-weight: bold;">オーセンティケータ</td>
                                         <td style="padding: 10px; border: 1px solid var(--border-color); color: #60a5fa; font-weight: bold;">RADIUSクライアント</td>
                                         <td style="padding: 10px; border: 1px solid var(--border-color);">EAPOL ⇄ RADIUS</td>
-                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #e2e8f0;">
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #000000ff;">
                                             <strong>【問17正解ポイント】</strong>自身で判定を行わず、EAPOLをRADIUS（UDP 1812）に変換して認証サーバへ仲介する。認証成功時にポートを解放する。
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="padding: 10px; border: 1px solid var(--border-color); font-weight: bold;">認証サーバ</td>
-                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #a7f3d0;">認証サーバ</td>
-                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #a7f3d0;">RADIUSサーバ</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #24ac6dff;">認証サーバ</td>
+                                        <td style="padding: 10px; border: 1px solid var(--border-color); color: #24ac6dff;">RADIUSサーバ</td>
                                         <td style="padding: 10px; border: 1px solid var(--border-color);">RADIUS (UDP 1812/1813)</td>
                                         <td style="padding: 10px; border: 1px solid var(--border-color);">ユーザーDBと照合して認証の可否を判定し、APにAccess-Accept / Access-Reject を返す。</td>
                                     </tr>
@@ -380,7 +380,7 @@ window.SecurityLabModules["eap_auth"] = {
         { source: "RFC 2865", title: "Remote Authentication Dial In User Service (RADIUS)", url: "https://datatracker.ietf.org/doc/html/rfc2865", note: "RADIUS認証標準仕様" },
         { source: "Cisco Systems", title: "IEEE 802.1X 認証デザイン ＆ RADIUS 連携ガイド", url: "https://www.cisco.com/c/ja_jp/support/docs/lan-switching/8021x/118634-config-8021x-00.html" }
     ],
-    init: function() {
+    init: function () {
         // --- Navigation Tab Switching ---
         if (window.UIComponents && window.UIComponents.setupSubTabs) {
             window.UIComponents.setupSubTabs([
@@ -401,7 +401,7 @@ window.SecurityLabModules["eap_auth"] = {
             btnVerifyRoles.addEventListener("click", () => {
                 const pcDot1x = document.getElementById("rolePcDot1x").value;
                 const pcRadius = document.getElementById("rolePcRadius").value;
-                
+
                 const apDot1x = document.getElementById("roleApDot1x").value;
                 const apRadius = document.getElementById("roleApRadius").value;
 
@@ -420,7 +420,7 @@ window.SecurityLabModules["eap_auth"] = {
                 const isServerCorrect = (serverDot1x === "Server" && serverRadius === "Server");
 
                 roleVerifyResult.style.display = "block";
-                
+
                 if (isPcCorrect && isApCorrect && isServerCorrect) {
                     roleVerifyResult.className = "alert alert-success text-sm";
                     roleVerifyResult.innerHTML = `
@@ -477,7 +477,7 @@ window.SecurityLabModules["eap_auth"] = {
         let autoTimer = null;
 
         function getStepsForMethod(method) {
-            switch(method) {
+            switch (method) {
                 case "TLS":
                     return [
                         {
@@ -714,7 +714,7 @@ window.SecurityLabModules["eap_auth"] = {
                     btnEapNext.innerText = "次のステップへ進む";
                     btnEapNext.disabled = false;
                 }
-                
+
                 if (eapPortStatus) {
                     eapPortStatus.innerText = "🔒 ポート閉鎖 (Unauthorized)";
                     eapPortStatus.className = "text-xs badge-subtle-danger";
@@ -726,11 +726,11 @@ window.SecurityLabModules["eap_auth"] = {
                 btnEapNext.innerText = currentStep === steps.length ? "完了 (リセット)" : "次のステップへ進む";
                 btnEapNext.disabled = false;
             }
-            
+
             const step = steps[currentStep - 1];
             if (eapStepTitle) eapStepTitle.innerText = `${currentStep}/${steps.length} - ${step.title}`;
             if (eapStepExplanation) eapStepExplanation.innerText = step.explain;
-            
+
             // Generate simulated logs
             let logText = step.getLog();
             if (eapLogConsole) eapLogConsole.innerText = logText;
@@ -767,7 +767,7 @@ window.SecurityLabModules["eap_auth"] = {
                 if (eapStepTitle) eapStepTitle.innerText = `⚠️ エラー発生 - ${step.title}`;
                 if (eapStepExplanation) eapStepExplanation.innerText = "前提条件（クライアント証明書の所持、またはPACキーの所持）が満たされていないため、認証プロセスが途中で中断されました。チェックボックスをONにしてやり直してください。";
                 if (window.app) window.app.log("error", `[EAP認証エラー] EAP-${method} の前提要件が不足しています。`);
-                
+
                 // Block progress
                 if (btnEapNext) btnEapNext.disabled = true;
                 isAutoRunning = false;

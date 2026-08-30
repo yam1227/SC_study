@@ -79,7 +79,7 @@ window.SecurityLabModules["cookie_security"] = {
                                         <div class="text-xs text-muted" style="margin-top: 2px;">ブラウザ</div>
                                     </div>
                                     <div style="flex: 1; height: 2px; background-color: var(--border-color); margin: 0 16px; position: relative;" id="lineCookieFlow">
-                                        <div id="dotCookiePacket" style="position: absolute; top: -5px; left: 0%; width: 12px; height: 12px; border-radius: 50%; background-color: var(--color-primary); display: none; transition: left 0.8s ease-in-out;"></div>
+                                        <div id="dotCookieFlow" style="position: absolute; top: -5px; left: 0%; width: 12px; height: 12px; border-radius: 50%; background-color: var(--color-primary); display: none; transition: left 0.8s ease-in-out;"></div>
                                         <span id="labelCookiePacket" class="text-xs" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); padding: 3px 6px; border-radius: 4px; background: var(--bg-terminal); border: 1px solid var(--border-color); color: #fff; display: none;">🍪 SessionID</span>
                                     </div>
                                     <div style="text-align: center;">
@@ -93,9 +93,9 @@ window.SecurityLabModules["cookie_security"] = {
                             <div style="flex: 1; display: flex; flex-direction: column;">
                                 <label class="text-base">シミュレーション詳細判定:</label>
                                 <div class="code-log-box" style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                                    <div id="cookieReportHeader">「シミュレーション実行」を押してください。</div>
-                                    <div id="cookieReportDesc" class="text-muted"></div>
-                                    <div id="cookieReportAdvice" style="color: #fbbf24;"></div>
+                                    <div id="textCookieAttrHeader" style="color: var(--text-secondary);">Set-Cookie ヘッダー例がここに表示されます。</div>
+                                    <div id="textCookieSentResult" class="text-muted">「シミュレーション実行」を押してください。</div>
+                                    <div id="textCookieJsResult" style="color: var(--text-secondary);">JavaScript からの読み取り可否も判定します。</div>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ window.SecurityLabModules["cookie_security"] = {
                                 &lt;/script&gt;
                             </div>
                             <div style="display: flex; gap: 10px; align-items: center;">
-                                <div class="text-base">
+                                <div class="text-base" id="textXssHttpOnlyStatus">
                                     HttpOnly: <b id="lblXssHttpOnly" class="text-success-color">ON</b>
                                 </div>
                                 <button class="btn btn-primary text-base" id="btnExecuteXss" style="padding: 7px 14px;">XSS攻撃を実行</button>
@@ -286,15 +286,20 @@ window.SecurityLabModules["cookie_security"] = {
             textCsrfSameSiteStatus.style.color = (samesiteVal === "STRICT" || samesiteVal === "LAX") ? "var(--color-success)" : "#f87171";
         }
 
-        // Keep SameSite vs Secure requirement matching
+        // Keep SameSite vs Secure requirement matching & sync attack status
         cookieSameSite.addEventListener("change", () => {
-            if (cookieSameSite.value === "none") {
+            if ((cookieSameSite.value || "").toLowerCase() === "none") {
                 cookieSecure.checked = true;
                 cookieSecure.disabled = true;
                 app.log("warning", "[仕様制約] SameSite=None を指定する場合、主要ブラウザの仕様により Secure属性の付与が必須になります。");
             } else {
                 cookieSecure.disabled = false;
             }
+            updateAttackStatusTexts();
+        });
+
+        cookieHttpOnly.addEventListener("change", () => {
+            updateAttackStatusTexts();
         });
 
         function clearFlowAnimation() {
@@ -464,15 +469,16 @@ window.SecurityLabModules["cookie_security"] = {
             logCsrfAttack.innerHTML += "📦 罠サイト内の非表示フォームから <code>https://bank.com/transfer</code> (送金API) へPOSTリクエストを自動送信します...<br>";
             await new Promise(r => setTimeout(r, 800));
 
-            const samesite = cookieSameSite.value;
+            const samesite = (cookieSameSite.value || "").toLowerCase();
+            const samesiteDisplay = samesite.charAt(0).toUpperCase() + samesite.slice(1);
 
             // In real CSRF, browser determines Cookie attachment based on SameSite attribute
             if (samesite === "strict" || samesite === "lax") {
                 logCsrfAttack.innerHTML += `<span style="color: #34d399;">🛡️ 結果: Cookieなしでのリクエストを検知。銀行サーバーが認証エラー「401 Unauthorized」を返しました。</span><br>`;
-                logCsrfAttack.innerHTML += `<span style="color: #60a5fa;">[解説] SameSite=${samesite.capitalize()} 属性が有効なため、クロスサイトからのPOST送信時にブラウザがCookie（セッション情報）を添付するのを自動ブロックしました。CSRF攻撃を防ぎました。</span>`;
+                logCsrfAttack.innerHTML += `<span style="color: #60a5fa;">[解説] SameSite=${samesiteDisplay} 属性が有効なため、クロスサイトからのPOST送信時にブラウザがCookie（セッション情報）を添付するのを自動ブロックしました。CSRF攻撃を防ぎました。</span>`;
                 badgeCsrfStatus.innerText = "防御成功";
                 badgeCsrfStatus.className = "badge badge-success";
-                app.log("success", `[CSRF攻撃実証] SameSite=${samesite.capitalize()} により、クロスサイトPOSTでのCookie添付が拒否され、不正送金を防止しました。`);
+                app.log("success", `[CSRF攻撃実証] SameSite=${samesiteDisplay} により、クロスサイトPOSTでのCookie添付が拒否され、不正送金を防止しました。`);
             } else {
                 logCsrfAttack.innerHTML += `<span style="color: #f87171;">🚨 警告: ブラウザがCookie [session_id=sess_abc123] を自動添付して送信しました！</span><br>`;
                 logCsrfAttack.innerHTML += `<span style="color: #f87171;">💸 口座から 100,000 円が攻撃者の口座へ送金されました（送金処理完了）。</span>`;
