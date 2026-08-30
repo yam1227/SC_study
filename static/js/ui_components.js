@@ -138,27 +138,27 @@ window.UIComponents = {
      * @returns {string} HTML文字列
      */
     generateReferencesHtml: function(references) {
-        if (!references || references.length === 0) return '';
+        if (!references || !Array.isArray(references) || references.length === 0) return '';
 
         let itemsHtml = '';
         references.forEach(ref => {
+            const label = ref.source ? `<strong>${ref.source}</strong>: ` : (ref.title && ref.url ? `<strong>${ref.title}</strong>: ` : '');
+            const linkText = ref.title && ref.source ? ref.title : (ref.url || ref.title);
+            const linkHtml = ref.url 
+                ? `<a href="${ref.url}" target="_blank" rel="noopener noreferrer">${linkText}</a>`
+                : (ref.title || '');
+            const noteHtml = ref.note ? ` - ${ref.note}` : '';
+
             itemsHtml += `
-                <li style="margin-bottom: 6px;">
-                    <strong>${ref.title}</strong>: 
-                    <a href="${ref.url}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); word-break: break-all;">
-                        ${ref.url}
-                    </a>
-                    ${ref.note ? `<span style="font-size: 11px; color: var(--text-secondary); margin-left: 6px;">(${ref.note})</span>` : ''}
-                </li>
+                <li>${label}${linkHtml}${noteHtml}</li>
             `;
         });
 
         return `
-            <div class="card references-card" style="margin-top: 24px; border-top: 2px solid var(--border-color); padding-top: 16px; background: var(--bg-card); border-radius: var(--radius-md);">
-                <h4 style="margin-top: 0; font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                    📚 参考文献 ＆ 標準規格仕様ドキュメント
-                </h4>
-                <ul style="font-size: 12px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0; padding-left: 20px;">
+            <div class="card references-card">
+                <h3>📚 参照元・公式仕様リファレンス</h3>
+                <p class="card-subtitle">本モジュールの解説およびシミュレーションは、以下の信頼できる仕様書・公式情報源を参考に構築されています。</p>
+                <ul>
                     ${itemsHtml}
                 </ul>
             </div>

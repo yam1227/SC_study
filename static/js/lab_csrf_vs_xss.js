@@ -461,22 +461,16 @@ response.set_cookie(
                     </ul>
                 </div>
             </div>
-
-            <!-- References Section (Required by Workflow) -->
-            <div class="card" style="margin-top: 24px; border-top: 3px solid var(--color-primary);">
-                <h3>📚 参考文献 & セキスペ出題出典（具体的な参照投稿・文献一覧）</h3>
-                <p class="card-subtitle">本モジュールで扱った解説および仕様は、以下の公式ドキュメントおよび技術ドキュメント・投稿記事を参考に構成されています。</p>
-                
-                <ul style="font-size: 13px; line-height: 1.8; color: var(--text-secondary); margin-left: 20px; margin-top: 10px;">
-                    <li><b>IPA 情報処理安全確保支援士 試験問題・解答例（令和5年秋期 午前Ⅱ 問7）</b>: <a href="https://www.sc-siken.com/kakomon/05_aki/am2_7.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.sc-siken.com/kakomon/05_aki/am2_7.html</a></li>
-                    <li><b>IPA 安全なウェブサイトの作り方 (CSRF対策 / XSS対策)</b>: <a href="https://www.ipa.go.jp/security/vuln/websecurity.html" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.ipa.go.jp/security/vuln/websecurity.html</a></li>
-                    <li><b>OWASP Out-of-Band Authentication & Transaction Signing Guidelines</b>: <a href="https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html" target="_blank" rel="noopener" style="color: var(--color-primary);">OWASP Out-of-Band Guidelines</a></li>
-                    <li><b>FISC (金融関連システム安全対策基準) - 送金取引のトランザクション署名指針</b>: <a href="https://www.fisc.or.jp/" target="_blank" rel="noopener" style="color: var(--color-primary);">https://www.fisc.or.jp/</a></li>
-                    <li><b>MDN Web Docs: Same-Origin Policy (同種オリジン制約)</b>: <a href="https://developer.mozilla.org/ja/docs/Web/Security/Same-origin_policy" target="_blank" rel="noopener" style="color: var(--color-primary);">https://developer.mozilla.org/ja/docs/Web/Security/Same-origin_policy</a></li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "令和5年秋期 午前Ⅱ 問7 過去問解説（トランザクション署名）", url: "https://www.sc-siken.com/kakomon/05_aki/am2_7.html" },
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "安全なウェブサイトの作り方 (CSRF対策 / XSS対策)", url: "https://www.ipa.go.jp/security/vuln/websecurity.html" },
+        { source: "OWASP", title: "Out-of-Band Authentication & Transaction Signing Guidelines", url: "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html" },
+        { source: "FISC (金融情報システムセンター)", title: "金融機関等におけるサイバーセキュリティ対策ガイドライン (トランザクション署名指針)", url: "https://www.fisc.or.jp/" },
+        { source: "MDN Web Docs", title: "Same-Origin Policy (同一オリジンポリシー)", url: "https://developer.mozilla.org/ja/docs/Web/Security/Same-origin_policy" }
+    ],
 
     init: function () {
         this.bindEvents();

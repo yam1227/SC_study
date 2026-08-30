@@ -102,6 +102,12 @@ window.SecurityLabModules["kerberos"] = {
             </div>
         </div>
     `,
+
+    references: [
+        { source: "RFC 4120", title: "The Kerberos Network Authentication Service (V5)", url: "https://datatracker.ietf.org/doc/html/rfc4120", note: "Kerberos認証プロトコルの基本仕様" },
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "情報処理安全確保支援士 シラバス（シングルサインオンとKerberos認証）", url: "https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" },
+        { source: "Microsoft Learn", title: "Kerberos 認証の概要 (Active Directory ドメイン認証)", url: "https://learn.microsoft.com/ja-jp/windows-server/security/kerberos/kerberos-authentication-overview" }
+    ],
     
     init: function(app) {
         const btnStep1 = document.getElementById("btnKrbStep1");

@@ -264,21 +264,15 @@ window.SecurityLabModules["stp"] = {
                     </div>
                 </div>
             </div>
-
-            <!-- References Footer (Required by project rules) -->
-            <div class="card" style="margin-top: 24px; padding: 16px; border-top: 1px solid var(--border-color); background: rgba(15, 15, 20, 0.6);">
-                <h4 style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                    <span>📚</span> 参考文献・引用元リンク
-                </h4>
-                <ul style="font-size: 0.78rem; color: var(--text-muted); padding-left: 18px; line-height: 1.6;">
-                    <li>IPA 独立行政法人 情報処理推進機構: <a href="https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: underline;">情報処理安全確保支援士試験 シラバス（試験範囲）</a></li>
-                    <li>情報処理安全確保支援士ドットコム: <a href="https://www.sc-siken.com/kakomon/05_haru/am2_19.html" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: underline;">令和5年春期 午前II 問19 過去問解説</a></li>
-                    <li>IEEE Standards Association: <a href="https://standards.ieee.org/" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: underline;">IEEE 802.1D Media Access Control (MAC) Bridges & IEEE 802.1w Rapid Reconfiguration</a></li>
-                    <li>Cisco Systems: <a href="https://www.cisco.com/c/ja_jp/support/docs/lan-switching/spanning-tree-protocol/10556-16.html" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: underline;">スパニングツリー プロトコル（STP）のテクノロジーに関するガイドラインと概念</a></li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "情報処理安全確保支援士試験 シラバス（試験範囲）", url: "https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" },
+        { source: "情報処理安全確保支援士ドットコム", title: "令和5年春期 午前II 問19 過去問解説", url: "https://www.sc-siken.com/kakomon/05_haru/am2_19.html" },
+        { source: "IEEE Standards Association", title: "IEEE 802.1D Media Access Control (MAC) Bridges & IEEE 802.1w Rapid Reconfiguration", url: "https://standards.ieee.org/" },
+        { source: "Cisco Systems", title: "スパニングツリー プロトコル（STP）のテクノロジーに関するガイドラインと概念", url: "https://www.cisco.com/c/ja_jp/support/docs/lan-switching/spanning-tree-protocol/10556-16.html" }
+    ],
 
     init: function () {
         const self = this;

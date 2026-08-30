@@ -222,20 +222,15 @@ window.SecurityLabModules["jwt"] = {
                     🤝 OAuth / OIDC フロー学習に進む ➔
                 </button>
             </div>
-
-            <!-- Reference Documents Links (Required by AGENTS.md) -->
-            <div class="card" style="margin-top: 24px;">
-                <h3>📚 参照元・公式仕様リファレンス</h3>
-                <p class="card-subtitle">本モジュールの解説およびシミュレーションは、以下の信頼できる仕様書・情報源を参考に構築されています。</p>
-                <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; font-size: 13px;">
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 7519: JSON Web Token (JWT)</a> - JWTの標準仕様書。</li>
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc7515" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 7515: JSON Web Signature (JWS)</a> - デジタル署名による完全性担保の標準仕様。</li>
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc7516" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 7516: JSON Web Encryption (JWE)</a> - 暗号化による機密性担保の標準仕様。</li>
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc7517" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 7517: JSON Web Key (JWK) / JWKS</a> - 公開鍵配信および鍵フォーマットの標準仕様。</li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "RFC 7519", title: "JSON Web Token (JWT)", url: "https://datatracker.ietf.org/doc/html/rfc7519", note: "JWTの標準仕様書" },
+        { source: "RFC 7515", title: "JSON Web Signature (JWS)", url: "https://datatracker.ietf.org/doc/html/rfc7515", note: "デジタル署名による完全性担保の標準仕様" },
+        { source: "RFC 7516", title: "JSON Web Encryption (JWE)", url: "https://datatracker.ietf.org/doc/html/rfc7516", note: "暗号化による機密性担保の標準仕様" },
+        { source: "RFC 7517", title: "JSON Web Key (JWK) / JWKS", url: "https://datatracker.ietf.org/doc/html/rfc7517", note: "公開鍵配信および鍵フォーマットの標準仕様" }
+    ],
 
     init: function (app) {
         const btnGenerateJWT = document.getElementById("btnGenerateJWT");

@@ -209,20 +209,14 @@ window.SecurityLabModules["system_reliability"] = {
                     </div>
                 </div>
             </div>
-
-            <!-- References Footer (Required by project rules) -->
-            <div class="card" style="margin-top: 24px; padding: 16px; border-top: 1px solid var(--border-color); background: rgba(15, 15, 20, 0.6);">
-                <h4 style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                    <span>📚</span> 参考文献・引用元リンク
-                </h4>
-                <ul style="font-size: 0.78rem; color: var(--text-muted); padding-left: 18px; line-height: 1.6;">
-                    <li>IPA 独立行政法人 情報処理推進機構: <a href="https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: underline;">ITパスポート・基本情報・応用情報・高度試験 シラバス（システム信頼性設計）</a></li>
-                    <li>JSA 日本規格協会: <a href="https://www.jsa.or.jp/" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: underline;">JIS Z 8115 信頼性用語 & 機能安全 (Functional Safety) 原理規格</a></li>
-                    <li>デジタル庁 / 政府共通プラットフォーム: <a href="https://www.digital.go.jp/" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: underline;">システム可用性・耐障害性評価設計ガイドライン</a></li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "ITパスポート・基本情報・応用情報・高度試験 シラバス（システム信頼性設計）", url: "https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" },
+        { source: "JSA 日本規格協会", title: "JIS Z 8115 信頼性用語 & 機能安全 (Functional Safety) 原理規格", url: "https://www.jsa.or.jp/" },
+        { source: "デジタル庁 / 政府共通プラットフォーム", title: "システム可用性・耐障害性評価設計ガイドライン", url: "https://www.digital.go.jp/" }
+    ],
 
     init: function () {
         const self = this;

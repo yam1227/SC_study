@@ -408,41 +408,19 @@ window.SecurityLabModules["eap_auth"] = {
                             <!-- Q2 Feedback Box -->
                             <div id="q2Feedback" style="margin-top: 14px; display: none; padding: 14px; border-radius: 6px; font-size: 13px; line-height: 1.6;"></div>
                         </div>
-
                     </div>
                 </div>
             </div>
-
-            <!-- Footer References & Standards Section (Workflow Compliant) -->
-            <div class="card" style="margin-top: 24px; border-top: 2px solid var(--border-color); padding-top: 16px;">
-                <h4 style="margin-top: 0; font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                    📚 参考文献 ＆ 標準規格仕様ドキュメント
-                </h4>
-                <ul style="font-size: 12px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0; padding-left: 20px;">
-                    <li>
-                        <strong>IPA 情報処理安全確保支援士 試験問題・解答例（令和4年春期 午前Ⅱ 問17）</strong>: 
-                        <a href="https://www.sc-siken.com/kakomon/04_haru/am2_17.html" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">https://www.sc-siken.com/kakomon/04_haru/am2_17.html</a>
-                    </li>
-                    <li>
-                        <strong>IEEE 802.1X Standard for Local and Metropolitan Area Networks--Port-Based Network Access Control</strong>: 
-                        <a href="https://standards.ieee.org/ieee/802.1X/3973/" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">IEEE 802.1X-2010 Specification</a>
-                    </li>
-                    <li>
-                        <strong>RFC 3748 - Extensible Authentication Protocol (EAP)</strong>: 
-                        <a href="https://datatracker.ietf.org/doc/html/rfc3748" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">https://datatracker.ietf.org/doc/html/rfc3748</a>
-                    </li>
-                    <li>
-                        <strong>RFC 2865 - Remote Authentication Dial In User Service (RADIUS)</strong>: 
-                        <a href="https://datatracker.ietf.org/doc/html/rfc2865" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">https://datatracker.ietf.org/doc/html/rfc2865</a>
-                    </li>
-                    <li>
-                        <strong>Cisco Systems - IEEE 802.1X 認証デザイン ＆ RADIUS 連携ガイド</strong>: 
-                        <a href="https://www.cisco.com/c/ja_jp/support/docs/lan-switching/8021x/118634-config-8021x-00.html" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">Cisco 802.1X / EAP Deployment Guide</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "令和4年春期 午前Ⅱ 問17 過去問解説（EAP-TLS / PEAP / EAP-TTLS）", url: "https://www.sc-siken.com/kakomon/04_haru/am2_17.html" },
+        { source: "IEEE 802.1X", title: "Port-Based Network Access Control Standard", url: "https://standards.ieee.org/ieee/802.1X/3973/", note: "ポートベースネットワーク認証規格" },
+        { source: "RFC 3748", title: "Extensible Authentication Protocol (EAP)", url: "https://datatracker.ietf.org/doc/html/rfc3748", note: "EAPプロトコル標準仕様" },
+        { source: "RFC 2865", title: "Remote Authentication Dial In User Service (RADIUS)", url: "https://datatracker.ietf.org/doc/html/rfc2865", note: "RADIUS認証標準仕様" },
+        { source: "Cisco Systems", title: "IEEE 802.1X 認証デザイン ＆ RADIUS 連携ガイド", url: "https://www.cisco.com/c/ja_jp/support/docs/lan-switching/8021x/118634-config-8021x-00.html" }
+    ],
     init: function() {
         // --- Navigation Tab Switching ---
         const btnTabEapArch = document.getElementById("btnTabEapArch");

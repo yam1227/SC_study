@@ -200,7 +200,6 @@ window.SecurityLabModules["cookie_security"] = {
                         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 12px;">
                             <thead>
                                 <tr style="border-bottom: 1px solid rgba(251,191,36,0.2); color: var(--text-primary);">
-                                <tr style="border-bottom: 1px solid rgba(251,191,36,0.2); color: var(--text-primary);">
                                     <th style="padding: 4px;">属性値</th>
                                     <th style="padding: 4px;">同一サイト内 (First-party)</th>
                                     <th style="padding: 4px;">クロスサイトGET (外部リンク遷移)</th>
@@ -233,11 +232,16 @@ window.SecurityLabModules["cookie_security"] = {
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
     `,
+
+    references: [
+        { source: "RFC 6265bis", title: "Cookies: HTTP State Management Mechanism (SameSite Attributes)", url: "https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis", note: "Cookie仕様およびSameSite属性の標準化草案" },
+        { source: "MDN Web Docs", title: "HTTP Cookie の使用とセキュリティ (Secure, HttpOnly, SameSite)", url: "https://developer.mozilla.org/ja/docs/Web/HTTP/Cookies", note: "WebセキュリティにおけるCookie制御ガイド" },
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "安全なウェブサイトの作り方 - セッション管理とCookieの保護", url: "https://www.ipa.go.jp/security/vuln/websecurity.html" }
+    ],
 
     init: function(app) {
         // Tab switching

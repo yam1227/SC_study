@@ -249,29 +249,14 @@ window.SecurityLabModules["mac"] = {
                     </div>
                 </div>
             </div>
-
-            <!-- Footer References & Standards Section (Workflow Compliant) -->
-            <div class="card" style="margin-top: 24px; border-top: 2px solid var(--border-color); padding-top: 16px;">
-                <h4 style="margin-top: 0; font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                    📚 参考文献 ＆ 標準規格仕様ドキュメント
-                </h4>
-                <ul style="font-size: 12px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0; padding-left: 20px;">
-                    <li>
-                        <strong>IPA 情報処理安全確保支援士 試験問題・解答例（令和6年春期 午前Ⅱ 問2）</strong>: 
-                        <a href="https://www.sc-siken.com/kakomon/06_haru/am2_2.html" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">https://www.sc-siken.com/kakomon/06_haru/am2_2.html</a>
-                    </li>
-                    <li>
-                        <strong>RFC 2104 - HMAC: Keyed-Hashing for Message Authentication</strong>: 
-                        <a href="https://datatracker.ietf.org/doc/html/rfc2104" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">https://datatracker.ietf.org/doc/html/rfc2104</a>
-                    </li>
-                    <li>
-                        <strong>NIST SP 800-38B - Recommendation for Block Cipher Modes of Operation: The CMAC Mode for Authentication</strong>: 
-                        <a href="https://csrc.nist.gov/publications/detail/sp/800-38b/final" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">NIST SP 800-38B Specification</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "令和6年春期 午前Ⅱ 問2 過去問解説（HMAC・CMAC鍵長）", url: "https://www.sc-siken.com/kakomon/06_haru/am2_2.html" },
+        { source: "RFC 2104", title: "HMAC: Keyed-Hashing for Message Authentication", url: "https://datatracker.ietf.org/doc/html/rfc2104", note: "HMAC標準仕様" },
+        { source: "NIST SP 800-38B", title: "Recommendation for Block Cipher Modes of Operation: The CMAC Mode for Authentication", url: "https://csrc.nist.gov/publications/detail/sp/800-38b/final", note: "CMAC標準仕様" }
+    ],
 
     init: function() {
         // --- Navigation Tab Switching using UIComponents ---

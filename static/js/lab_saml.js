@@ -231,6 +231,12 @@ window.SecurityLabModules["saml"] = {
             </div>
         </div>
     `,
+
+    references: [
+        { source: "OASIS Standards", title: "Security Assertion Markup Language (SAML) V2.0 Core", url: "http://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf", note: "SAML 2.0標準仕様書" },
+        { source: "国立情報学研究所 (NII) 学認 (GakuNin)", title: "学術認証フェデレーション「学認」技術ガイドライン", url: "https://www.gakunin.jp/", note: "日本の学術機関におけるSAMLフェデレーション基準" },
+        { source: "OASIS Standards", title: "SAML V2.0 Bindings (HTTP POST / Redirect Binding)", url: "http://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf", note: "ブラウザ間でのSAMLメッセージ伝送仕様" }
+    ],
     
     init: function(app) {
         const btnSamlNext = document.getElementById("btnSamlNext");

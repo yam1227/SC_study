@@ -131,6 +131,12 @@ window.SecurityLabModules["network"] = {
             </div>
         </div>
     `,
+
+    references: [
+        { source: "NIST SP 800-41 Rev. 1", title: "Guidelines on Firewalls and Firewall Policy", url: "https://csrc.nist.gov/publications/detail/sp/800-41/rev-1/final", note: "ファイアウォール設計指針" },
+        { source: "NIST SP 800-94 Rev. 1", title: "Guide to Intrusion Detection and Prevention Systems (IDPS)", url: "https://csrc.nist.gov/publications/detail/sp/800-94/rev-1/final", note: "IDS/IPS導入・運用基準" },
+        { source: "OWASP ModSecurity Core Rule Set (CRS)", title: "OWASP CRS - Web Application Firewall Guidelines", url: "https://coreruleset.org/", note: "WAFの防御シグネチャ基準" }
+    ],
     
     init: function(app) {
         const netPredefined = document.getElementById("netPredefined");

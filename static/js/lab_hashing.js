@@ -87,6 +87,12 @@ window.SecurityLabModules["hashing"] = {
             </div>
         </div>
     `,
+
+    references: [
+        { source: "NIST FIPS PUB 180-4", title: "Secure Hash Standard (SHS) - SHA-1, SHA-224, SHA-256, SHA-512", url: "https://csrc.nist.gov/publications/detail/fips/180/4/final", note: "暗号学的ハッシュ関数の基本規格" },
+        { source: "RFC 2898 / RFC 8018", title: "PKCS #5: Password-Based Cryptography Specification (PBKDF2)", url: "https://datatracker.ietf.org/doc/html/rfc8018", note: "パスワードハッシュ化・ストレッチング標準" },
+        { source: "OWASP Password Storage Cheat Sheet", title: "Password Storage Cheat Sheet (Argon2id, bcrypt, PBKDF2)", url: "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html", note: "推奨ハッシュアルゴリズム指針" }
+    ],
     
     init: function(app) {
         const btnGenerateHash = document.getElementById("btnGenerateHash");

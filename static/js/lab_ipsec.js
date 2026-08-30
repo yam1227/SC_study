@@ -107,8 +107,8 @@ window.SecurityLabModules["ipsec"] = {
                         </div>
                     </div>
                     
-                    <div id="ikeExplanationCard" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 10px; background: var(--bg-card); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md);">
-                        <span style="font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">💡 IKE (Internet Key Exchange) 試験攻略知識</span>
+                    <div id="ikeExplanationCard" class="exam-key-card" style="display: flex; flex-direction: column; gap: 10px;">
+                        <span style="display: block; padding-bottom: 6px;">💡 IKE (Internet Key Exchange) 試験攻略知識</span>
                         <p>
                             IPsecでは、通信を行う2者間でセキュリティ属性の合意（暗号方式や鍵など）である **SA (Security Association)** を結びます。この SA を動的に確立するためのプロトコルが **IKE** です。
                         </p>
@@ -123,20 +123,15 @@ window.SecurityLabModules["ipsec"] = {
                     </div>
                 </div>
             </div>
-
-            <!-- Reference Documents Links (Required by AGENTS.md) -->
-            <div class="card" style="margin-top: 24px;">
-                <h3>📚 参照元・公式仕様リファレンス</h3>
-                <p class="card-subtitle">本モジュールの解説およびシミュレーションは、以下の信頼できる仕様書・情報源を参考に構築されています。</p>
-                <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; font-size: 13px;">
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc4301" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 4301: Security Architecture for the Internet Protocol</a> - IPsecセキュリティアーキテクチャの基本仕様。</li>
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc4302" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 4302: IP Authentication Header (AH)</a> - AH（送信元認証・完全性）の仕様。</li>
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc4303" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 4303: IP Encapsulating Security Payload (ESP)</a> - ESP（暗号化＋完全性）の仕様。</li>
-                    <li><a href="https://datatracker.ietf.org/doc/html/rfc7296" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 7296: Internet Key Exchange Protocol Version 2 (IKEv2)</a> - 鍵交換プロトコル IKEv2 の仕様。</li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "RFC 4301", title: "Security Architecture for the Internet Protocol", url: "https://datatracker.ietf.org/doc/html/rfc4301", note: "IPsecセキュリティアーキテクチャの基本仕様" },
+        { source: "RFC 4302", title: "IP Authentication Header (AH)", url: "https://datatracker.ietf.org/doc/html/rfc4302", note: "AH（送信元認証・完全性）の仕様" },
+        { source: "RFC 4303", title: "IP Encapsulating Security Payload (ESP)", url: "https://datatracker.ietf.org/doc/html/rfc4303", note: "ESP（暗号化＋完全性）の仕様" },
+        { source: "RFC 7296", title: "Internet Key Exchange Protocol Version 2 (IKEv2)", url: "https://datatracker.ietf.org/doc/html/rfc7296", note: "鍵交換プロトコル IKEv2 の仕様" }
+    ],
 
     init: function (app) {
         // Inject CSS for IKE animations

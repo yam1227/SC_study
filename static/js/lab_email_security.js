@@ -34,39 +34,39 @@ window.SecurityLabModules["email_security"] = {
 
                     <div class="lab-grid-3" style="grid-template-columns: 1fr 1.25fr 1.25fr; gap: 20px; margin-top: 15px;">
                         <!-- Left: Mail Composition Form -->
-                        <div style="background: rgba(15,23,42,0.4); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; display: flex; flex-direction: column; gap: 14px;">
+                        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; display: flex; flex-direction: column; gap: 14px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
                                 <span style="font-weight: 700; color: var(--text-primary); font-size: 14px;">1. 送信メール設定</span>
-                                <span style="font-size: 12px; color: #94a3b8; background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px;">模擬MUA</span>
+                                <span style="font-size: 12px; color: var(--text-secondary); background: var(--bg-panel); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border-color);">模擬MUA</span>
                             </div>
                             
                             <div class="form-group" style="margin: 0;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <label style="font-size: 12px; font-weight: 600; color: #cbd5e1;">Envelope-From (MAIL FROM):</label>
+                                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Envelope-From (MAIL FROM):</label>
                                     <span style="font-size: 12px; color: #38bdf8; background: rgba(56,189,248,0.1); padding: 2px 8px; border-radius: 4px;">SMTP制御用</span>
                                 </div>
-                                <input type="text" id="emailEnvFrom" value="support@trusted-bank.com" style="width: 100%; font-size: 13px; padding: 8px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" placeholder="SMTP通信で使用する本来の送信者">
+                                <input type="text" id="emailEnvFrom" value="support@trusted-bank.com" style="width: 100%; font-size: 13px; padding: 8px 10px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" placeholder="SMTP通信で使用する本来の送信者">
                                 <span style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; display: block;">※ SMTPセッションでMTAに伝える送信ドメイン（SPF検証対象）</span>
                             </div>
 
                             <div class="form-group" style="margin: 0;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                    <label style="font-size: 12px; font-weight: 600; color: #cbd5e1;">Header From (From:):</label>
+                                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary);">Header From (From:):</label>
                                     <span style="font-size: 12px; color: #f43f5e; background: rgba(244,63,94,0.1); padding: 2px 8px; border-radius: 4px;">メーラー表示用</span>
                                 </div>
-                                <input type="text" id="emailHeaderFrom" value="support@trusted-bank.com" style="width: 100%; font-size: 13px; padding: 8px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" placeholder="メールヘッダに表示する送信者">
+                                <input type="text" id="emailHeaderFrom" value="support@trusted-bank.com" style="width: 100%; font-size: 13px; padding: 8px 10px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" placeholder="メールヘッダに表示する送信者">
                                 <span style="font-size: 12px; color: var(--text-secondary); margin-top: 2px; display: block;">※ 受信者のメールソフトに表示される差出人（なりすまし可能な領域）</span>
                             </div>
 
                             <div class="form-group" style="margin: 0;">
-                                <label style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">To (宛先):</label>
-                                <input type="text" id="emailTo" value="user@my-isp.ne.jp" style="width: 100%; font-size: 13px; padding: 8px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);">
+                                <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; display: block;">To (宛先):</label>
+                                <input type="text" id="emailTo" value="user@my-isp.ne.jp" style="width: 100%; font-size: 13px; padding: 8px 10px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);">
                             </div>
 
                             <div class="form-group" style="margin: 0;">
-                                <label style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">Subject (件名) ＆ Body (本文):</label>
-                                <input type="text" id="emailSubject" value="【重要】ログイン情報の確認" style="width: 100%; font-size: 13px; padding: 8px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); margin-bottom: 8px;">
-                                <textarea id="emailBody" style="width: 100%; height: 75px; font-size: 12px; padding: 8px; font-family: var(--font-sans); background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); resize: vertical;" placeholder="本文を入力...">セキュリティ設定を更新してください。</textarea>
+                                <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; display: block;">Subject (件名) ＆ Body (本文):</label>
+                                <input type="text" id="emailSubject" value="【重要】ログイン情報の確認" style="width: 100%; font-size: 13px; padding: 8px 10px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); margin-bottom: 8px;">
+                                <textarea id="emailBody" style="width: 100%; height: 75px; font-size: 12px; padding: 8px; font-family: var(--font-sans); background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); resize: vertical;" placeholder="本文を入力...">セキュリティ設定を更新してください。</textarea>
                             </div>
 
                             <div style="margin-top: 8px; display: flex; gap: 10px;">
@@ -79,31 +79,31 @@ window.SecurityLabModules["email_security"] = {
                         <div style="display: flex; flex-direction: column; gap: 16px;">
                             <div>
                                 <span style="font-weight: 700; color: var(--text-primary); font-size: 14px; display: block; margin-bottom: 8px;">2. 配送経路ステータスアニメーション</span>
-                                <div class="email-flow-visual" style="display: flex; justify-content: space-between; align-items: center; background: rgba(15,23,42,0.6); border: 1px solid var(--border-color); padding: 16px 14px; border-radius: var(--radius-md); position: relative; min-height: 85px;">
+                                <div class="email-flow-visual" style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); border: 1px solid var(--border-color); padding: 16px 14px; border-radius: var(--radius-md); position: relative; min-height: 85px;">
                                     <div style="text-align: center; z-index: 2; flex: 1;">
                                         <span style="font-size: 26px; transition: transform 0.2s;" id="nodeSenderPC">💻</span>
-                                        <div style="font-size: 12px; font-weight: 600; color: #e2e8f0; margin-top: 4px;">送信PC</div>
+                                        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-top: 4px;">送信PC</div>
                                     </div>
                                     <div class="flow-arrow" id="arrowSendToMta1" style="flex: 1; border-top: 2px dashed #64748b; height: 1px; margin: 0 4px; position: relative;">
                                         <div class="flow-dot" id="dotFlow1" style="display: none; position: absolute; top: -6px; left: 0; width: 10px; height: 10px; background-color: #6366f1; border-radius: 50%; box-shadow: 0 0 8px #6366f1;"></div>
                                     </div>
                                     <div style="text-align: center; z-index: 2; flex: 1;">
                                         <span style="font-size: 26px; transition: transform 0.2s;" id="nodeMta1">📤</span>
-                                        <div style="font-size: 12px; font-weight: 600; color: #e2e8f0; margin-top: 4px;">送信MTA<br><span style="font-size: 12px; color: #94a3b8; font-weight: normal;">(送信サーバ)</span></div>
+                                        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-top: 4px;">送信MTA<br><span style="font-size: 12px; color: var(--text-secondary); font-weight: normal;">(送信サーバ)</span></div>
                                     </div>
                                     <div class="flow-arrow" id="arrowMta1ToMta2" style="flex: 1; border-top: 2px dashed #64748b; height: 1px; margin: 0 4px; position: relative;">
                                         <div class="flow-dot" id="dotFlow2" style="display: none; position: absolute; top: -6px; left: 0; width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981;"></div>
                                     </div>
                                     <div style="text-align: center; z-index: 2; flex: 1;">
                                         <span style="font-size: 26px; transition: transform 0.2s;" id="nodeMta2">📥</span>
-                                        <div style="font-size: 12px; font-weight: 600; color: #e2e8f0; margin-top: 4px;">受信MTA<br><span style="font-size: 12px; color: #94a3b8; font-weight: normal;">(受信サーバ)</span></div>
+                                        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-top: 4px;">受信MTA<br><span style="font-size: 12px; color: var(--text-secondary); font-weight: normal;">(受信サーバ)</span></div>
                                     </div>
                                     <div class="flow-arrow" id="arrowMta2ToRecvPC" style="flex: 1; border-top: 2px dashed #64748b; height: 1px; margin: 0 4px; position: relative;">
                                         <div class="flow-dot" id="dotFlow3" style="display: none; position: absolute; top: -6px; left: 0; width: 10px; height: 10px; background-color: #ec4899; border-radius: 50%; box-shadow: 0 0 8px #ec4899;"></div>
                                     </div>
                                     <div style="text-align: center; z-index: 2; flex: 1;">
                                         <span style="font-size: 26px; transition: transform 0.2s;" id="nodeRecvPC">💻</span>
-                                        <div style="font-size: 12px; font-weight: 600; color: #e2e8f0; margin-top: 4px;">受信PC</div>
+                                        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-top: 4px;">受信PC</div>
                                     </div>
                                 </div>
                                 <div style="text-align: center; font-size: 12px; font-weight: 600; color: #38bdf8; margin-top: 6px; min-height: 18px;" id="emailFlowStatusText">
@@ -158,12 +158,12 @@ window.SecurityLabModules["email_security"] = {
                         
                         <!-- Left: Simulation Environment & Configuration -->
                         <div style="display: flex; flex-direction: column; gap: 16px;">
-                            <div style="background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 12px;">
                                 <span style="font-weight: 700; color: var(--text-primary); font-size: 14px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">1. 検証条件シナリオの設定</span>
                                 
                                 <div class="form-group" style="margin: 0;">
-                                    <label style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; display: block;">送信メールシナリオ選択:</label>
-                                    <select id="authMailPreset" style="width: 100%; font-size: 12px; padding: 8px 10px; background-color: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; cursor: pointer;">
+                                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; display: block;">送信メールシナリオ選択:</label>
+                                    <select id="authMailPreset" style="width: 100%; font-size: 12px; padding: 8px 10px; background-color: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 4px; cursor: pointer;">
                                         <option value="legit">【正当】銀行からの正規メール（SPF/DKIM/DMARC 一致）</option>
                                         <option value="spoof_spf_fail">【詐称】攻撃者IPからのなりすまし（SPF検証失敗）</option>
                                         <option value="spoof_spf_align_fail">【詐称】送信者ドメイン違い（SPF合格だがアライメント失敗）</option>
@@ -173,19 +173,19 @@ window.SecurityLabModules["email_security"] = {
                                 </div>
 
                                 <div class="form-group" style="margin: 0;">
-                                    <label style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 2px; display: block;">接続元送信IPアドレス:</label>
-                                    <input type="text" id="authSenderIp" value="192.0.2.10" style="width: 100%; font-size: 12px; padding: 6px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" readonly>
+                                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; display: block;">接続元送信IPアドレス:</label>
+                                    <input type="text" id="authSenderIp" value="192.0.2.10" style="width: 100%; font-size: 12px; padding: 6px 10px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" readonly>
                                     <span style="font-size: 12px; color: var(--text-secondary);">※ 送信元MTAの物理IPアドレス</span>
                                 </div>
 
                                 <div class="form-group" style="margin: 0;">
-                                    <label style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 2px; display: block;">Envelope-From ドメイン (MAIL FROM):</label>
-                                    <input type="text" id="authEnvFromDom" value="trusted-bank.com" style="width: 100%; font-size: 12px; padding: 6px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" readonly>
+                                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; display: block;">Envelope-From ドメイン (MAIL FROM):</label>
+                                    <input type="text" id="authEnvFromDom" value="trusted-bank.com" style="width: 100%; font-size: 12px; padding: 6px 10px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" readonly>
                                 </div>
 
                                 <div class="form-group" style="margin: 0;">
-                                    <label style="font-size: 12px; font-weight: 600; color: #cbd5e1; margin-bottom: 2px; display: block;">Header From ドメイン (From:):</label>
-                                    <input type="text" id="authHeaderFromDom" value="trusted-bank.com" style="width: 100%; font-size: 12px; padding: 6px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" readonly>
+                                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; display: block;">Header From ドメイン (From:):</label>
+                                    <input type="text" id="authHeaderFromDom" value="trusted-bank.com" style="width: 100%; font-size: 12px; padding: 6px 10px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary);" readonly>
                                 </div>
 
                                 <div class="form-group" style="margin: 0; display: flex; align-items: center; gap: 8px;">
@@ -199,7 +199,7 @@ window.SecurityLabModules["email_security"] = {
                             </div>
 
                             <!-- DNS Records Panel -->
-                            <div style="background: rgba(15,23,42,0.4); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+                            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 10px;">
                                 <span style="font-weight: 700; color: var(--text-primary); font-size: 13px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 4px;">🌐 模擬DNSレコード設定 (受信MTA参照用)</span>
                                 
                                 <div>
@@ -229,10 +229,10 @@ window.SecurityLabModules["email_security"] = {
                                 <!-- Row 1: SPF & DKIM parallel verification -->
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                                     <!-- SPF Validation Block -->
-                                    <div id="blockVerifySPF" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: rgba(15,23,42,0.3); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
+                                    <div id="blockVerifySPF" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: var(--bg-card); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                             <span style="font-weight: 700; font-size: 13px; color: var(--text-primary);">① SPF検証</span>
-                                            <span id="badgeSpfResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-card); border: 1px solid var(--border-color); display: none;">N/A</span>
+                                            <span id="badgeSpfResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-panel); border: 1px solid var(--border-color); display: none;">N/A</span>
                                         </div>
                                         <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;" id="textSpfVerifyStatus">
                                             DNSから Envelope-From の SPF TXT レコードを取得し、接続元IPが許可されているか照合します。
@@ -240,10 +240,10 @@ window.SecurityLabModules["email_security"] = {
                                     </div>
 
                                     <!-- DKIM Validation Block -->
-                                    <div id="blockVerifyDKIM" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: rgba(15,23,42,0.3); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
+                                    <div id="blockVerifyDKIM" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: var(--bg-card); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                             <span style="font-weight: 700; font-size: 13px; color: var(--text-primary);">② DKIM検証</span>
-                                            <span id="badgeDkimResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-card); border: 1px solid var(--border-color); display: none;">N/A</span>
+                                            <span id="badgeDkimResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-panel); border: 1px solid var(--border-color); display: none;">N/A</span>
                                         </div>
                                         <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;" id="textDkimVerifyStatus">
                                             DKIM-Signature ヘッダーのドメインDNSから公開鍵を取得し、電子署名を検証します。
@@ -254,10 +254,10 @@ window.SecurityLabModules["email_security"] = {
                                 <!-- Row 2: DMARC Alignment checks -->
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                                     <!-- SPF Alignment Block -->
-                                    <div id="blockAlignSPF" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: rgba(15,23,42,0.3); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
+                                    <div id="blockAlignSPF" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: var(--bg-card); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                             <span style="font-weight: 700; font-size: 13px; color: var(--text-primary);">③ SPFアライメント</span>
-                                            <span id="badgeSpfAlignResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-card); border: 1px solid var(--border-color); display: none;">N/A</span>
+                                            <span id="badgeSpfAlignResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-panel); border: 1px solid var(--border-color); display: none;">N/A</span>
                                         </div>
                                         <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;" id="textSpfAlignStatus">
                                             Header From (表示差出人) と Envelope-From (通信送信元) のドメイン一致を判定します。
@@ -265,10 +265,10 @@ window.SecurityLabModules["email_security"] = {
                                     </div>
 
                                     <!-- DKIM Alignment Block -->
-                                    <div id="blockAlignDKIM" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: rgba(15,23,42,0.3); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
+                                    <div id="blockAlignDKIM" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; background: var(--bg-card); display: flex; flex-direction: column; gap: 8px; transition: all 0.3s;">
                                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;">
                                             <span style="font-weight: 700; font-size: 13px; color: var(--text-primary);">④ DKIMアライメント</span>
-                                            <span id="badgeDkimAlignResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-card); border: 1px solid var(--border-color); display: none;">N/A</span>
+                                            <span id="badgeDkimAlignResult" class="badge" style="font-size: 12px; padding: 3px 8px; background-color: var(--bg-panel); border: 1px solid var(--border-color); display: none;">N/A</span>
                                         </div>
                                         <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;" id="textDkimAlignStatus">
                                             Header From と DKIM署名内のドメイン (<code>d=</code>) の一致を判定します。
@@ -277,19 +277,19 @@ window.SecurityLabModules["email_security"] = {
                                 </div>
 
                                 <!-- Row 3: DMARC Policy integration -->
-                                <div id="blockDmarcPolicy" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; background: rgba(15,23,42,0.3); display: flex; flex-direction: column; gap: 10px; transition: all 0.3s;">
+                                <div id="blockDmarcPolicy" style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; background: var(--bg-card); display: flex; flex-direction: column; gap: 10px; transition: all 0.3s;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
                                             <span style="font-size: 18px;">🛡️</span>
                                             <span style="font-weight: 700; font-size: 14px; color: var(--text-primary);">⑤ DMARC総合判定 ＆ 受信アクション決定</span>
                                         </div>
-                                        <span id="badgeDmarcResult" class="badge" style="font-size: 12px; font-weight: 700; padding: 4px 12px; background-color: var(--bg-card); border: 1px solid var(--border-color); display: none;">N/A</span>
+                                        <span id="badgeDmarcResult" class="badge" style="font-size: 12px; font-weight: 700; padding: 4px 12px; background-color: var(--bg-panel); border: 1px solid var(--border-color); display: none;">N/A</span>
                                     </div>
                                     <div style="display: flex; gap: 16px; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
                                         <div style="flex: 1;" id="textDmarcPolicyStatus">
                                             SPFおよびDKIMの認証結果、アライメント結果を総合評価します。アライメントを満たしたSPFまたはDKIMのいずれかが成功していればDMARC合格(PASS)となります。失敗時はポリシー (p=none/quarantine/reject) に従い処理します。
                                         </div>
-                                        <div style="width: 150px; background: #090d16; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px;" id="dmarcActionBox">
+                                        <div style="width: 150px; background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px;" id="dmarcActionBox">
                                             <span style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">最終受信アクション</span>
                                             <span style="font-size: 14px; font-weight: 800; color: var(--text-primary);" id="textDmarcFinalAction">検証前</span>
                                         </div>
@@ -351,12 +351,18 @@ window.SecurityLabModules["email_security"] = {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     `,
+
+    references: [
+        { source: "RFC 7208", title: "Sender Policy Framework (SPF) for Authorizing Use of Domains in Email", url: "https://datatracker.ietf.org/doc/html/rfc7208", note: "SPF検証標準仕様" },
+        { source: "RFC 6376", title: "DomainKeys Identified Mail (DKIM) Signatures", url: "https://datatracker.ietf.org/doc/html/rfc6376", note: "電子署名によるメール認証仕様" },
+        { source: "RFC 7489", title: "Domain-based Message Authentication, Reporting, and Conformance (DMARC)", url: "https://datatracker.ietf.org/doc/html/rfc7489", note: "DMARCポリシー＆アライメント判定仕様" },
+        { source: "総務省 / 迷惑メール対策推進協議会", title: "送信ドメイン認証技術導入マニュアル", url: "https://www.soumu.go.jp/", note: "送信元偽装防止ガイドライン" }
+    ],
 
     init: function (app) {
         // Tab elements
@@ -726,7 +732,7 @@ window.SecurityLabModules["email_security"] = {
         function resetAuthUI() {
             // Remove highlighting styles
             [blockVerifySPF, blockVerifyDKIM, blockAlignSPF, blockAlignDKIM, blockDmarcPolicy].forEach(el => {
-                el.style.backgroundColor = "rgba(15,23,42,0.3)";
+                el.style.backgroundColor = "var(--bg-card)";
                 el.style.borderColor = "var(--border-color)";
                 el.style.boxShadow = "none";
             });

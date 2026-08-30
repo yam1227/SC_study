@@ -195,6 +195,21 @@
     padding-bottom: 80px;
 }
 
+/* Lab Container: Ensure Vertical (Column) Stack */
+.lab-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+    max-width: 100%;
+}
+
+.module-overview-card,
+.glossary-search-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 /* Welcome Dashboard */
 .welcome-container {
     display: flex;

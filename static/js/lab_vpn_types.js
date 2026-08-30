@@ -175,8 +175,8 @@ window.SecurityLabModules["vpn_types"] = {
                     </div>
                     
                     <!-- Exam Key Points -->
-                    <div id="vpnArchExplainBox" style="background: rgba(24, 24, 32, 0.4); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); font-size: 13px; line-height: 1.6; color: var(--text-secondary);">
-                        <span style="font-weight: bold; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; display: block; margin-bottom: 8px;">💡 広域ネットワークVPN 試験攻略の鍵</span>
+                    <div id="vpnArchExplainBox" class="exam-key-card">
+                        <span style="display: block; margin-bottom: 8px; padding-bottom: 6px;">💡 広域ネットワークVPN 試験攻略の鍵</span>
                         <div id="vpnArchExplainText">
                             上記ボタンをクリックすると、それぞれのVPN規格における試験対策上の必須知識と暗記ポイントがここに表示されます。
                         </div>
@@ -185,6 +185,13 @@ window.SecurityLabModules["vpn_types"] = {
             </div>
         </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "情報処理安全確保支援士 シラバス（VPN技術・MPLS・広域イーサネット）", url: "https://www.ipa.go.jp/shiken/syllabus/gaiyou.html" },
+        { source: "RFC 3031", title: "Multiprotocol Label Switching (MPLS) Architecture", url: "https://datatracker.ietf.org/doc/html/rfc3031", note: "MPLSラベルスイッチング仕様" },
+        { source: "RFC 4364", title: "BGP/MPLS IP Virtual Private Networks (VPNs)", url: "https://datatracker.ietf.org/doc/html/rfc4364", note: "キャリア閉域網におけるIP-VPN標準" },
+        { source: "IEEE 802.1Q", title: "Bridges and Bridged Networks (VLAN Tagging & Provider Bridging)", url: "https://standards.ieee.org/", note: "広域イーサネット技術規格" }
+    ],
     
     init: function(app) {
         // --- Part 1: IPsec SA Simulator Logic ---

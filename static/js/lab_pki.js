@@ -490,19 +490,14 @@ window.SecurityLabModules["pki"] = {
                 </div>
             </div>
         </div>
-
-        <!-- Reference Documents Links (Required by AGENTS.md) -->
-        <div class="card" style="margin-top: 24px;">
-            <h3>📚 参照元・公式仕様リファレンス</h3>
-            <p class="card-subtitle">本モジュールの解説およびシミュレーションは、以下の信頼できる仕様書・情報源を参考に構築されています。</p>
-            <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.6; font-size: 13px;">
-                <li><a href="https://www.ipa.go.jp/security/pki/" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">IPA: 公開鍵基盤 (PKI) について</a> - 暗号技術や認証局の基本概念についての解説。</li>
-                <li><a href="https://datatracker.ietf.org/doc/html/rfc5280" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 5280: Internet X.509 PKI & CRL Profile</a> - デジタル証明書(X.509)および失効リスト(CRL)の標準仕様。</li>
-                <li><a href="https://datatracker.ietf.org/doc/html/rfc6960" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 6960: Online Certificate Status Protocol (OCSP)</a> - オンライン失効検証プロトコル仕様。</li>
-                <li><a href="https://datatracker.ietf.org/doc/html/rfc5755" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover); text-decoration: underline;">RFC 5755: Attribute Certificate Profile for Authorization</a> - 属性証明書(AC)による認可制御の標準仕様。</li>
-            </ul>
-        </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "公開鍵基盤 (PKI) について", url: "https://www.ipa.go.jp/security/pki/", note: "暗号技術や認証局の基本概念についての解説" },
+        { source: "RFC 5280", title: "Internet X.509 PKI & CRL Profile", url: "https://datatracker.ietf.org/doc/html/rfc5280", note: "デジタル証明書(X.509)および失効リスト(CRL)の標準仕様" },
+        { source: "RFC 6960", title: "Online Certificate Status Protocol (OCSP)", url: "https://datatracker.ietf.org/doc/html/rfc6960", note: "オンライン失効検証プロトコル仕様" },
+        { source: "RFC 5755", title: "Attribute Certificate Profile for Authorization", url: "https://datatracker.ietf.org/doc/html/rfc5755", note: "属性証明書(AC)による認可制御の標準仕様" }
+    ],
 
     init: function (app) {
         // Elements

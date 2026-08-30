@@ -254,29 +254,14 @@ window.SecurityLabModules["block_cipher"] = {
                     </div>
                 </div>
             </div>
-
-            <!-- Footer References & Standards Section (Workflow Compliant) -->
-            <div class="card" style="margin-top: 24px; border-top: 2px solid var(--border-color); padding-top: 16px;">
-                <h4 style="margin-top: 0; font-size: 13px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                    📚 参考文献 ＆ 標準規格仕様ドキュメント
-                </h4>
-                <ul style="font-size: 12px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 0; padding-left: 20px;">
-                    <li>
-                        <strong>IPA 情報処理安全確保支援士 試験問題・解答例（令和5年春期 午前Ⅱ 問7）</strong>: 
-                        <a href="https://www.sc-siken.com/kakomon/05_haru/am2_7.html" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">https://www.sc-siken.com/kakomon/05_haru/am2_7.html</a>
-                    </li>
-                    <li>
-                        <strong>NIST SP 800-38A - Recommendation for Block Cipher Modes of Operation: Methods and Techniques</strong>: 
-                        <a href="https://csrc.nist.gov/publications/detail/sp/800-38a/final" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">NIST SP 800-38A Specification</a>
-                    </li>
-                    <li>
-                        <strong>NIST SP 800-38D - Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM)</strong>: 
-                        <a href="https://csrc.nist.gov/publications/detail/sp/800-38d/final" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary-hover);">NIST SP 800-38D GCM Specification</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     `,
+
+    references: [
+        { source: "IPA 独立行政法人 情報処理推進機構", title: "令和5年春期 午前Ⅱ 問7 過去問解説（ブロック暗号利用モード）", url: "https://www.sc-siken.com/kakomon/05_haru/am2_7.html" },
+        { source: "NIST SP 800-38A", title: "Recommendation for Block Cipher Modes of Operation (ECB, CBC, CFB, OFB, CTR)", url: "https://csrc.nist.gov/publications/detail/sp/800-38a/final" },
+        { source: "NIST SP 800-38D", title: "Recommendation for Block Cipher Modes of Operation: Galois/Counter Mode (GCM)", url: "https://csrc.nist.gov/publications/detail/sp/800-38d/final" }
+    ],
 
     init: function() {
         // --- Navigation Tab Switching using UIComponents ---

@@ -140,6 +140,12 @@ window.SecurityLabModules["crypto"] = {
         </div>
     `,
 
+    references: [
+        { source: "NIST FIPS PUB 197", title: "Advanced Encryption Standard (AES)", url: "https://csrc.nist.gov/publications/detail/fips/197/final", note: "米国標準共通鍵暗号規格" },
+        { source: "NIST FIPS PUB 186-5", title: "Digital Signature Standard (DSS)", url: "https://csrc.nist.gov/publications/detail/fips/186/5/final", note: "RSA / ECDSA デジタル署名標準" },
+        { source: "CRYPTREC (暗号技術検討会)", title: "電子政府推奨暗号リスト", url: "https://www.cryptrec.go.jp/", note: "日本政府における推奨暗号アルゴリズム基準" }
+    ],
+
     init: function (app) {
         const sessionId = "session_" + Math.random().toString(36).substring(2, 12);
 

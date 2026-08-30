@@ -624,8 +624,13 @@ class SecurityLab {
             </div>
         `;
         
-        // Insert module html template with Overview and Glossary prepended
-        this.labContainer.innerHTML = overviewHtml + glossaryHtml + modObj.html;
+        // Automatically generate references card from module references metadata if defined
+        const referencesHtml = (window.UIComponents && modObj.references && Array.isArray(modObj.references) && modObj.references.length > 0)
+            ? UIComponents.generateReferencesHtml(modObj.references)
+            : '';
+        
+        // Insert module html template with Overview and Glossary prepended, References appended
+        this.labContainer.innerHTML = overviewHtml + glossaryHtml + modObj.html + referencesHtml;
         
         // Initialize glossary search handlers
         this.initGlossarySearch();
